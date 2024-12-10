@@ -86,110 +86,132 @@ const getValidWords = (hand, state) => {
 			if (state[n[0]][n[1]]) continue;
 			// loop through perms and try placing letters
 			for (const perm of permutations) {
-				// deep copy state
-				const workingState = [];
-				for (const row of state) workingState.push([...row]);
-				// bounds check x-axis
-				if (n[1] - perm.length < 0) continue;
-				// array of placed letters that contact anchors
-				const verContacts = [];
+				// try perm with each letter in the neighbour coord
+				for (
+					let xStartDelta = 0;
+					xStartDelta < perm.length;
+					xStartDelta++
+				) {
+					const xStart = n[1] + xStartDelta;
 
-				// bool for breaking early
-				let isValidPerm = true;
-				// place letters in workingState
-				for (let j = 0; j < perm.length; j++) {
-					if (workingState[n[0]][n[1] - j]) {
-						isValidPerm = false;
-						break;
+					// deep copy state
+					const workingState = [];
+					for (const row of state) workingState.push([...row]);
+					// bounds check x-axis
+					if (xStart - perm.length < 0) continue;
+					// array of placed letters that contact anchors
+					const verContacts = [];
+
+					// bool for breaking early
+					let isValidPerm = true;
+					// place letters in workingState
+					for (let j = 0; j < perm.length; j++) {
+						if (workingState[n[0]][xStart - j]) {
+							isValidPerm = false;
+							break;
+						}
+						workingState[n[0]][xStart - j] =
+							perm[perm.length - 1 - j];
+						// if placed letter contacts an anchor add to contacts
+						// VERTICAL CONTACTS
+						// check for contacts above
+						if (workingState[n[0] - 1][xStart - j]) {
+							// if there is contact above search for the top letter
+							let yDelta = 1;
+							while (workingState[n[0] - yDelta][xStart - j]) {
+								yDelta++;
+							}
+							verContacts.push([n[0] - yDelta + 1, xStart - j]);
+							// check for contacts below
+						} else if (workingState[n[0] + 1][xStart - j]) {
+							verContacts.push([n[0], xStart - j]);
+						}
 					}
-					workingState[n[0]][n[1] - j] = perm[perm.length - 1 - j];
-					// if placed letter contacts an anchor add to contacts
-					// VERTICAL CONTACTS
-					// check for contacts above
-					if (workingState[n[0] - 1][n[1] - j]) {
-						// if there is contact above search for the top letter
-						let yDelta = 1;
-						while (workingState[n[0] - yDelta][n[1] - j]) {
+					if (!isValidPerm) continue;
+					// HORIZONTAL CONTACTS
+					const horContacts = [];
+					if (
+						perm.length === 1 &&
+						perm[0] === 'B' &&
+						anchor === 'E'
+					) {
+						console.log('');
+					}
+					// check for contacts left
+					if (workingState[n[0][xStart - perm.length]]) {
+						let xDelta = 1;
+						while (
+							workingState[n[0][xStart - perm.length - xDelta]]
+						) {
+							xDelta++;
+						}
+						horContacts.push([
+							n[0],
+							xStart - perm.length - xDelta + 1,
+						]);
+						// check for contact right
+					} else if (workingState[n[0]][xStart + 1]) {
+						horContacts.push([n[0], xStart - perm.length + 1]);
+					}
+
+					const words = [];
+					if (
+						wordArray.includes(perm.join('')) &&
+						!horContacts.length
+					)
+						words.push(perm.join(''));
+					// loop through contacts to find newly created words
+					// vertical contacts
+					for (const c of verContacts) {
+						// let [y, x] = c;
+						let word = '';
+						let yDelta = 0;
+						while (workingState[c[0] + yDelta][c[1]]) {
+							word += workingState[c[0] + yDelta][c[1]];
 							yDelta++;
 						}
-						verContacts.push([n[0] - yDelta + 1, n[1] - j]);
-						// check for contacts below
-					} else if (workingState[n[0] + 1][n[1] - j]) {
-						verContacts.push([n[0], n[1] - j]);
+						if (wordArray.includes(word)) {
+							words.push(word);
+						} else {
+							isValidPerm = false;
+							break;
+						}
 					}
-				}
-				if (!isValidPerm) continue;
-				// HORIZONTAL CONTACTS
-				const horContacts = [];
-				if (perm.length === 1 && perm[0] === 'B' && anchor === 'E') {
-					console.log('');
-				}
-				// check for contacts left
-				if (workingState[n[0][n[1] - perm.length]]) {
-					let xDelta = 1;
-					while (workingState[n[0][n[1] - perm.length - xDelta]]) {
-						xDelta++;
-					}
-					horContacts.push([n[0], n[1] - perm.length - xDelta + 1]);
-					// check for contact right
-				} else if (workingState[n[0]][n[1] + 1]) {
-					horContacts.push([n[0], n[1] - perm.length + 1]);
-				}
 
-				const words = [];
-				if (wordArray.includes(perm.join('')) && !horContacts.length)
-					words.push(perm.join(''));
-				// loop through contacts to find newly created words
-				// vertical contacts
-				for (const c of verContacts) {
-					// let [y, x] = c;
-					let word = '';
-					let yDelta = 0;
-					while (workingState[c[0] + yDelta][c[1]]) {
-						word += workingState[c[0] + yDelta][c[1]];
-						yDelta++;
+					if (!isValidPerm) continue;
+
+					// horizontal contacts
+					for (const c of horContacts) {
+						let word = '';
+						let xDelta = 0;
+						while (workingState[c[0]][c[1] + xDelta]) {
+							word += workingState[c[0]][c[1] + xDelta];
+							xDelta++;
+						}
+						if (wordArray.includes(word)) {
+							words.push(word);
+						} else {
+							isValidPerm = false;
+							break;
+						}
 					}
-					if (wordArray.includes(word)) {
-						words.push(word);
-					} else {
-						isValidPerm = false;
-						break;
+
+					if (isValidPerm && words.length) {
+						validWords.push([words, getWordScore(words)]);
 					}
+
+					// const compoundWord = anchor + perm[perm.length - 1];
+					// if (wordArray.includes(compoundWord)) {
+					// 	const newWords = [perm.join(''), compoundWord];
+					// 	validWords.push([newWords, getWordScore(newWords)]);
+					// }
 				}
-
-				if (!isValidPerm) continue;
-
-				// horizontal contacts
-				for (const c of horContacts) {
-					let word = '';
-					let xDelta = 0;
-					while (workingState[c[0]][c[1] + xDelta]) {
-						word += workingState[c[0]][c[1] + xDelta];
-						xDelta++;
-					}
-					if (wordArray.includes(word)) {
-						words.push(word);
-					} else {
-						isValidPerm = false;
-						break;
-					}
-				}
-
-				if (isValidPerm && words.length) {
-					validWords.push([words, getWordScore(words)]);
-				}
-
-				// const compoundWord = anchor + perm[perm.length - 1];
-				// if (wordArray.includes(compoundWord)) {
-				// 	const newWords = [perm.join(''), compoundWord];
-				// 	validWords.push([newWords, getWordScore(newWords)]);
-				// }
 			}
 		}
 	}
 
-	return validWords.sort((a, b) => b[1] - a[1]).slice(0, 50);
-	// return validWords;
+	// return validWords.sort((a, b) => b[1] - a[1]).slice(0, 100);
+	return validWords;
 };
 
 const getPermutaions = (hand) => {
