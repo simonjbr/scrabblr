@@ -28,7 +28,7 @@ const getValidWords = (hand, state) => {
 
 	// console.log('single anchors:', anchors);
 
-	// check vertical
+	// check for vertical anchors
 	const verAnchors = [];
 	for (let i = 0; i < BOARD_LENGTH; i++) {
 		let anchor = '';
@@ -43,10 +43,25 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
-
 	console.log(verAnchors);
 
-	const validWords = [];
+	// check for horizontal anchors
+	const horAnchors = [];
+	for (let i = 0; i < BOARD_LENGTH; i++) {
+		const row = state[i];
+		let anchor = '';
+		for (let j = 0; j < BOARD_LENGTH; j++) {
+			const char = row[j];
+			if (char) {
+				anchor += char;
+			} else if (anchor) {
+				// push anchor and the indices of the first char to array
+				horAnchors.push([anchor, i, j - anchor.length]);
+				anchor = '';
+			}
+		}
+	}
+	console.log(horAnchors);
 
 	// valid letter placement deltas (relative to anchors)
 	const deltas = [
@@ -71,6 +86,7 @@ const getValidWords = (hand, state) => {
 	// get permutations for hand
 	const permutations = getPermutaions(hand);
 
+	const validWords = [];
 	// loop through vertical anchors and find valid permutations of letter
 	// placement that touches at least that anchor
 	for (let i = 0; i < verAnchors.length; i++) {
@@ -210,8 +226,141 @@ const getValidWords = (hand, state) => {
 		}
 	}
 
-	// return validWords.sort((a, b) => b[1] - a[1]).slice(0, 100);
-	return validWords;
+	// now loop through horizontal anchors
+	for (let i = 0; i < horAnchors.length; i++) {
+		let [anchor, y, x] = horAnchors[i];
+
+		for (const d of horDeltas) {
+			// coords of anchor's neighbour
+			const n = [
+				y + d[0],
+				d[1] < 0 ? x + d[1] : x + d[1] * anchor.length,
+			];
+			// if neighbour is occupied move on to next delta
+			if (state[n[0]][n[1]]) continue;
+			// loop through perms and try placing letters
+			for (const perm of permutations) {
+				// try perm with each letter in the neighbour coord
+				for (
+					// change to yStartDelta
+					let xStartDelta = 0;
+					xStartDelta < perm.length;
+					xStartDelta++
+				) {
+					const xStart = n[1] + xStartDelta; // const yStart = n[0] + yStartDelta
+
+					// deep copy state
+					const workingState = [];
+					for (const row of state) workingState.push([...row]);
+					// bounds check x-axis
+					if (xStart - perm.length < 0) continue;
+					// array of placed letters that contact anchors
+					const verContacts = [];
+
+					// bool for breaking early
+					let isValidPerm = true;
+					// place letters in workingState
+					for (let j = 0; j < perm.length; j++) {
+						if (workingState[n[0]][xStart - j]) {
+							isValidPerm = false;
+							break;
+						}
+						workingState[n[0]][xStart - j] =
+							perm[perm.length - 1 - j];
+						// if placed letter contacts an anchor add to contacts
+						// VERTICAL CONTACTS
+						// check for contacts above
+						if (workingState[n[0] - 1][xStart - j]) {
+							// if there is contact above search for the top letter
+							let yDelta = 1;
+							while (workingState[n[0] - yDelta][xStart - j]) {
+								yDelta++;
+							}
+							verContacts.push([n[0] - yDelta + 1, xStart - j]);
+							// check for contacts below
+						} else if (workingState[n[0] + 1][xStart - j]) {
+							verContacts.push([n[0], xStart - j]);
+						}
+					}
+					if (!isValidPerm) continue;
+					// HORIZONTAL CONTACTS
+					const horContacts = [];
+					if (
+						perm.length === 1 &&
+						perm[0] === 'B' &&
+						anchor === 'E'
+					) {
+						console.log('');
+					}
+					// check for contacts left
+					if (workingState[n[0][xStart - perm.length]]) {
+						let xDelta = 1;
+						while (
+							workingState[n[0][xStart - perm.length - xDelta]]
+						) {
+							xDelta++;
+						}
+						horContacts.push([
+							n[0],
+							xStart - perm.length - xDelta + 1,
+						]);
+						// check for contact right
+					} else if (workingState[n[0]][xStart + 1]) {
+						horContacts.push([n[0], xStart - perm.length + 1]);
+					}
+
+					const words = [];
+					if (
+						wordArray.includes(perm.join('')) &&
+						!horContacts.length
+					)
+						words.push(perm.join(''));
+					// loop through contacts to find newly created words
+					// vertical contacts
+					for (const c of verContacts) {
+						// let [y, x] = c;
+						let word = '';
+						let yDelta = 0;
+						while (workingState[c[0] + yDelta][c[1]]) {
+							word += workingState[c[0] + yDelta][c[1]];
+							yDelta++;
+						}
+						if (wordArray.includes(word)) {
+							words.push(word);
+						} else {
+							isValidPerm = false;
+							break;
+						}
+					}
+
+					if (!isValidPerm) continue;
+
+					// horizontal contacts
+					for (const c of horContacts) {
+						let word = '';
+						let xDelta = 0;
+						while (workingState[c[0]][c[1] + xDelta]) {
+							word += workingState[c[0]][c[1] + xDelta];
+							xDelta++;
+						}
+						if (wordArray.includes(word)) {
+							words.push(word);
+						} else {
+							isValidPerm = false;
+							break;
+						}
+					}
+
+					if (isValidPerm && words.length) {
+						validWords.push([words, getWordScore(words)]);
+					}
+				}
+			}
+		}
+	}
+
+	return validWords.sort((a, b) => b[1] - a[1]).slice(0, 100);
+	// return validWords;
 };
 
 const getPermutaions = (hand) => {
