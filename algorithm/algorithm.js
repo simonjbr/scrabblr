@@ -1,4 +1,4 @@
-import tiles from './data/tiles.js';
+import tiles from './data/letterScores.js';
 import createBoard from './data/board.js';
 import wordArray from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';

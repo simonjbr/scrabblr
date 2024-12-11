@@ -1,4 +1,4 @@
-const tiles = {
+const letterScores = {
 	A: 1,
 	B: 4,
 	C: 4,
@@ -28,4 +28,4 @@ const tiles = {
 	0: 0,
 };
 
-export default tiles;
+export default letterScores;

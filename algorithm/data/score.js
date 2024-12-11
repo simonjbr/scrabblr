@@ -1,4 +1,5 @@
-import tiles from './tiles.js';
+import letterScores from './letterScores.js';
+import createBoard from './board.js';
 
 /**
  *
@@ -6,17 +7,44 @@ import tiles from './tiles.js';
  * @returns
  */
 
-const getWordScore = (words) => {
-	let score = 0;
-	for (const word of words) {
-		const chars = word.split('');
+const board = createBoard();
 
-		for (const c of chars) {
-			score += tiles[c];
+const getWordScore = (words) => {
+	let total = 0;
+	for (const word of words) {
+		let score = 0;
+		let wordMultiplier = 1;
+
+		for (const t of word.tiles) {
+			let letterMultiplier = 1;
+
+			if (t.hasBonus) {
+				let bonus = board[t.y][t.x];
+
+				switch (bonus) {
+					case 'DL':
+						letterMultiplier = 2;
+						break;
+					case 'TL':
+						letterMultiplier = 3;
+						break;
+					case 'DW':
+						wordMultiplier *= 2;
+						break;
+					case 'TW':
+						wordMultiplier *= 3;
+						break;
+					default:
+						break;
+				}
+			}
+
+			score += letterScores[t.letter] * letterMultiplier;
 		}
+		total += score * wordMultiplier;
 	}
 
-	return score;
+	return total;
 };
 
 export default getWordScore;

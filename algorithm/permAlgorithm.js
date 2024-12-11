@@ -1,4 +1,3 @@
-import createBoard from './data/board.js';
 import wordArray from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
@@ -9,8 +8,6 @@ import getWordScore from './data/score.js';
  */
 
 const getValidWords = (hand, state) => {
-	const board = createBoard();
-
 	const BOARD_LENGTH = 15;
 
 	// generate array of existing characters that must be attached to
@@ -25,8 +22,6 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
-
-	// console.log('single anchors:', anchors);
 
 	// check for vertical anchors
 	const verAnchors = [];
@@ -43,7 +38,6 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
-	console.log(verAnchors);
 
 	// check for horizontal anchors
 	const horAnchors = [];
@@ -61,22 +55,13 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
-	console.log(horAnchors);
 
 	// valid letter placement deltas (relative to anchors)
-	const deltas = [
-		[-1, 0],
-		[0, 1],
-		[1, 0],
-		[0, -1],
-	];
-
 	// vertical deltas
 	const verDeltas = [
 		[-1, 0],
 		[1, 0],
 	];
-
 	// horizontal deltas
 	const horDeltas = [
 		[0, 1],
@@ -121,14 +106,24 @@ const getValidWords = (hand, state) => {
 
 					// bool for breaking early
 					let isValidPerm = true;
+					// placed letter coordinates for score calculation
+					const placedLetters = [];
 					// place letters in workingState
 					for (let j = 0; j < perm.length; j++) {
 						if (workingState[n[0]][xStart - j]) {
 							isValidPerm = false;
 							break;
 						}
+						// place letter
 						workingState[n[0]][xStart - j] =
 							perm[perm.length - 1 - j];
+						// add letter and its coords to placedLetters
+						placedLetters.push({
+							letter: perm[perm.length - 1 - j],
+							y: n[0],
+							x: xStart - j,
+							hasBonus: true,
+						});
 						// if placed letter contacts an anchor add to contacts
 						// VERTICAL CONTACTS
 						// check for contacts above
@@ -173,17 +168,31 @@ const getValidWords = (hand, state) => {
 						wordArray.includes(perm.join('')) &&
 						!horContacts.length
 					)
-						words.push(perm.join(''));
+						words.push({
+							fullWord: perm.join(''),
+							tiles: placedLetters,
+						});
 					// loop through contacts to find newly created words
 					// vertical contacts
 					for (const c of verContacts) {
-						let word = '';
+						const word = {
+							fullWord: '',
+							tiles: [],
+						};
 						let yDelta = 0;
 						while (workingState[c[0] + yDelta][c[1]]) {
-							word += workingState[c[0] + yDelta][c[1]];
+							word.fullWord += workingState[c[0] + yDelta][c[1]];
+							word.tiles.push({
+								letter: workingState[c[0] + yDelta][c[1]],
+								y: c[0] + yDelta,
+								x: c[1],
+								hasBonus: state[c[0] + yDelta][c[1]]
+									? false
+									: true,
+							});
 							yDelta++;
 						}
-						if (wordArray.includes(word)) {
+						if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -195,13 +204,24 @@ const getValidWords = (hand, state) => {
 
 					// horizontal contacts
 					for (const c of horContacts) {
-						let word = '';
+						let word = {
+							fullWord: '',
+							tiles: [],
+						};
 						let xDelta = 0;
 						while (workingState[c[0]][c[1] + xDelta]) {
-							word += workingState[c[0]][c[1] + xDelta];
+							word.fullWord += workingState[c[0]][c[1] + xDelta];
+							word.tiles.push({
+								letter: workingState[c[0]][c[1] + xDelta],
+								y: c[0],
+								x: c[1] + xDelta,
+								hasBonus: state[c[0]][c[1] + xDelta]
+									? false
+									: true,
+							});
 							xDelta++;
 						}
-						if (wordArray.includes(word)) {
+						if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -210,7 +230,8 @@ const getValidWords = (hand, state) => {
 					}
 
 					if (isValidPerm && words.length) {
-						validWords.push([words, getWordScore(words)]);
+						let validWord = [words, getWordScore(words)];
+						validWords.push(validWord);
 					}
 				}
 			}
@@ -250,14 +271,24 @@ const getValidWords = (hand, state) => {
 
 					// HORIZONTAL CONTACTS
 					const horContacts = [];
+					// placed letter coordinates for score calculation
+					const placedLetters = [];
 					// place letters in workingState
 					for (let j = 0; j < perm.length; j++) {
 						if (workingState[yStart - j][n[1]]) {
 							isValidPerm = false;
 							break;
 						}
+						// place letter
 						workingState[yStart - j][n[1]] =
 							perm[perm.length - 1 - j];
+						// add letter and its coords to placedLetters
+						placedLetters.push({
+							letter: perm[perm.length - 1 - j],
+							y: yStart - j,
+							x: n[1],
+							hasBonus: true,
+						});
 						// if placed letter contacts an anchor add to contacts
 						// check for contacts left
 						if (workingState[yStart - j][n[1] - 1]) {
@@ -303,18 +334,32 @@ const getValidWords = (hand, state) => {
 						wordArray.includes(perm.join('')) &&
 						!verContacts.length
 					)
-						words.push(perm.join(''));
+						words.push({
+							fullWord: perm.join(''),
+							tiles: placedLetters,
+						});
 
 					// loop through contacts to find newly created words
 					// VERTICAL CONTACTS
 					for (const c of verContacts) {
-						let word = '';
+						const word = {
+							fullWord: '',
+							tiles: [],
+						};
 						let yDelta = 0;
 						while (workingState[c[0] + yDelta][c[1]]) {
-							word += workingState[c[0] + yDelta][c[1]];
+							word.fullWord += workingState[c[0] + yDelta][c[1]];
+							word.tiles.push({
+								letter: workingState[c[0] + yDelta][c[1]],
+								y: c[0] + yDelta,
+								x: c[1],
+								hasBonus: state[c[0] + yDelta][c[1]]
+									? false
+									: true,
+							});
 							yDelta++;
 						}
-						if (wordArray.includes(word)) {
+						if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -326,13 +371,24 @@ const getValidWords = (hand, state) => {
 
 					// HORIZONTAL CONTACTS
 					for (const c of horContacts) {
-						let word = '';
+						let word = {
+							fullWord: '',
+							tiles: [],
+						};
 						let xDelta = 0;
 						while (workingState[c[0]][c[1] + xDelta]) {
-							word += workingState[c[0]][c[1] + xDelta];
+							word.fullWord += workingState[c[0]][c[1] + xDelta];
+							word.tiles.push({
+								letter: workingState[c[0]][c[1] + xDelta],
+								y: c[0],
+								x: c[1] + xDelta,
+								hasBonus: state[c[0]][c[1] + xDelta]
+									? false
+									: true,
+							});
 							xDelta++;
 						}
-						if (wordArray.includes(word)) {
+						if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -392,4 +448,4 @@ const getPermutaions = (hand) => {
 
 const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 const validWords = getValidWords(hand, testState);
-console.log(validWords);
+console.log(validWords[0]);
