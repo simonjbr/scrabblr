@@ -4,6 +4,7 @@ node_modules/
 # Logs
 *.log
 npm-debug.log*
+*.cpuprofile
 
 # Environment variables
 .env
