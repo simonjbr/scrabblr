@@ -180,7 +180,10 @@ const getValidWords = (hand, state) => {
 							tiles: [],
 						};
 						let yDelta = 0;
-						while (workingState[c[0] + yDelta][c[1]]) {
+						while (
+							c[0] + yDelta < BOARD_LENGTH &&
+							workingState[c[0] + yDelta][c[1]]
+						) {
 							word.fullWord += workingState[c[0] + yDelta][c[1]];
 							word.tiles.push({
 								letter: workingState[c[0] + yDelta][c[1]],
@@ -209,7 +212,10 @@ const getValidWords = (hand, state) => {
 							tiles: [],
 						};
 						let xDelta = 0;
-						while (workingState[c[0]][c[1] + xDelta]) {
+						while (
+							c[1] + xDelta < BOARD_LENGTH &&
+							workingState[c[0]][c[1] + xDelta]
+						) {
 							word.fullWord += workingState[c[0]][c[1] + xDelta];
 							word.tiles.push({
 								letter: workingState[c[0]][c[1] + xDelta],
@@ -347,7 +353,10 @@ const getValidWords = (hand, state) => {
 							tiles: [],
 						};
 						let yDelta = 0;
-						while (workingState[c[0] + yDelta][c[1]]) {
+						while (
+							c[0] + yDelta < BOARD_LENGTH &&
+							workingState[c[0] + yDelta][c[1]]
+						) {
 							word.fullWord += workingState[c[0] + yDelta][c[1]];
 							word.tiles.push({
 								letter: workingState[c[0] + yDelta][c[1]],
@@ -435,8 +444,9 @@ const getPermutaions = (hand) => {
 			for (const perm of permute(remaining)) {
 				const p = [current, ...perm];
 				// if its a valid word push it to permutations
-				if (wordArray.includes(p.join('')))
-					permutations.push([current, ...perm]);
+				if (wordArray.includes(p.join(''))) {
+					permutations.push(p);
+				}
 			}
 		}
 		return permutations;
@@ -448,4 +458,9 @@ const getPermutaions = (hand) => {
 
 const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 const validWords = getValidWords(hand, testState);
-console.log(validWords[0]);
+for (let i = 0; i < 10; i++) console.info(validWords[i]);
+console.log(validWords.length);
+
+// const perms = getPermutaions(hand);
+
+// console.log(perms);
