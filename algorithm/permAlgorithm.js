@@ -431,7 +431,7 @@ const getValidWords = (hand, state) => {
 		index++;
 	}
 
-	return filteredValidWords;
+	return [filteredValidWords, validWords.length];
 };
 
 const getPermutaions = (hand) => {
@@ -459,13 +459,24 @@ const getPermutaions = (hand) => {
 			const remaining = arr.slice(0, i).concat(arr.slice(i + 1));
 			for (const perm of permute(remaining)) {
 				const p = [current, ...perm];
-				// if its a valid word push it to permutations
-				if (wordArray.includes(p.join(''))) {
-					permutations.push(p);
+
+				// add all perms to permutations
+				permutations.push(p);
+			}
+		}
+
+		// filter out perms that don't exist as components of words
+		const filteredPermutations = [];
+		for (const p of permutations) {
+			const pString = p.join('');
+			for (const word of wordArray) {
+				if (word.includes(pString)) {
+					filteredPermutations.push(p);
+					break;
 				}
 			}
 		}
-		return permutations;
+		return filteredPermutations;
 	};
 
 	generateSubsets([], 0);
@@ -474,9 +485,10 @@ const getPermutaions = (hand) => {
 
 const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 const validWords = getValidWords(hand, testState);
-for (let i = 0; i < 10; i++) console.info(validWords[i]);
-console.log(validWords.length);
+console.log(validWords);
+// for (let i = 0; i < 10; i++) console.info(validWords[i]);
+// console.log(validWords.length);
 
 // const perms = getPermutaions(hand);
 
-// console.log(perms);
+// console.log(perms.length);
