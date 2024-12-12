@@ -414,8 +414,24 @@ const getValidWords = (hand, state) => {
 		}
 	}
 
-	// return validWords.sort((a, b) => b[1] - a[1]).slice(0, 100);
-	return validWords.sort((a, b) => b[1] - a[1]);
+	validWords.sort((a, b) => b[1] - a[1]);
+
+	// filter out repeats
+	const filteredValidWords = [validWords[0]];
+	const usedMoves = new Set();
+	usedMoves.add(JSON.stringify(validWords[0]));
+	let index = 1;
+	while (filteredValidWords.length < 20) {
+		const validWord = validWords[index];
+		const move = JSON.stringify(validWord);
+		if (!usedMoves.has(move)) {
+			filteredValidWords.push(validWord);
+			usedMoves.add(move);
+		}
+		index++;
+	}
+
+	return filteredValidWords;
 };
 
 const getPermutaions = (hand) => {
