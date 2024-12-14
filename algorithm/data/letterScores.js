@@ -25,7 +25,7 @@ const letterScores = {
 	X: 8,
 	Y: 4,
 	Z: 10,
-	0: 0,
+	j: 0,
 };
 
 export default letterScores;

@@ -435,6 +435,7 @@ const getValidWords = (hand, state) => {
 };
 
 const getPermutaions = (hand) => {
+	console.log('permutations:');
 	const results = [];
 
 	// helper function to generate subsets of hand
@@ -460,19 +461,59 @@ const getPermutaions = (hand) => {
 			for (const perm of permute(remaining)) {
 				const p = [current, ...perm];
 
+				// how many jokers are in this permutation
+				let jokers = 0;
+				const jokerIndices = [];
+
+				for (let k = 0; k < p.length; k++) {
+					const letter = p[k];
+					if (letter === 'j') {
+						jokerIndices.push(k);
+						jokers++;
+					}
+				}
+
 				// add all perms to permutations
-				permutations.push(p);
+				permutations.push({
+					permutation: p,
+					jokers: jokers,
+					jokerIndices: jokerIndices,
+				});
 			}
 		}
 
 		// filter out perms that don't exist as components of words
 		const filteredPermutations = [];
 		for (const p of permutations) {
-			const pString = p.join('');
-			for (const word of wordArray) {
-				if (word.includes(pString)) {
-					filteredPermutations.push(p);
-					break;
+			const pString = p.permutation.join('');
+			if (p.jokers === 0) {
+				p.regExp = new RegExp(pString);
+				for (const word of wordArray) {
+					if (word.includes(pString)) {
+						filteredPermutations.push(p);
+						break;
+					}
+				}
+			} else {
+				// if there are jokers in permutation
+				// dynamically generate regex to test with
+				let jokerRegExpString = '';
+				for (const letter of p.permutation) {
+					if (letter !== 'j') {
+						jokerRegExpString += letter;
+					} else {
+						jokerRegExpString += '[A-Z]';
+					}
+				}
+				// store regex in permutation object
+				// const jokerRegExp = new RegExp(jokerRegExpString);
+				p.regExp = new RegExp(jokerRegExpString);
+				for (const word of wordArray) {
+					if (jokerRegExp.test(word)) {
+						filteredPermutations.push(p);
+						console.log(p.permutation);
+						break;
+					}
 				}
 			}
 		}
@@ -480,12 +521,14 @@ const getPermutaions = (hand) => {
 	};
 
 	generateSubsets([], 0);
+	console.log('permutations length:', results.length);
 	return results;
 };
 
-const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
 const validWords = getValidWords(hand, testState);
 console.log(validWords);
+console.log(validWords.length);
 // for (let i = 0; i < 10; i++) console.info(validWords[i]);
 // console.log(validWords.length);
 
