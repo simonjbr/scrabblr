@@ -90,7 +90,7 @@ const getValidWords = (hand, state) => {
 				// try perm with each letter in the neighbour coord
 				for (
 					let xStartDelta = 0;
-					xStartDelta < perm.length;
+					xStartDelta < perm.permutation.length;
 					xStartDelta++
 				) {
 					const xStart = n[1] + xStartDelta;
@@ -100,7 +100,7 @@ const getValidWords = (hand, state) => {
 					const workingState = [];
 					for (const row of state) workingState.push([...row]);
 					// bounds check x-axis
-					if (xStart - perm.length < 0) continue;
+					if (xStart - perm.permutation.length < 0) continue;
 					// array of placed letters that contact anchors
 					const verContacts = [];
 
@@ -109,17 +109,19 @@ const getValidWords = (hand, state) => {
 					// placed letter coordinates for score calculation
 					const placedLetters = [];
 					// place letters in workingState
-					for (let j = 0; j < perm.length; j++) {
+					for (let j = 0; j < perm.permutation.length; j++) {
 						if (workingState[n[0]][xStart - j]) {
 							isValidPerm = false;
 							break;
 						}
 						// place letter
 						workingState[n[0]][xStart - j] =
-							perm[perm.length - 1 - j];
+							perm.permutation[perm.permutation.length - 1 - j];
 						// add letter and its coords to placedLetters
 						placedLetters.push({
-							letter: perm[perm.length - 1 - j],
+							letter: perm.permutation[
+								perm.permutation.length - 1 - j
+							],
 							y: n[0],
 							x: xStart - j,
 							hasBonus: true,
@@ -144,32 +146,37 @@ const getValidWords = (hand, state) => {
 					// HORIZONTAL CONTACTS
 					const horContacts = [];
 					// check for contacts left
-					if (workingState[n[0][xStart - perm.length]]) {
+					if (workingState[n[0][xStart - perm.permutation.length]]) {
 						let xDelta = 1;
 						while (
-							workingState[n[0][xStart - perm.length - xDelta]]
+							workingState[
+								n[0][xStart - perm.permutation.length - xDelta]
+							]
 						) {
 							xDelta++;
 						}
 						horContacts.push([
 							n[0],
-							xStart - perm.length - xDelta + 1,
+							xStart - perm.permutation.length - xDelta + 1,
 						]);
 						// check for contact right
 					} else if (
 						xStart + 1 < BOARD_LENGTH &&
 						workingState[n[0]][xStart + 1]
 					) {
-						horContacts.push([n[0], xStart - perm.length + 1]);
+						horContacts.push([
+							n[0],
+							xStart - perm.permutation.length + 1,
+						]);
 					}
 
 					const words = [];
 					if (
-						wordArray.includes(perm.join('')) &&
+						wordArray.includes(perm.permutation.join('')) &&
 						!horContacts.length
 					)
 						words.push({
-							fullWord: perm.join(''),
+							fullWord: perm.permutation.join(''),
 							tiles: placedLetters,
 						});
 					// loop through contacts to find newly created words
@@ -261,7 +268,7 @@ const getValidWords = (hand, state) => {
 				// try perm with each letter in the neighbour coord
 				for (
 					let yStartDelta = 0;
-					yStartDelta < perm.length;
+					yStartDelta < perm.permutation.length;
 					yStartDelta++
 				) {
 					const yStart = n[0] + yStartDelta; // const yStart = n[0] + yStartDelta
@@ -271,7 +278,7 @@ const getValidWords = (hand, state) => {
 					const workingState = [];
 					for (const row of state) workingState.push([...row]);
 					// bounds check y-axis
-					if (yStart - perm.length < 0) continue;
+					if (yStart - perm.permutation.length < 0) continue;
 					// bool for breaking early
 					let isValidPerm = true;
 
@@ -280,17 +287,19 @@ const getValidWords = (hand, state) => {
 					// placed letter coordinates for score calculation
 					const placedLetters = [];
 					// place letters in workingState
-					for (let j = 0; j < perm.length; j++) {
+					for (let j = 0; j < perm.permutation.length; j++) {
 						if (workingState[yStart - j][n[1]]) {
 							isValidPerm = false;
 							break;
 						}
 						// place letter
 						workingState[yStart - j][n[1]] =
-							perm[perm.length - 1 - j];
+							perm.permutation[perm.permutation.length - 1 - j];
 						// add letter and its coords to placedLetters
 						placedLetters.push({
-							letter: perm[perm.length - 1 - j],
+							letter: perm.permutation[
+								perm.permutation.length - 1 - j
+							],
 							y: yStart - j,
 							x: n[1],
 							hasBonus: true,
@@ -313,16 +322,20 @@ const getValidWords = (hand, state) => {
 					// VERTICAL CONTACTS
 					const verContacts = [];
 					// check for contacts above
-					if (workingState[yStart - perm.length][[n[1]]]) {
+					if (
+						workingState[yStart - perm.permutation.length][[n[1]]]
+					) {
 						// if found search for top letter
 						let yDelta = 1;
 						while (
-							workingState[yStart - perm.length - yDelta][n[1]]
+							workingState[
+								yStart - perm.permutation.length - yDelta
+							][n[1]]
 						) {
 							yDelta++;
 						}
 						verContacts.push([
-							yStart - perm.length - yDelta + 1,
+							yStart - perm.permutation.length - yDelta + 1,
 							n[1],
 						]);
 						// check for contact below
@@ -330,18 +343,21 @@ const getValidWords = (hand, state) => {
 						yStart + 1 < BOARD_LENGTH &&
 						workingState[yStart + 1][n[1]]
 					) {
-						verContacts.push([yStart - perm.length + 1, n[1]]);
+						verContacts.push([
+							yStart - perm.permutation.length + 1,
+							n[1],
+						]);
 					}
 					if (!isValidPerm) continue;
 
 					const words = [];
 					// make sure perm is on array if it is valid and isn't a component of another word
 					if (
-						wordArray.includes(perm.join('')) &&
+						wordArray.includes(perm.permutation.join('')) &&
 						!verContacts.length
 					)
 						words.push({
-							fullWord: perm.join(''),
+							fullWord: perm.permutation.join(''),
 							tiles: placedLetters,
 						});
 
@@ -451,7 +467,17 @@ const getPermutaions = (hand) => {
 
 	// helper function to generate permutations of the subset
 	const permute = (arr) => {
-		if (arr.length === 1) return [arr];
+		// if (arr.length === 1) return [arr];
+		if (arr.length === 1) {
+			const isJoker = arr[0] === 'j';
+			return [
+				{
+					permutation: arr,
+					jokers: isJoker ? 1 : 0,
+					jokerIndices: isJoker ? [0] : [],
+				},
+			];
+		}
 
 		const permutations = [];
 		for (let i = 0; i < arr.length; i++) {
@@ -459,7 +485,7 @@ const getPermutaions = (hand) => {
 			// slice out current letter
 			const remaining = arr.slice(0, i).concat(arr.slice(i + 1));
 			for (const perm of permute(remaining)) {
-				const p = [current, ...perm];
+				const p = [current, ...perm.permutation];
 
 				// how many jokers are in this permutation
 				let jokers = 0;
@@ -509,7 +535,7 @@ const getPermutaions = (hand) => {
 				// const jokerRegExp = new RegExp(jokerRegExpString);
 				p.regExp = new RegExp(jokerRegExpString);
 				for (const word of wordArray) {
-					if (jokerRegExp.test(word)) {
+					if (p.regExp.test(word)) {
 						filteredPermutations.push(p);
 						console.log(p.permutation);
 						break;
