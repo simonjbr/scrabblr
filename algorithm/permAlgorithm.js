@@ -118,16 +118,16 @@ const getValidWords = (hand, state) => {
 							break;
 						}
 						// place letter
-						workingState[n[0]][xStart - j] =
+						const letter =
 							perm.permutation[perm.permutation.length - 1 - j];
+						workingState[n[0]][xStart - j] = letter;
 						// add letter and its coords to placedLetters
 						placedLetters.push({
-							letter: perm.permutation[
-								perm.permutation.length - 1 - j
-							],
+							letter: letter,
 							y: n[0],
 							x: xStart - j,
 							hasBonus: true,
+							isJoker: letter === 'j',
 						});
 						// if placed letter contacts an anchor add to contacts
 						// VERTICAL CONTACTS
@@ -174,12 +174,23 @@ const getValidWords = (hand, state) => {
 					}
 
 					const words = [];
-					if (
-						wordArray.includes(perm.permutation.join('')) &&
+					if (perm.jokers && !horContacts.length) {
+						const jokerRegExp = new RegExp(perm.string);
+						for (const word of wordArray) {
+							if (jokerRegExp.test(word)) {
+								words.push({
+									fullWord: word,
+									tiles: placedLetters,
+								});
+								break;
+							}
+						}
+					} else if (
+						wordArray.includes(perm.string) &&
 						!horContacts.length
 					)
 						words.push({
-							fullWord: perm.permutation.join(''),
+							fullWord: perm.string,
 							tiles: placedLetters,
 						});
 					// loop through contacts to find newly created words
@@ -194,18 +205,36 @@ const getValidWords = (hand, state) => {
 							c[0] + yDelta < BOARD_LENGTH &&
 							workingState[c[0] + yDelta][c[1]]
 						) {
-							word.fullWord += workingState[c[0] + yDelta][c[1]];
+							const letter = workingState[c[0] + yDelta][c[1]];
+							const isLetterJoker = letter === 'j';
+							word.fullWord += letter;
 							word.tiles.push({
-								letter: workingState[c[0] + yDelta][c[1]],
+								letter: letter,
 								y: c[0] + yDelta,
 								x: c[1],
 								hasBonus: state[c[0] + yDelta][c[1]]
 									? false
 									: true,
+								isJoker: isLetterJoker,
 							});
+							if (isLetterJoker) word.hasJoker = true;
 							yDelta++;
 						}
-						if (wordArray.includes(word.fullWord)) {
+						if (word.hasJoker) {
+							const jokerRegExp = new RegExp(
+								word.fullWord.replace(/j/g, '[A-Z]')
+							);
+							for (const w of wordArray) {
+								if (
+									w.length === word.fullWord.length &&
+									jokerRegExp.test(w)
+								) {
+									word.fullWord = w;
+									words.push(word);
+									break;
+								}
+							}
+						} else if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -226,18 +255,36 @@ const getValidWords = (hand, state) => {
 							c[1] + xDelta < BOARD_LENGTH &&
 							workingState[c[0]][c[1] + xDelta]
 						) {
-							word.fullWord += workingState[c[0]][c[1] + xDelta];
+							const letter = workingState[c[0]][c[1] + xDelta];
+							const isLetterJoker = letter === 'j';
+							word.fullWord += letter;
 							word.tiles.push({
-								letter: workingState[c[0]][c[1] + xDelta],
+								letter: letter,
 								y: c[0],
 								x: c[1] + xDelta,
 								hasBonus: state[c[0]][c[1] + xDelta]
 									? false
 									: true,
+								isJoker: isLetterJoker,
 							});
+							if (isLetterJoker) word.hasJoker = true;
 							xDelta++;
 						}
-						if (wordArray.includes(word.fullWord)) {
+						if (word.hasJoker) {
+							const jokerRegExp = new RegExp(
+								word.fullWord.replace(/j/g, '[A-Z]')
+							);
+							for (const w of wordArray) {
+								if (
+									w.length === word.fullWord.length &&
+									jokerRegExp.test(w)
+								) {
+									word.fullWord = w;
+									words.push(word);
+									break;
+								}
+							}
+						} else if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -296,16 +343,16 @@ const getValidWords = (hand, state) => {
 							break;
 						}
 						// place letter
-						workingState[yStart - j][n[1]] =
+						const letter =
 							perm.permutation[perm.permutation.length - 1 - j];
+						workingState[yStart - j][n[1]] = letter;
 						// add letter and its coords to placedLetters
 						placedLetters.push({
-							letter: perm.permutation[
-								perm.permutation.length - 1 - j
-							],
+							letter: letter,
 							y: yStart - j,
 							x: n[1],
 							hasBonus: true,
+							isJoker: letter === 'j',
 						});
 						// if placed letter contacts an anchor add to contacts
 						// check for contacts left
@@ -355,12 +402,23 @@ const getValidWords = (hand, state) => {
 
 					const words = [];
 					// make sure perm is on array if it is valid and isn't a component of another word
-					if (
-						wordArray.includes(perm.permutation.join('')) &&
+					if (perm.jokers && !verContacts.length) {
+						const jokerRegExp = new RegExp(perm.string);
+						for (const word of wordArray) {
+							if (jokerRegExp.test(word)) {
+								words.push({
+									fullWord: word,
+									tiles: placedLetters,
+								});
+								break;
+							}
+						}
+					} else if (
+						wordArray.includes(perm.string) &&
 						!verContacts.length
 					)
 						words.push({
-							fullWord: perm.permutation.join(''),
+							fullWord: perm.string,
 							tiles: placedLetters,
 						});
 
@@ -376,18 +434,36 @@ const getValidWords = (hand, state) => {
 							c[0] + yDelta < BOARD_LENGTH &&
 							workingState[c[0] + yDelta][c[1]]
 						) {
-							word.fullWord += workingState[c[0] + yDelta][c[1]];
+							const letter = workingState[c[0] + yDelta][c[1]];
+							const isLetterJoker = letter === 'j';
+							word.fullWord += letter;
 							word.tiles.push({
-								letter: workingState[c[0] + yDelta][c[1]],
+								letter: letter,
 								y: c[0] + yDelta,
 								x: c[1],
 								hasBonus: state[c[0] + yDelta][c[1]]
 									? false
 									: true,
+								isJoker: isLetterJoker,
 							});
+							if (isLetterJoker) word.hasJoker = true;
 							yDelta++;
 						}
-						if (wordArray.includes(word.fullWord)) {
+						if (word.hasJoker) {
+							const jokerRegExp = new RegExp(
+								word.fullWord.replace(/j/g, '[A-Z]')
+							);
+							for (const w of wordArray) {
+								if (
+									w.length === word.fullWord.length &&
+									jokerRegExp.test(w)
+								) {
+									word.fullWord = w;
+									words.push(word);
+									break;
+								}
+							}
+						} else if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -404,19 +480,40 @@ const getValidWords = (hand, state) => {
 							tiles: [],
 						};
 						let xDelta = 0;
-						while (workingState[c[0]][c[1] + xDelta]) {
-							word.fullWord += workingState[c[0]][c[1] + xDelta];
+						while (
+							c[1] + xDelta < BOARD_LENGTH &&
+							workingState[c[0]][c[1] + xDelta]
+						) {
+							const letter = workingState[c[0]][c[1] + xDelta];
+							const isLetterJoker = letter === 'j';
+							word.fullWord += letter;
 							word.tiles.push({
-								letter: workingState[c[0]][c[1] + xDelta],
+								letter: letter,
 								y: c[0],
 								x: c[1] + xDelta,
 								hasBonus: state[c[0]][c[1] + xDelta]
 									? false
 									: true,
+								isJoker: isLetterJoker,
 							});
+							if (isLetterJoker) word.hasJoker = true;
 							xDelta++;
 						}
-						if (wordArray.includes(word.fullWord)) {
+						if (word.hasJoker) {
+							const jokerRegExp = new RegExp(
+								word.fullWord.replace(/j/g, '[A-Z]')
+							);
+							for (const w of wordArray) {
+								if (
+									w.length === word.fullWord.length &&
+									jokerRegExp.test(w)
+								) {
+									word.fullWord = w;
+									words.push(word);
+									break;
+								}
+							}
+						} else if (wordArray.includes(word.fullWord)) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -456,3 +553,6 @@ const getValidWords = (hand, state) => {
 const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
 const validWords = getValidWords(hand, testState);
 console.log(validWords);
+for (const validWord of validWords) {
+	console.log(JSON.stringify(validWord, null, '\t'));
+}

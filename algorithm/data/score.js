@@ -39,7 +39,7 @@ const getWordScore = (words) => {
 				}
 			}
 
-			score += letterScores[t.letter] * letterMultiplier;
+			if (!t.isJoker) score += letterScores[t.letter] * letterMultiplier;
 		}
 		total += score * wordMultiplier;
 	}

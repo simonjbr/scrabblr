@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import getPermutaions from './permutations.js';
 
 const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
 

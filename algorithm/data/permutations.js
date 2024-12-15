@@ -25,6 +25,7 @@ const getPermutaions = (hand) => {
 					permutation: arr,
 					jokers: isJoker ? 1 : 0,
 					jokerIndices: isJoker ? [0] : [],
+					string: arr[0],
 				},
 			];
 		}
@@ -61,11 +62,11 @@ const getPermutaions = (hand) => {
 		// filter out perms that don't exist as components of words
 		const filteredPermutations = [];
 		for (const p of permutations) {
-			const pString = p.permutation.join('');
+			p.string = p.permutation.join('');
 			if (p.jokers === 0) {
-				p.regExp = new RegExp(pString);
+				p.regExp = new RegExp(p.string);
 				for (const word of wordArray) {
-					if (word.includes(pString)) {
+					if (word.includes(p.string)) {
 						filteredPermutations.push(p);
 						break;
 					}
@@ -73,17 +74,16 @@ const getPermutaions = (hand) => {
 			} else {
 				// if there are jokers in permutation
 				// dynamically generate regex to test with
-				let jokerRegExpString = '';
+				p.string = '';
 				for (const letter of p.permutation) {
 					if (letter !== 'j') {
-						jokerRegExpString += letter;
+						p.string += letter;
 					} else {
-						jokerRegExpString += '[A-Z]';
+						p.string += '[A-Z]';
 					}
 				}
 				// store regex in permutation object
-				// const jokerRegExp = new RegExp(jokerRegExpString);
-				p.regExp = new RegExp(jokerRegExpString);
+				p.regExp = new RegExp(p.string);
 				for (const word of wordArray) {
 					if (p.regExp.test(word)) {
 						filteredPermutations.push(p);

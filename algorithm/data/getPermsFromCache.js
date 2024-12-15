@@ -15,5 +15,10 @@ const getPermsFromCache = () => {
 		return false;
 	}
 };
+// const perms = getPermsFromCache();
+
+// for (const p of perms) {
+// 	if (p.jokers) console.log(p.regExp);
+// }
 
 export default getPermsFromCache;
