@@ -23,3 +23,6 @@ build/
 
 # cache
 cache/
+
+# benchmarking
+benchmark/

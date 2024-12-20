@@ -13,5 +13,8 @@
 	"dependencies": {
 		"object-sizeof": "^2.6.5",
 		"word-list": "^4.1.0"
+	},
+	"devDependencies": {
+		"tinybench": "^3.0.7"
 	}
 }
