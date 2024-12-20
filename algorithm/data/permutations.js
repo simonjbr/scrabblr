@@ -1,6 +1,6 @@
 import { wordObj } from './words.js';
 
-const getPermutaions = (hand) => {
+const getPermutations = (hand) => {
 	// console.log('permutations:');
 	const results = [];
 	const MAX_LENGTH = 28;
@@ -127,6 +127,6 @@ const getPermutaions = (hand) => {
 };
 
 // const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
-// getPermutaions(hand);
+// getPermutations(hand);
 
-export default getPermutaions;
+export default getPermutations;

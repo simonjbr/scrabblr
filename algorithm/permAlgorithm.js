@@ -1,7 +1,7 @@
 import wordArray from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
-import getPermutaions from './data/permutations.js';
+import getPermutations from './data/permutations.js';
 import getPermsFromCache from './data/getPermsFromCache.js';
 import fs from 'node:fs';
 
@@ -73,7 +73,7 @@ const getValidWords = (hand, state) => {
 
 	// get permutations for hand
 	// try cache first otherwise generate new perms
-	const permutations = getPermsFromCache().perms || getPermutaions(hand);
+	const permutations = getPermsFromCache().perms || getPermutations(hand);
 
 	const validWords = [];
 	// loop through vertical anchors and find valid permutations of letter
