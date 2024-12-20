@@ -16,10 +16,22 @@ for (const word of wordArray) {
 	wordObj[word.length].push(word);
 }
 
-fs.writeFileSync(
-	`./algorithm/data/words.json`,
-	JSON.stringify({ wordObj }),
-	'utf8'
-);
+const wordArraySplit = [[]];
+for (const word of wordArray) {
+	if (!wordArraySplit[word.length]) {
+		wordArraySplit.push([]);
+		if (word.length === 27) {
+			wordArraySplit.push([]);
+		}
+	}
 
-export default wordObj;
+	wordArraySplit[word.length].push(word);
+}
+
+// fs.writeFileSync(
+// 	`./algorithm/data/words.json`,
+// 	JSON.stringify({ wordObj }),
+// 	'utf8'
+// );
+
+export { wordArray, wordObj, wordArraySplit };
