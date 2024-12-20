@@ -3,7 +3,7 @@ import { wordObj } from './words.js';
 const getPermutations = (hand) => {
 	// console.log('permutations:');
 	const results = [];
-	const MAX_LENGTH = 28;
+	const MAX_LENGTH = 15;
 
 	// helper function to generate subsets of hand
 	const generateSubsets = (subset, start) => {
@@ -72,7 +72,6 @@ const getPermutations = (hand) => {
 					length++
 				) {
 					let isValidPerm = false;
-					if (length === 26) continue;
 					const wordArray = wordObj[length];
 					for (const word of wordArray) {
 						if (word.includes(p.string)) {
@@ -103,7 +102,6 @@ const getPermutations = (hand) => {
 					length++
 				) {
 					let isValidPerm = false;
-					if (length === 26) continue;
 					const wordArray = wordObj[length];
 					for (const word of wordArray) {
 						if (p.regExp.test(word)) {

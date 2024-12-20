@@ -10,6 +10,7 @@ const wordArray = fs
 
 const wordObj = {};
 for (const word of wordArray) {
+	if (word.length >= 16) break;
 	if (!wordObj[word.length]) {
 		wordObj[word.length] = [];
 	}
