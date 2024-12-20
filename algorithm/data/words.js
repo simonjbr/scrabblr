@@ -8,4 +8,18 @@ const wordArray = fs
 	.split('\n')
 	.sort((a, b) => a.length - b.length);
 
-export default wordArray;
+const wordObj = {};
+for (const word of wordArray) {
+	if (!wordObj[word.length]) {
+		wordObj[word.length] = [];
+	}
+	wordObj[word.length].push(word);
+}
+
+fs.writeFileSync(
+	`./algorithm/data/words.json`,
+	JSON.stringify({ wordObj }),
+	'utf8'
+);
+
+export default wordObj;
