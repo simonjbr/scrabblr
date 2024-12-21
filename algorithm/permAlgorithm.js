@@ -1,4 +1,4 @@
-import wordArray from './data/words.js';
+import { wordArray, wordObj } from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
 import getPermutations from './data/permutations.js';
@@ -13,6 +13,7 @@ import fs from 'node:fs';
 const getValidWords = (hand, state) => {
 	const BOARD_LENGTH = 15;
 
+	console.time('Finding anchors');
 	// generate array of existing characters that must be attached to
 	// I'll call them anchors
 	const anchors = [];
@@ -59,6 +60,8 @@ const getValidWords = (hand, state) => {
 		}
 	}
 
+	console.timeEnd('Finding anchors');
+
 	// valid letter placement deltas (relative to anchors)
 	// vertical deltas
 	const verDeltas = [
@@ -71,11 +74,16 @@ const getValidWords = (hand, state) => {
 		[0, -1],
 	];
 
+	console.time('Get permutations');
 	// get permutations for hand
 	// try cache first otherwise generate new perms
-	const permutations = getPermsFromCache().perms || getPermutations(hand);
+	// const permutations = getPermsFromCache().perms || getPermutations(hand);
+	const permutations = getPermutations(hand);
+	console.timeEnd('Get permutations');
 
+	console.time('Get valid words');
 	const validWords = [];
+	console.time('Horizontal placements');
 	// loop through vertical anchors and find valid permutations of letter
 	// placement that touches at least that anchor
 	for (let i = 0; i < verAnchors.length; i++) {
@@ -187,7 +195,7 @@ const getValidWords = (hand, state) => {
 							hasJoker: true,
 						};
 						// search wordArray for valid joker letters
-						for (const word of wordArray) {
+						for (const word of wordObj[perm.permutation.length]) {
 							if (
 								word.length === perm.permutation.length &&
 								jokerRegExp.test(word)
@@ -215,7 +223,9 @@ const getValidWords = (hand, state) => {
 							}
 						}
 					} else if (
-						wordArray.includes(perm.string) &&
+						wordObj[perm.permutation.length].includes(
+							perm.string
+						) &&
 						!horContacts.length
 					)
 						words.push({
@@ -277,7 +287,7 @@ const getValidWords = (hand, state) => {
 							const badJokerLetterIndices = [];
 							for (let j = 0; j < word.fullWord.length; j++) {
 								const w = word.fullWord[j];
-								if (wordArray.includes(w)) {
+								if (wordObj[w.length].includes(w)) {
 									isValidJoker = true;
 								} else {
 									badJokerLetterIndices.push(j);
@@ -302,10 +312,6 @@ const getValidWords = (hand, state) => {
 										1
 									);
 								}
-								// update workingState with filtered joker letter values
-								workingState[word.tiles[jokerIndex].y][
-									word.tiles[jokerIndex].x
-								] = word.tiles[jokerIndex];
 							}
 							// if all words removed break early
 							if (!word.fullWord.length) {
@@ -313,7 +319,11 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 							words.push(word);
-						} else if (wordArray.includes(word.fullWord)) {
+						} else if (
+							wordObj[word.fullWord.length].includes(
+								word.fullWord
+							)
+						) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -353,6 +363,7 @@ const getValidWords = (hand, state) => {
 							}
 							xDelta++;
 						}
+
 						if (word.hasJoker) {
 							// if word has a joker push all potentialy valid combinations
 							word.fullWord = [word.fullWord];
@@ -375,7 +386,7 @@ const getValidWords = (hand, state) => {
 							const badJokerLetterIndices = [];
 							for (let j = 0; j < word.fullWord.length; j++) {
 								const w = word.fullWord[j];
-								if (wordArray.includes(w)) {
+								if (wordObj[w.length].includes(w)) {
 									isValidJoker = true;
 								} else {
 									badJokerLetterIndices.push(j);
@@ -400,10 +411,6 @@ const getValidWords = (hand, state) => {
 										1
 									);
 								}
-								// update workingState with filtered joker letter values
-								workingState[word.tiles[jokerIndex].y][
-									word.tiles[jokerIndex].x
-								] = word.tiles[jokerIndex];
 							}
 							// if all words removed break early
 							if (!word.fullWord.length) {
@@ -411,7 +418,11 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 							words.push(word);
-						} else if (wordArray.includes(word.fullWord)) {
+						} else if (
+							wordObj[word.fullWord.length].includes(
+								word.fullWord
+							)
+						) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -431,7 +442,9 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
+	console.timeEnd('Horizontal placements');
 
+	console.time('Vertical placements');
 	// now loop through horizontal anchors
 	for (let i = 0; i < horAnchors.length; i++) {
 		let [anchor, y, x] = horAnchors[i];
@@ -544,7 +557,7 @@ const getValidWords = (hand, state) => {
 							hasJoker: true,
 						};
 						// search wordArray for valid joker letters
-						for (const word of wordArray) {
+						for (const word of wordObj[perm.permutation.length]) {
 							if (
 								word.length === perm.permutation.length &&
 								jokerRegExp.test(word)
@@ -572,7 +585,9 @@ const getValidWords = (hand, state) => {
 							}
 						}
 					} else if (
-						wordArray.includes(perm.string) &&
+						wordObj[perm.permutation.length].includes(
+							perm.string
+						) &&
 						!verContacts.length
 					)
 						words.push({
@@ -634,7 +649,7 @@ const getValidWords = (hand, state) => {
 							const badJokerLetterIndices = [];
 							for (let j = 0; j < word.fullWord.length; j++) {
 								const w = word.fullWord[j];
-								if (wordArray.includes(w)) {
+								if (wordObj[w.length].includes(w)) {
 									isValidJoker = true;
 								} else {
 									badJokerLetterIndices.push(j);
@@ -659,10 +674,6 @@ const getValidWords = (hand, state) => {
 										1
 									);
 								}
-								// update workingState with filtered joker letter values
-								workingState[word.tiles[jokerIndex].y][
-									word.tiles[jokerIndex].x
-								] = word.tiles[jokerIndex];
 							}
 							// if all words removed break early
 							if (!word.fullWord.length) {
@@ -670,7 +681,11 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 							words.push(word);
-						} else if (wordArray.includes(word.fullWord)) {
+						} else if (
+							wordObj[word.fullWord.length].includes(
+								word.fullWord
+							)
+						) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -693,8 +708,8 @@ const getValidWords = (hand, state) => {
 							workingState[c[0]][c[1] + xDelta]
 						) {
 							const letter = workingState[c[0]][c[1] + xDelta];
-							const isLetterJoker = letter === 'j';
-							word.fullWord += letter;
+							const isLetterJoker = Array.isArray(letter);
+							word.fullWord += isLetterJoker ? 'j' : letter;
 							word.tiles.push({
 								letter: letter,
 								y: c[0],
@@ -732,7 +747,7 @@ const getValidWords = (hand, state) => {
 							const badJokerLetterIndices = [];
 							for (let j = 0; j < word.fullWord.length; j++) {
 								const w = word.fullWord[j];
-								if (wordArray.includes(w)) {
+								if (wordObj[w.length].includes(w)) {
 									isValidJoker = true;
 								} else {
 									badJokerLetterIndices.push(j);
@@ -757,10 +772,6 @@ const getValidWords = (hand, state) => {
 										1
 									);
 								}
-								// update workingState with filtered joker letter values
-								workingState[word.tiles[jokerIndex].y][
-									word.tiles[jokerIndex].x
-								] = word.tiles[jokerIndex];
 							}
 							// if all words removed break early
 							if (!word.fullWord.length) {
@@ -768,7 +779,11 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 							words.push(word);
-						} else if (wordArray.includes(word.fullWord)) {
+						} else if (
+							wordObj[word.fullWord.length].includes(
+								word.fullWord
+							)
+						) {
 							words.push(word);
 						} else {
 							isValidPerm = false;
@@ -788,7 +803,10 @@ const getValidWords = (hand, state) => {
 			}
 		}
 	}
+	console.timeEnd('Vertical placements');
+	console.timeEnd('Get valid words');
 
+	console.time('Sort and filter');
 	validWords.sort((a, b) => b.score - a.score);
 
 	// filter out repeats
@@ -805,12 +823,16 @@ const getValidWords = (hand, state) => {
 		}
 		index++;
 	}
+	console.timeEnd('Sort and filter');
 
 	return [filteredValidWords, validWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
+console.log('hand:', hand);
+console.time('Total runtime');
 const validWords = getValidWords(hand, testState);
+console.timeEnd('Total runtime');
 console.log(validWords);
 for (const validWord of validWords) {
 	console.log(JSON.stringify(validWord, null, '\t'));
