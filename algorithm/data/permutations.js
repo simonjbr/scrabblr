@@ -1,8 +1,9 @@
-import wordArray from './words.js';
+import { wordObj } from './words.js';
 
-const getPermutaions = (hand) => {
-	console.log('permutations:');
+const getPermutations = (hand) => {
+	// console.log('permutations:');
 	const results = [];
+	const MAX_LENGTH = 15;
 
 	// helper function to generate subsets of hand
 	const generateSubsets = (subset, start) => {
@@ -65,11 +66,22 @@ const getPermutaions = (hand) => {
 			p.string = p.permutation.join('');
 			if (p.jokers === 0) {
 				p.regExp = new RegExp(p.string);
-				for (const word of wordArray) {
-					if (word.includes(p.string)) {
-						filteredPermutations.push(p);
-						break;
+				for (
+					let length = p.permutation.length;
+					length <= MAX_LENGTH;
+					length++
+				) {
+					let isValidPerm = false;
+					const wordArray = wordObj[length];
+					for (const word of wordArray) {
+						if (word.includes(p.string)) {
+							filteredPermutations.push(p);
+							// console.log(p.permutation);
+							isValidPerm = true;
+							break;
+						}
 					}
+					if (isValidPerm) break;
 				}
 			} else {
 				// if there are jokers in permutation
@@ -84,12 +96,22 @@ const getPermutaions = (hand) => {
 				}
 				// store regex in permutation object
 				p.regExp = new RegExp(p.string);
-				for (const word of wordArray) {
-					if (p.regExp.test(word)) {
-						filteredPermutations.push(p);
-						console.log(p.permutation);
-						break;
+				for (
+					let length = p.permutation.length;
+					length <= MAX_LENGTH;
+					length++
+				) {
+					let isValidPerm = false;
+					const wordArray = wordObj[length];
+					for (const word of wordArray) {
+						if (p.regExp.test(word)) {
+							filteredPermutations.push(p);
+							// console.log(p.permutation);
+							isValidPerm = true;
+							break;
+						}
 					}
+					if (isValidPerm) break;
 				}
 			}
 		}
@@ -97,8 +119,12 @@ const getPermutaions = (hand) => {
 	};
 
 	generateSubsets([], 0);
+
 	console.log('permutations length:', results.length);
 	return results;
 };
 
-export default getPermutaions;
+// const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
+// getPermutations(hand);
+
+export default getPermutations;

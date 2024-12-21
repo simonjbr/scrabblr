@@ -1,9 +1,9 @@
 import fs from 'node:fs';
-import getPermutaions from './permutations.js';
+import getPermutations from './permutations.js';
 
-const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 
-const perms = getPermutaions(hand);
+const perms = getPermutations(hand);
 console.log(perms.length);
 
 fs.writeFileSync(
