@@ -78,8 +78,8 @@ const getValidWords = (hand, state) => {
 	console.time('Get permutations');
 	// get permutations for hand
 	// try cache first otherwise generate new perms
-	const permutations = getPermsFromCache().perms || getPermutations(hand);
-	// const permutations = getPermutations(hand);
+	// const permutations = getPermsFromCache().perms || getPermutations(hand);
+	const permutations = getPermutations(hand);
 	console.timeEnd('Get permutations');
 
 	console.time('Get valid words');
@@ -246,100 +246,6 @@ const getValidWords = (hand, state) => {
 							'vertical',
 							words
 						);
-					// for (const c of verContacts) {
-					// 	const word = {
-					// 		fullWord: '',
-					// 		tiles: [],
-					// 		jokerIndices: [],
-					// 	};
-					// 	let yDelta = 0;
-					// 	while (
-					// 		c[0] + yDelta < BOARD_LENGTH &&
-					// 		workingState[c[0] + yDelta][c[1]]
-					// 	) {
-					// 		const letter = workingState[c[0] + yDelta][c[1]];
-					// 		const isLetterJoker = Array.isArray(letter);
-					// 		word.fullWord += isLetterJoker ? 'j' : letter;
-					// 		word.tiles.push({
-					// 			letter: letter,
-					// 			y: c[0] + yDelta,
-					// 			x: c[1],
-					// 			hasBonus: state[c[0] + yDelta][c[1]]
-					// 				? false
-					// 				: true,
-					// 			isJoker: isLetterJoker,
-					// 		});
-					// 		if (isLetterJoker) {
-					// 			word.hasJoker = true;
-					// 			word.jokerIndices.push(yDelta);
-					// 		}
-					// 		yDelta++;
-					// 	}
-					// 	if (word.hasJoker) {
-					// 		// if word has a joker push all potentialy valid combinations
-					// 		word.fullWord = [word.fullWord];
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (const letter of word.tiles[jokerIndex]
-					// 				.letter) {
-					// 				word.fullWord.push(
-					// 					word.fullWord[0].slice(0, jokerIndex) +
-					// 						letter +
-					// 						word.fullWord[0].slice(
-					// 							jokerIndex + 1
-					// 						)
-					// 				);
-					// 			}
-					// 		}
-					// 		// remove first fullWord as it still has a lowercase 'j'
-					// 		word.fullWord.splice(0, 1);
-					// 		let isValidJoker = false;
-					// 		// find any invalid joker letters and store there indices so we can remove them
-					// 		const badJokerLetterIndices = [];
-					// 		for (let j = 0; j < word.fullWord.length; j++) {
-					// 			const w = word.fullWord[j];
-					// 			if (wordObj[w.length].includes(w)) {
-					// 				isValidJoker = true;
-					// 			} else {
-					// 				badJokerLetterIndices.push(j);
-					// 			}
-					// 		}
-					// 		// if no valid words found break early
-					// 		if (!isValidJoker) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		// remove bad joker letters and fullWords
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (
-					// 				let j = 0;
-					// 				j < badJokerLetterIndices.length;
-					// 				j++
-					// 			) {
-					// 				const badIndex = badJokerLetterIndices[j];
-					// 				word.fullWord.splice(badIndex - j, 1);
-					// 				word.tiles[jokerIndex].letter.splice(
-					// 					badIndex - j,
-					// 					1
-					// 				);
-					// 			}
-					// 		}
-					// 		// if all words removed break early
-					// 		if (!word.fullWord.length) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		words.push(word);
-					// 	} else if (
-					// 		wordObj[word.fullWord.length].includes(
-					// 			word.fullWord
-					// 		)
-					// 	) {
-					// 		words.push(word);
-					// 	} else {
-					// 		isValidPerm = false;
-					// 		break;
-					// 	}
-					// }
 
 					if (!isValidPerm) continue;
 
@@ -353,101 +259,6 @@ const getValidWords = (hand, state) => {
 							'horizontal',
 							words
 						);
-					// for (const c of horContacts) {
-					// 	let word = {
-					// 		fullWord: '',
-					// 		tiles: [],
-					// 		jokerIndices: [],
-					// 	};
-					// 	let xDelta = 0;
-					// 	while (
-					// 		c[1] + xDelta < BOARD_LENGTH &&
-					// 		workingState[c[0]][c[1] + xDelta]
-					// 	) {
-					// 		const letter = workingState[c[0]][c[1] + xDelta];
-					// 		const isLetterJoker = Array.isArray(letter);
-					// 		word.fullWord += isLetterJoker ? 'j' : letter;
-					// 		word.tiles.push({
-					// 			letter: letter,
-					// 			y: c[0],
-					// 			x: c[1] + xDelta,
-					// 			hasBonus: state[c[0]][c[1] + xDelta]
-					// 				? false
-					// 				: true,
-					// 			isJoker: isLetterJoker,
-					// 		});
-					// 		if (isLetterJoker) {
-					// 			word.hasJoker = true;
-					// 			word.jokerIndices.push(xDelta);
-					// 		}
-					// 		xDelta++;
-					// 	}
-
-					// 	if (word.hasJoker) {
-					// 		// if word has a joker push all potentialy valid combinations
-					// 		word.fullWord = [word.fullWord];
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (const letter of word.tiles[jokerIndex]
-					// 				.letter) {
-					// 				word.fullWord.push(
-					// 					word.fullWord[0].slice(0, jokerIndex) +
-					// 						letter +
-					// 						word.fullWord[0].slice(
-					// 							jokerIndex + 1
-					// 						)
-					// 				);
-					// 			}
-					// 		}
-					// 		// remove first fullWord as it still has a lowercase 'j'
-					// 		word.fullWord.splice(0, 1);
-					// 		let isValidJoker = false;
-					// 		// find any invalid joker letters and store there indices so we can remove them
-					// 		const badJokerLetterIndices = [];
-					// 		for (let j = 0; j < word.fullWord.length; j++) {
-					// 			const w = word.fullWord[j];
-					// 			if (wordObj[w.length].includes(w)) {
-					// 				isValidJoker = true;
-					// 			} else {
-					// 				badJokerLetterIndices.push(j);
-					// 			}
-					// 		}
-					// 		// if no valid words found break early
-					// 		if (!isValidJoker) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		// remove bad joker letters and fullWords
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (
-					// 				let j = 0;
-					// 				j < badJokerLetterIndices.length;
-					// 				j++
-					// 			) {
-					// 				const badIndex = badJokerLetterIndices[j];
-					// 				word.fullWord.splice(badIndex - j, 1);
-					// 				word.tiles[jokerIndex].letter.splice(
-					// 					badIndex - j,
-					// 					1
-					// 				);
-					// 			}
-					// 		}
-					// 		// if all words removed break early
-					// 		if (!word.fullWord.length) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		words.push(word);
-					// 	} else if (
-					// 		wordObj[word.fullWord.length].includes(
-					// 			word.fullWord
-					// 		)
-					// 	) {
-					// 		words.push(word);
-					// 	} else {
-					// 		isValidPerm = false;
-					// 		break;
-					// 	}
-					// }
 
 					if (isValidPerm && words.length) {
 						const move = {
@@ -626,100 +437,6 @@ const getValidWords = (hand, state) => {
 							'vertical',
 							words
 						);
-					// for (const c of verContacts) {
-					// 	const word = {
-					// 		fullWord: '',
-					// 		tiles: [],
-					// 		jokerIndices: [],
-					// 	};
-					// 	let yDelta = 0;
-					// 	while (
-					// 		c[0] + yDelta < BOARD_LENGTH &&
-					// 		workingState[c[0] + yDelta][c[1]]
-					// 	) {
-					// 		const letter = workingState[c[0] + yDelta][c[1]];
-					// 		const isLetterJoker = Array.isArray(letter);
-					// 		word.fullWord += isLetterJoker ? 'j' : letter;
-					// 		word.tiles.push({
-					// 			letter: letter,
-					// 			y: c[0] + yDelta,
-					// 			x: c[1],
-					// 			hasBonus: state[c[0] + yDelta][c[1]]
-					// 				? false
-					// 				: true,
-					// 			isJoker: isLetterJoker,
-					// 		});
-					// 		if (isLetterJoker) {
-					// 			word.hasJoker = true;
-					// 			word.jokerIndices.push(yDelta);
-					// 		}
-					// 		yDelta++;
-					// 	}
-					// 	if (word.hasJoker) {
-					// 		// if word has a joker push all potentialy valid combinations
-					// 		word.fullWord = [word.fullWord];
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (const letter of word.tiles[jokerIndex]
-					// 				.letter) {
-					// 				word.fullWord.push(
-					// 					word.fullWord[0].slice(0, jokerIndex) +
-					// 						letter +
-					// 						word.fullWord[0].slice(
-					// 							jokerIndex + 1
-					// 						)
-					// 				);
-					// 			}
-					// 		}
-					// 		// remove first fullWord as it still has a lowercase 'j'
-					// 		word.fullWord.splice(0, 1);
-					// 		let isValidJoker = false;
-					// 		// find any invalid joker letters and store there indices so we can remove them
-					// 		const badJokerLetterIndices = [];
-					// 		for (let j = 0; j < word.fullWord.length; j++) {
-					// 			const w = word.fullWord[j];
-					// 			if (wordObj[w.length].includes(w)) {
-					// 				isValidJoker = true;
-					// 			} else {
-					// 				badJokerLetterIndices.push(j);
-					// 			}
-					// 		}
-					// 		// if no valid words found break early
-					// 		if (!isValidJoker) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		// remove bad joker letters and fullWords
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (
-					// 				let j = 0;
-					// 				j < badJokerLetterIndices.length;
-					// 				j++
-					// 			) {
-					// 				const badIndex = badJokerLetterIndices[j];
-					// 				word.fullWord.splice(badIndex - j, 1);
-					// 				word.tiles[jokerIndex].letter.splice(
-					// 					badIndex - j,
-					// 					1
-					// 				);
-					// 			}
-					// 		}
-					// 		// if all words removed break early
-					// 		if (!word.fullWord.length) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		words.push(word);
-					// 	} else if (
-					// 		wordObj[word.fullWord.length].includes(
-					// 			word.fullWord
-					// 		)
-					// 	) {
-					// 		words.push(word);
-					// 	} else {
-					// 		isValidPerm = false;
-					// 		break;
-					// 	}
-					// }
 
 					if (!isValidPerm) continue;
 
@@ -733,100 +450,6 @@ const getValidWords = (hand, state) => {
 							'horizontal',
 							words
 						);
-					// for (const c of horContacts) {
-					// 	let word = {
-					// 		fullWord: '',
-					// 		tiles: [],
-					// 		jokerIndices: [],
-					// 	};
-					// 	let xDelta = 0;
-					// 	while (
-					// 		c[1] + xDelta < BOARD_LENGTH &&
-					// 		workingState[c[0]][c[1] + xDelta]
-					// 	) {
-					// 		const letter = workingState[c[0]][c[1] + xDelta];
-					// 		const isLetterJoker = Array.isArray(letter);
-					// 		word.fullWord += isLetterJoker ? 'j' : letter;
-					// 		word.tiles.push({
-					// 			letter: letter,
-					// 			y: c[0],
-					// 			x: c[1] + xDelta,
-					// 			hasBonus: state[c[0]][c[1] + xDelta]
-					// 				? false
-					// 				: true,
-					// 			isJoker: isLetterJoker,
-					// 		});
-					// 		if (isLetterJoker) {
-					// 			word.hasJoker = true;
-					// 			word.jokerIndices.push(xDelta);
-					// 		}
-					// 		xDelta++;
-					// 	}
-					// 	if (word.hasJoker) {
-					// 		// if word has a joker push all potentialy valid combinations
-					// 		word.fullWord = [word.fullWord];
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (const letter of word.tiles[jokerIndex]
-					// 				.letter) {
-					// 				word.fullWord.push(
-					// 					word.fullWord[0].slice(0, jokerIndex) +
-					// 						letter +
-					// 						word.fullWord[0].slice(
-					// 							jokerIndex + 1
-					// 						)
-					// 				);
-					// 			}
-					// 		}
-					// 		// remove first fullWord as it still has a lowercase 'j'
-					// 		word.fullWord.splice(0, 1);
-					// 		let isValidJoker = false;
-					// 		// find any invalid joker letters and store there indices so we can remove them
-					// 		const badJokerLetterIndices = [];
-					// 		for (let j = 0; j < word.fullWord.length; j++) {
-					// 			const w = word.fullWord[j];
-					// 			if (wordObj[w.length].includes(w)) {
-					// 				isValidJoker = true;
-					// 			} else {
-					// 				badJokerLetterIndices.push(j);
-					// 			}
-					// 		}
-					// 		// if no valid words found break early
-					// 		if (!isValidJoker) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		// remove bad joker letters and fullWords
-					// 		for (const jokerIndex of word.jokerIndices) {
-					// 			for (
-					// 				let j = 0;
-					// 				j < badJokerLetterIndices.length;
-					// 				j++
-					// 			) {
-					// 				const badIndex = badJokerLetterIndices[j];
-					// 				word.fullWord.splice(badIndex - j, 1);
-					// 				word.tiles[jokerIndex].letter.splice(
-					// 					badIndex - j,
-					// 					1
-					// 				);
-					// 			}
-					// 		}
-					// 		// if all words removed break early
-					// 		if (!word.fullWord.length) {
-					// 			isValidPerm = false;
-					// 			break;
-					// 		}
-					// 		words.push(word);
-					// 	} else if (
-					// 		wordObj[word.fullWord.length].includes(
-					// 			word.fullWord
-					// 		)
-					// 	) {
-					// 		words.push(word);
-					// 	} else {
-					// 		isValidPerm = false;
-					// 		break;
-					// 	}
-					// }
 
 					if (isValidPerm && words.length) {
 						const move = {
@@ -865,7 +488,7 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
 console.log('hand:', hand);
 console.time('Total runtime');
 const validWords = getValidWords(hand, testState);
