@@ -8,6 +8,12 @@ const wordArray = fs
 	.split('\n')
 	.sort((a, b) => a.length - b.length);
 
+let wordsString = '';
+for (const word of wordArray) {
+	if (word.length > 15) break;
+	wordsString += ` ${word}`;
+}
+
 const wordObj = {};
 for (const word of wordArray) {
 	if (word.length >= 16) break;
@@ -44,4 +50,4 @@ for (const word of wordArray) {
 // 	'utf8'
 // );
 
-export { wordArray, wordObj, wordArraySplit, wordObjStrings };
+export { wordArray, wordObj, wordArraySplit, wordObjStrings, wordsString };

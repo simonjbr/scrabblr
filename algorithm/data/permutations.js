@@ -1,9 +1,7 @@
-import { wordObj, wordObjStrings } from './words.js';
+import { wordsString } from './words.js';
 
 const getPermutations = (hand) => {
-	// console.log('permutations:');
 	const results = [];
-	const MAX_LENGTH = 15;
 
 	// helper function to generate subsets of hand
 	const generateSubsets = (subset, start) => {
@@ -18,7 +16,6 @@ const getPermutations = (hand) => {
 
 	// helper function to generate permutations of the subset
 	const permute = (arr) => {
-		// if (arr.length === 1) return [arr];
 		if (arr.length === 1) {
 			const isJoker = arr[0] === 'j';
 			return [
@@ -66,16 +63,8 @@ const getPermutations = (hand) => {
 			p.string = p.permutation.join('');
 			if (p.jokers === 0) {
 				p.regExp = new RegExp(p.string);
-				for (
-					let length = p.permutation.length;
-					length <= MAX_LENGTH;
-					length++
-				) {
-					const wordsString = wordObjStrings[length];
-					if (wordsString.includes(p.string)) {
-						filteredPermutations.push(p);
-						break;
-					}
+				if (wordsString.includes(p.string)) {
+					filteredPermutations.push(p);
 				}
 			} else {
 				// if there are jokers in permutation
@@ -90,16 +79,8 @@ const getPermutations = (hand) => {
 				}
 				// store regex in permutation object
 				p.regExp = new RegExp(p.string);
-				for (
-					let length = p.permutation.length;
-					length <= MAX_LENGTH;
-					length++
-				) {
-					const wordsString = wordObjStrings[length];
-					if (p.regExp.test(wordsString)) {
-						filteredPermutations.push(p);
-						break;
-					}
+				if (p.regExp.test(wordsString)) {
+					filteredPermutations.push(p);
 				}
 			}
 		}
