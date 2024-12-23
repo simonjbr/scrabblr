@@ -1,4 +1,4 @@
-import { wordObj } from './words.js';
+import { wordObj, wordObjStrings } from './words.js';
 
 const getPermutations = (hand) => {
 	// console.log('permutations:');
@@ -71,17 +71,11 @@ const getPermutations = (hand) => {
 					length <= MAX_LENGTH;
 					length++
 				) {
-					let isValidPerm = false;
-					const wordArray = wordObj[length];
-					for (const word of wordArray) {
-						if (word.includes(p.string)) {
-							filteredPermutations.push(p);
-							// console.log(p.permutation);
-							isValidPerm = true;
-							break;
-						}
+					const wordsString = wordObjStrings[length];
+					if (wordsString.includes(p.string)) {
+						filteredPermutations.push(p);
+						break;
 					}
-					if (isValidPerm) break;
 				}
 			} else {
 				// if there are jokers in permutation
@@ -101,17 +95,11 @@ const getPermutations = (hand) => {
 					length <= MAX_LENGTH;
 					length++
 				) {
-					let isValidPerm = false;
-					const wordArray = wordObj[length];
-					for (const word of wordArray) {
-						if (p.regExp.test(word)) {
-							filteredPermutations.push(p);
-							// console.log(p.permutation);
-							isValidPerm = true;
-							break;
-						}
+					const wordsString = wordObjStrings[length];
+					if (p.regExp.test(wordsString)) {
+						filteredPermutations.push(p);
+						break;
 					}
-					if (isValidPerm) break;
 				}
 			}
 		}

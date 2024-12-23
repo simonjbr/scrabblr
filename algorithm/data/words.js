@@ -17,6 +17,15 @@ for (const word of wordArray) {
 	wordObj[word.length].push(word);
 }
 
+const wordObjStrings = {};
+for (const word of wordArray) {
+	if (word.length >= 16) break;
+	if (!wordObjStrings[word.length]) {
+		wordObjStrings[word.length] = '';
+	}
+	wordObjStrings[word.length] += ` ${word}`;
+}
+
 const wordArraySplit = [[]];
 for (const word of wordArray) {
 	if (!wordArraySplit[word.length]) {
@@ -35,4 +44,4 @@ for (const word of wordArray) {
 // 	'utf8'
 // );
 
-export { wordArray, wordObj, wordArraySplit };
+export { wordArray, wordObj, wordArraySplit, wordObjStrings };
