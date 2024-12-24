@@ -4,12 +4,13 @@ import createBoard from './board.js';
 /**
  *
  * @param {String[]} words
+ * @param {number} tilesUsed
  * @returns
  */
 
 const board = createBoard();
 
-const getWordScore = (words) => {
+const getWordScore = (words, tilesUsed) => {
 	let total = 0;
 	for (const word of words) {
 		let score = 0;
@@ -43,6 +44,8 @@ const getWordScore = (words) => {
 		}
 		total += score * wordMultiplier;
 	}
+
+	if (tilesUsed === 7) total += 50;
 
 	return total;
 };

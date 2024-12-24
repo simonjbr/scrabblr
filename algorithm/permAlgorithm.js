@@ -264,7 +264,7 @@ const getValidWords = (hand, state) => {
 						const move = {
 							placedLetters: placedLetters,
 							words: words,
-							score: getWordScore(words),
+							score: getWordScore(words, placedLetters.length),
 						};
 						validWords.push(move);
 					}
@@ -455,7 +455,7 @@ const getValidWords = (hand, state) => {
 						const move = {
 							placedLetters: placedLetters,
 							words: words,
-							score: getWordScore(words),
+							score: getWordScore(words, placedLetters.length),
 						};
 						validWords.push(move);
 					}
