@@ -5,6 +5,7 @@ const getPermsFromCache = () => {
 		const perms = JSON.parse(
 			fs.readFileSync(
 				'./algorithm/data/cache/testPermutations.json',
+				// './algorithm/data/cache/quickTest.json',
 				'utf8'
 			)
 		);

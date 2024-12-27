@@ -17,16 +17,16 @@ const getValidWords = (hand, state) => {
 	console.time('Finding anchors');
 	// generate array of existing characters that must be attached to
 	// I'll call them anchors
-	const anchors = [];
-	for (let i = 0; i < BOARD_LENGTH; i++) {
-		const row = state[i];
-		for (let j = 0; j < BOARD_LENGTH; j++) {
-			const char = row[j];
-			if (char) {
-				anchors.push([char, i, j]);
-			}
-		}
-	}
+	// const anchors = [];
+	// for (let i = 0; i < BOARD_LENGTH; i++) {
+	// 	const row = state[i];
+	// 	for (let j = 0; j < BOARD_LENGTH; j++) {
+	// 		const char = row[j];
+	// 		if (char) {
+	// 			anchors.push([char, i, j]);
+	// 		}
+	// 	}
+	// }
 
 	// check for vertical anchors
 	const verAnchors = [];
@@ -38,7 +38,7 @@ const getValidWords = (hand, state) => {
 				anchor += char;
 			} else if (anchor) {
 				// push anchor and the indices of the first char to array
-				verAnchors.push([anchor, j - anchor.length, i]);
+				verAnchors.push([anchor, j - anchor.length, i, true]);
 				anchor = '';
 			}
 		}
@@ -55,11 +55,12 @@ const getValidWords = (hand, state) => {
 				anchor += char;
 			} else if (anchor) {
 				// push anchor and the indices of the first char to array
-				horAnchors.push([anchor, i, j - anchor.length]);
+				horAnchors.push([anchor, i, j - anchor.length, false]);
 				anchor = '';
 			}
 		}
 	}
+	const anchors = [...verAnchors, ...horAnchors];
 
 	console.timeEnd('Finding anchors');
 
@@ -87,10 +88,12 @@ const getValidWords = (hand, state) => {
 	console.time('Horizontal placements');
 	// loop through vertical anchors and find valid permutations of letter
 	// placement that touches at least that anchor
-	for (let i = 0; i < verAnchors.length; i++) {
-		let [anchor, y, x] = verAnchors[i];
+	for (let i = 0; i < anchors.length; i++) {
+		let [anchor, y, x, isVertical] = anchors[i];
 
-		for (const d of verDeltas) {
+		const deltas = isVertical ? verDeltas : horDeltas;
+
+		for (const d of deltas) {
 			// coords of anchor's neighbour
 			const n = [
 				d[0] < 0 ? y + d[0] : y + d[0] * anchor.length,
