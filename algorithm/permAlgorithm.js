@@ -15,19 +15,6 @@ const getValidWords = (hand, state) => {
 	const BOARD_LENGTH = 15;
 
 	console.time('Finding anchors');
-	// generate array of existing characters that must be attached to
-	// I'll call them anchors
-	// const anchors = [];
-	// for (let i = 0; i < BOARD_LENGTH; i++) {
-	// 	const row = state[i];
-	// 	for (let j = 0; j < BOARD_LENGTH; j++) {
-	// 		const char = row[j];
-	// 		if (char) {
-	// 			anchors.push([char, i, j]);
-	// 		}
-	// 	}
-	// }
-
 	// check for vertical anchors
 	const verAnchors = [];
 	for (let i = 0; i < BOARD_LENGTH; i++) {
@@ -79,9 +66,9 @@ const getValidWords = (hand, state) => {
 	console.time('Get permutations');
 	// get permutations for hand
 	// try cache first otherwise generate new perms
-	const permutations =
-		getPermsFromCache().permutations || getPermutations(hand, anchors);
-	// const permutations = getPermutations(hand, anchors);
+	// const permutations =
+	// getPermsFromCache().permutations || getPermutations(hand, anchors);
+	const permutations = getPermutations(hand, anchors);
 	console.timeEnd('Get permutations');
 
 	// fs.writeFileSync(
@@ -226,9 +213,6 @@ const getValidWords = (hand, state) => {
 							fullWord: [],
 							hasJoker: true,
 						};
-						// if (anchor === 'U') {
-						// 	console.log('');
-						// }
 						// find matches in specific length word string
 						const matches = [
 							...wordObjStrings[
@@ -248,27 +232,6 @@ const getValidWords = (hand, state) => {
 							}
 							newWord.tiles = placedLetters;
 						}
-						// search wordArray for valid joker letters
-						// for (const word of wordObj[
-						// 	perm.permutation.length + intersectionCount
-						// ]) {
-						// 	if (
-						// 		word.length ===
-						// 			perm.permutation.length +
-						// 				intersectionCount &&
-						// 		jokerRegExp.test(word)
-						// 	) {
-						// 		// push valid joker letters to the placed letter or each joker
-						// 		for (const jokerIndex of perm.jokerIndices) {
-						// 			placedLetters[jokerIndex].letter.push(
-						// 				word[jokerIndex]
-						// 			);
-						// 			newWord.fullWord.push(word);
-						// 		}
-						// 		newWord.tiles = placedLetters;
-						// 		isMatchFound = true;
-						// 	}
-						// }
 						// if placed letters arent a component of a new word AND they can make a whole word
 						// push them on to words array
 						if (!horContacts.length && !isIntersecting) {
@@ -424,7 +387,7 @@ const getValidWords = (hand, state) => {
 						}
 					}
 					if (!isValidPerm) break;
-					
+
 					// VERTICAL CONTACTS
 					const verContacts = [];
 					// check for contacts above
@@ -469,6 +432,7 @@ const getValidWords = (hand, state) => {
 							fullWord: [],
 							hasJoker: true,
 						};
+						// find matches in specific length word string
 						const matches = [
 							...wordObjStrings[
 								perm.permutation.length + intersectionCount
@@ -487,23 +451,6 @@ const getValidWords = (hand, state) => {
 								newWord.tiles = placedLetters;
 							}
 						}
-						// search wordArray for valid joker letters
-						// for (const word of wordObj[perm.permutation.length]) {
-						// 	if (
-						// 		word.length === perm.permutation.length &&
-						// 		jokerRegExp.test(word)
-						// 	) {
-						// 		// push valid joker letters to the placed letter or each joker
-						// 		for (const jokerIndex of perm.jokerIndices) {
-						// 			placedLetters[jokerIndex].letter.push(
-						// 				word[jokerIndex]
-						// 			);
-						// 			newWord.fullWord.push(word);
-						// 		}
-						// 		newWord.tiles = placedLetters;
-						// 		isMatchFound = true;
-						// 	}
-						// }
 						// if placed letters arent a component of a new word AND they can make a whole word
 						// push them on to words array
 						if (!verContacts.length && !isIntersecting) {
@@ -591,7 +538,7 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length, filteredValidWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 console.log('hand:', hand);
 console.time('Total runtime');
 const validWords = getValidWords(hand, testState);
