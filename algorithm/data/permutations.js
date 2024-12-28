@@ -1,7 +1,16 @@
 import { wordsString } from './words.js';
 
-const getPermutations = (hand) => {
+const getPermutations = (hand, anchors) => {
 	const results = [];
+
+	// create anchor regExp character set
+	let anchorCharGroup = '(';
+	for (let i = 0; i < anchors.length; i++) {
+		const a = anchors[i];
+		anchorCharGroup += a[0];
+		if (i !== anchors.length - 1) anchorCharGroup += '|';
+	}
+	anchorCharGroup += ')?';
 
 	// helper function to generate subsets of hand
 	const generateSubsets = (subset, start) => {
@@ -51,19 +60,27 @@ const getPermutations = (hand) => {
 				// add all perms to permutations
 				permutations.push({
 					permutation: p,
+					// string: p.join('').replace(/j/g, '[A-Z]'),
 					jokers: jokers,
 					jokerIndices: jokerIndices,
 				});
 			}
 		}
 
+		// return permutations;
+
 		// filter out perms that don't exist as components of words
 		const filteredPermutations = [];
 		for (const p of permutations) {
 			p.string = p.permutation.join('');
 			if (p.jokers === 0) {
-				p.regExp = new RegExp(p.string);
-				if (wordsString.includes(p.string)) {
+				let regExpString = '';
+				for (const char of p.string) {
+					regExpString += char;
+					regExpString += anchorCharGroup;
+				}
+				p.regExp = new RegExp(regExpString);
+				if (p.regExp.test(wordsString)) {
 					filteredPermutations.push(p);
 				}
 			} else {
