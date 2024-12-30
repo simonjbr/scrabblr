@@ -74,7 +74,7 @@ const getPermutations = (hand, anchors) => {
 		for (const p of permutations) {
 			p.string = p.permutation.join('');
 			if (p.jokers === 0) {
-				let regExpString = p.permutation.join(anchorCharGroup) + '\n';
+				let regExpString = p.permutation.join(anchorCharGroup);
 				p.regExp = new RegExp(regExpString, 'm');
 				if (p.regExp.test(wordsString)) {
 					filteredPermutations.push(p);
@@ -82,9 +82,9 @@ const getPermutations = (hand, anchors) => {
 			} else {
 				// if there are jokers in permutation
 				// dynamically generate regex to test with
-				let regExpString =
-					p.permutation.join(anchorCharGroup).replace(/j/, '[A-Z]') +
-					'\n';
+				let regExpString = p.permutation
+					.join(anchorCharGroup)
+					.replace(/j/, '[A-Z]');
 				p.regExp = new RegExp(regExpString, 'm');
 				if (p.regExp.test(wordsString)) {
 					filteredPermutations.push(p);
