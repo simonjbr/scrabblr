@@ -538,7 +538,7 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length, filteredValidWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
 console.log('hand:', hand);
 console.time('Total runtime');
 const validWords = getValidWords(hand, testState);

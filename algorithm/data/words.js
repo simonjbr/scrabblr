@@ -11,7 +11,7 @@ const wordArray = fs
 let wordsString = '';
 for (const word of wordArray) {
 	if (word.length > 15) break;
-	wordsString += ` ${word}`;
+	wordsString += `${word}\n`;
 }
 
 const wordObj = {};
