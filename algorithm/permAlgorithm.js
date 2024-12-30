@@ -67,7 +67,7 @@ const getValidWords = (hand, state) => {
 	// get permutations for hand
 	// try cache first otherwise generate new perms
 	// const permutations =
-	// getPermsFromCache().permutations || getPermutations(hand, anchors);
+	// 	getPermsFromCache().permutations || getPermutations(hand, anchors);
 	const permutations = getPermutations(hand, anchors);
 	console.timeEnd('Get permutations');
 
@@ -80,6 +80,7 @@ const getValidWords = (hand, state) => {
 	console.time('Get valid words');
 	const validWords = [];
 	console.time('Horizontal placements');
+	const usedHorizontalPositions = new Set();
 	// loop through vertical anchors and find valid permutations of letter
 	// placement that touches at least that anchor
 	for (let i = 0; i < anchors.length; i++) {
@@ -97,7 +98,6 @@ const getValidWords = (hand, state) => {
 			if (state[n[0]][n[1]]) continue;
 			// loop through perms and try placing letters
 			for (const perm of permutations) {
-				const usedPositions = new Set();
 				// try perm with each letter in the neighbour coord
 				for (
 					let xStartDelta = 0;
@@ -106,6 +106,13 @@ const getValidWords = (hand, state) => {
 				) {
 					let xStart = n[1] + xStartDelta;
 					if (xStart >= BOARD_LENGTH) break;
+
+					const position = `${perm.string}-${n[0]}-${xStart}`;
+					if (usedHorizontalPositions.has(position)) {
+						break;
+					} else {
+						usedHorizontalPositions.add(position);
+					}
 
 					// deep copy state
 					const workingState = [];
@@ -297,6 +304,7 @@ const getValidWords = (hand, state) => {
 	console.timeEnd('Horizontal placements');
 
 	console.time('Vertical placements');
+	const usedVerticalPositions = new Set();
 	// now loop through horizontal anchors
 	for (let i = 0; i < anchors.length; i++) {
 		let [anchor, y, x, isVertical] = anchors[i];
@@ -321,6 +329,13 @@ const getValidWords = (hand, state) => {
 				) {
 					let yStart = n[0] + yStartDelta; // const yStart = n[0] + yStartDelta
 					if (yStart >= BOARD_LENGTH) break;
+
+					const position = `${perm.string}-${yStart}-${n[1]}`;
+					if (usedVerticalPositions.has(position)) {
+						break;
+					} else {
+						usedVerticalPositions.add(position);
+					}
 
 					// deep copy state
 					const workingState = [];
