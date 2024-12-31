@@ -60,38 +60,38 @@ const getPermutations = (hand, anchors) => {
 				// add all perms to permutations
 				permutations.push({
 					permutation: p,
-					// string: p.join('').replace(/j/g, '[A-Z]'),
+					string: p.join('').replace(/j/g, '[A-Z]'),
 					jokers: jokers,
 					jokerIndices: jokerIndices,
 				});
 			}
 		}
 
-		// return permutations;
+		return permutations;
 
 		// filter out perms that don't exist as components of words
-		const filteredPermutations = [];
-		for (const p of permutations) {
-			p.string = p.permutation.join('');
-			if (p.jokers === 0) {
-				let regExpString = p.permutation.join(anchorCharGroup);
-				p.regExp = new RegExp(regExpString, 'm');
-				if (p.regExp.test(wordsString)) {
-					filteredPermutations.push(p);
-				}
-			} else {
-				// if there are jokers in permutation
-				// dynamically generate regex to test with
-				let regExpString = p.permutation
-					.join(anchorCharGroup)
-					.replace(/j/, '[A-Z]');
-				p.regExp = new RegExp(regExpString, 'm');
-				if (p.regExp.test(wordsString)) {
-					filteredPermutations.push(p);
-				}
-			}
-		}
-		return filteredPermutations;
+		// const filteredPermutations = [];
+		// for (const p of permutations) {
+		// 	p.string = p.permutation.join('');
+		// 	if (p.jokers === 0) {
+		// 		let regExpString = p.permutation.join(anchorCharGroup);
+		// 		p.regExp = new RegExp(regExpString, 'm');
+		// 		if (p.regExp.test(wordsString)) {
+		// 			filteredPermutations.push(p);
+		// 		}
+		// 	} else {
+		// 		// if there are jokers in permutation
+		// 		// dynamically generate regex to test with
+		// 		let regExpString = p.permutation
+		// 			.join(anchorCharGroup)
+		// 			.replace(/j/, '[A-Z]');
+		// 		p.regExp = new RegExp(regExpString, 'm');
+		// 		if (p.regExp.test(wordsString)) {
+		// 			filteredPermutations.push(p);
+		// 		}
+		// 	}
+		// }
+		// return filteredPermutations;
 	};
 
 	generateSubsets([], 0);
