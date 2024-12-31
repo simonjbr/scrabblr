@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import wordListPath from 'word-list';
+import Trie from './trie.js';
 
 // generates an array of english words
 const wordArray = fs
@@ -7,6 +8,12 @@ const wordArray = fs
 	.toUpperCase()
 	.split('\n')
 	.sort((a, b) => a.length - b.length);
+
+const trie = new Trie();
+for (const word of wordArray) {
+	if (word.length > 15) break;
+	trie.insert(word);
+}
 
 let wordsString = '';
 for (const word of wordArray) {
@@ -50,4 +57,11 @@ for (const word of wordArray) {
 // 	'utf8'
 // );
 
-export { wordArray, wordObj, wordArraySplit, wordObjStrings, wordsString };
+export {
+	wordArray,
+	wordObj,
+	wordArraySplit,
+	wordObjStrings,
+	wordsString,
+	trie,
+};
