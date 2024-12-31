@@ -1,4 +1,4 @@
-import { wordArray, wordObj, wordObjStrings } from './data/words.js';
+import { wordArray, wordObj, wordObjStrings, trie } from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
 import getPermutations from './data/permutations.js';
@@ -250,9 +250,7 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 						}
-					} else if (
-						wordObj[perm.permutation.length].includes(perm.string)
-					) {
+					} else if (trie.search(perm.string)) {
 						if (!horContacts.length && !isIntersecting)
 							words.push({
 								fullWord: perm.string,
@@ -271,7 +269,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							verContacts,
-							wordObj,
+							trie,
 							'vertical',
 							words
 						);
@@ -284,7 +282,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							horContacts,
-							wordObj,
+							trie,
 							'horizontal',
 							words
 						);
@@ -477,9 +475,7 @@ const getValidWords = (hand, state) => {
 								break;
 							}
 						}
-					} else if (
-						wordObj[perm.permutation.length].includes(perm.string)
-					) {
+					} else if (trie.search(perm.string)) {
 						if (!verContacts.length && !isIntersecting)
 							words.push({
 								fullWord: perm.string,
@@ -498,7 +494,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							verContacts,
-							wordObj,
+							trie,
 							'vertical',
 							words
 						);
@@ -511,7 +507,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							horContacts,
-							wordObj,
+							trie,
 							'horizontal',
 							words
 						);
@@ -553,7 +549,7 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length, filteredValidWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'j', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
 console.log('hand:', hand);
 console.time('Total runtime');
 const validWords = getValidWords(hand, testState);

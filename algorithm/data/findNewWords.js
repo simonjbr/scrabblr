@@ -3,7 +3,7 @@
  * @param {String[][]} state
  * @param {String[][]} workingState
  * @param {number[][]} contacts
- * @param {Object} wordObj
+ * @param {Object} trie
  * @param {String} orientation orientation of tiles ('vertical' | 'horizontal')
  * @param {Object[]} words
  */
@@ -12,7 +12,7 @@ const findNewWords = (
 	state,
 	workingState,
 	contacts,
-	wordObj,
+	trie,
 	orientation,
 	words
 ) => {
@@ -92,7 +92,7 @@ const findNewWords = (
 			const badJokerLetterIndices = [];
 			for (let j = 0; j < word.fullWord.length; j++) {
 				const w = word.fullWord[j];
-				if (wordObj[w.length].includes(w)) {
+				if (trie.search(w)) {
 					isValidJoker = true;
 				} else {
 					badJokerLetterIndices.push(j);
@@ -115,7 +115,7 @@ const findNewWords = (
 				return false;
 			}
 			words.push(word);
-		} else if (wordObj[word.fullWord.length].includes(word.fullWord)) {
+		} else if (trie.search(word.fullWord)) {
 			words.push(word);
 		} else {
 			return false;
