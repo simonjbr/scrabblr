@@ -38,6 +38,47 @@ class Trie {
 		return current.isEndOfWord;
 	}
 
+	specialSearch(word, ptr) {
+		let current = ptr || this.root;
+		const jokerValues = [];
+		let jokerCount = 0;
+		let remaining = word;
+		for (const char of word) {
+			if (char !== 'j') {
+				if (!current.children[char]) {
+					return [false, []];
+				}
+				remaining = remaining.slice(1);
+				current = current.children[char];
+			} else {
+				jokerCount++;
+				const letters = Object.keys(current.children);
+				if (!letters.length) {
+					return [false, []];
+				}
+				jokerValues.push([]);
+				remaining = remaining.slice(1);
+
+				for (let i = 0; i < letters.length; i++) {
+					const l = letters[i];
+					let [isValidLetter] = this.specialSearch(
+						remaining,
+						current.children[l]
+					);
+					if (isValidLetter) {
+						jokerValues[jokerCount - 1].push(l);
+					}
+				}
+				if (jokerValues[0].length) {
+					current = current.children[jokerValues[jokerCount - 1][0]];
+				} else {
+					return [false, []];
+				}
+			}
+		}
+		return [current.isEndOfWord, jokerValues];
+	}
+
 	// search for a word with a given prefix
 	startsWith(prefix) {
 		let current = this.root;
