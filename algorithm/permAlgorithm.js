@@ -1,4 +1,4 @@
-import { wordArray, wordObj, wordObjStrings } from './data/words.js';
+import { wordArray, wordObj, wordObjStrings, trie } from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
 import getPermutations from './data/permutations.js';
@@ -67,8 +67,8 @@ const getValidWords = (hand, state) => {
 	// get permutations for hand
 	// try cache first otherwise generate new perms
 	// const permutations =
-	// getPermsFromCache().permutations || getPermutations(hand, anchors);
-	const permutations = getPermutations(hand, anchors);
+	// 	getPermsFromCache().permutations || getPermutations(hand);
+	const permutations = getPermutations(hand);
 	console.timeEnd('Get permutations');
 
 	// fs.writeFileSync(
@@ -80,6 +80,7 @@ const getValidWords = (hand, state) => {
 	console.time('Get valid words');
 	const validWords = [];
 	console.time('Horizontal placements');
+	const usedHorizontalPositions = new Set();
 	// loop through vertical anchors and find valid permutations of letter
 	// placement that touches at least that anchor
 	for (let i = 0; i < anchors.length; i++) {
@@ -97,7 +98,6 @@ const getValidWords = (hand, state) => {
 			if (state[n[0]][n[1]]) continue;
 			// loop through perms and try placing letters
 			for (const perm of permutations) {
-				const usedPositions = new Set();
 				// try perm with each letter in the neighbour coord
 				for (
 					let xStartDelta = 0;
@@ -106,6 +106,15 @@ const getValidWords = (hand, state) => {
 				) {
 					let xStart = n[1] + xStartDelta;
 					if (xStart >= BOARD_LENGTH) break;
+					// if we lose contact with anchor
+					if (xStart - perm.permutation.length >= n[1]) break;
+
+					const position = `${perm.string}-${n[0]}-${xStart}`;
+					if (usedHorizontalPositions.has(position)) {
+						break;
+					} else {
+						usedHorizontalPositions.add(position);
+					}
 
 					// deep copy state
 					const workingState = [];
@@ -148,7 +157,7 @@ const getValidWords = (hand, state) => {
 						workingState[n[0]][xStart - j] = isLetterJoker
 							? []
 							: letter;
-						placedWord += isLetterJoker ? '[A-Z]' : letter;
+						placedWord += isLetterJoker ? 'j' : letter;
 						// add letter and its coords to placedLetters
 						placedLetters.push({
 							letter: workingState[n[0]][xStart - j],
@@ -202,50 +211,52 @@ const getValidWords = (hand, state) => {
 					}
 
 					const words = [];
-					let isMatchFound = false;
-					if (perm.jokers) {
-						// if intersecting we need the intersecting tile(s) in this regExp
-						const jokerRegExp = new RegExp(
-							isIntersecting ? placedWord : perm.string,
-							'g'
-						);
+					// make sure perm is on array if it is valid and isn't a component of another word
+					if (perm.jokers && !horContacts.length && !isIntersecting) {
 						const newWord = {
 							fullWord: [],
 							hasJoker: true,
 						};
-						// find matches in specific length word string
-						const matches = [
-							...wordObjStrings[
-								perm.permutation.length + intersectionCount
-							].matchAll(jokerRegExp),
-						];
-						// iterate through matches to extract valid joker values
-						if (matches.length) {
-							isMatchFound = true;
-							for (const m of matches) {
-								for (const jokerIndex of perm.jokerIndices) {
-									placedLetters[jokerIndex].letter.push(
-										m[0][jokerIndex]
-									);
-									newWord.fullWord.push(m[0]);
+						// search trie for valid joker values
+						const [isMatchFound, jokerValues] = trie.specialSearch(
+							perm.string
+						);
+						// if found push all valid words to fullWord array
+						if (isMatchFound) {
+							const tempWords = [];
+							for (let i = 0; i < jokerValues.length; i++) {
+								const jokerValue = jokerValues[i];
+								const jokerIndex = perm.jokerIndices[i];
+								// update the placedLetters with valid joker values
+								placedLetters[jokerIndex].letter.push(
+									...jokerValue
+								);
+								// if more than 1 joker we need to do 2 rounds of j replacement (max 2 jokers)
+								for (const jLetter of jokerValue) {
+									if (perm.jokers === 1) {
+										newWord.fullWord.push(
+											placedWord.replace(/j/, jLetter)
+										);
+									} else if (i === 0) {
+										tempWords.push(
+											placedWord.replace(/j/, jLetter)
+										);
+									} else {
+										for (let tempWord of tempWords) {
+											newWord.fullWord.push(
+												tempWord.replace(/j/, jLetter)
+											);
+										}
+									}
 								}
 							}
 							newWord.tiles = placedLetters;
+							words.push(newWord);
+						} else if (!horContacts.length && !isIntersecting) {
+							isValidPerm = false;
+							continue;
 						}
-						// if placed letters arent a component of a new word AND they can make a whole word
-						// push them on to words array
-						if (!horContacts.length && !isIntersecting) {
-							if (isMatchFound) {
-								words.push(newWord);
-							} else {
-								// otherwise perm is invalid and we break early
-								isValidPerm = false;
-								break;
-							}
-						}
-					} else if (
-						wordObj[perm.permutation.length].includes(perm.string)
-					) {
+					} else if (trie.search(perm.string)) {
 						if (!horContacts.length && !isIntersecting)
 							words.push({
 								fullWord: perm.string,
@@ -264,7 +275,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							verContacts,
-							wordObj,
+							trie,
 							'vertical',
 							words
 						);
@@ -277,7 +288,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							horContacts,
-							wordObj,
+							trie,
 							'horizontal',
 							words
 						);
@@ -297,6 +308,7 @@ const getValidWords = (hand, state) => {
 	console.timeEnd('Horizontal placements');
 
 	console.time('Vertical placements');
+	const usedVerticalPositions = new Set();
 	// now loop through horizontal anchors
 	for (let i = 0; i < anchors.length; i++) {
 		let [anchor, y, x, isVertical] = anchors[i];
@@ -321,6 +333,15 @@ const getValidWords = (hand, state) => {
 				) {
 					let yStart = n[0] + yStartDelta; // const yStart = n[0] + yStartDelta
 					if (yStart >= BOARD_LENGTH) break;
+					// if we lose contact with anchor
+					if (yStart - perm.permutation.length >= n[0]) break;
+
+					const position = `${perm.string}-${yStart}-${n[1]}`;
+					if (usedVerticalPositions.has(position)) {
+						continue;
+					} else {
+						usedVerticalPositions.add(position);
+					}
 
 					// deep copy state
 					const workingState = [];
@@ -363,7 +384,7 @@ const getValidWords = (hand, state) => {
 						workingState[yStart - j][n[1]] = isLetterJoker
 							? []
 							: letter;
-						placedWord += isLetterJoker ? '[A-Z]' : letter;
+						placedWord += isLetterJoker ? 'j' : letter;
 						// add letter and its coords to placedLetters
 						placedLetters.push({
 							letter: workingState[yStart - j][n[1]],
@@ -420,51 +441,53 @@ const getValidWords = (hand, state) => {
 					if (!isValidPerm) continue;
 
 					const words = [];
-					let isMatchFound = false;
 					// make sure perm is on array if it is valid and isn't a component of another word
-					if (perm.jokers) {
-						// if intersecting we need the intersecting tile(s) in this regExp
-						const jokerRegExp = new RegExp(
-							isIntersecting ? placedWord : perm.string,
-							'g'
-						);
+					if (perm.jokers && !horContacts.length && !isIntersecting) {
 						const newWord = {
 							fullWord: [],
 							hasJoker: true,
 						};
-						// find matches in specific length word string
-						const matches = [
-							...wordObjStrings[
-								perm.permutation.length + intersectionCount
-							].matchAll(jokerRegExp),
-						];
-						// iterate through matches to extract valid joker values
-						if (matches.length) {
-							isMatchFound = true;
-							for (const m of matches) {
-								for (const jokerIndex of perm.jokerIndices) {
-									placedLetters[jokerIndex].letter.push(
-										m[0][jokerIndex]
-									);
-									newWord.fullWord.push(m[0]);
+						// search trie for valid joker values
+						const [isMatchFound, jokerValues] = trie.specialSearch(
+							perm.string
+						);
+						// if found push all valid words to fullWord array
+						if (isMatchFound) {
+							const tempWords = [];
+							for (let i = 0; i < jokerValues.length; i++) {
+								const jokerValue = jokerValues[i];
+								const jokerIndex = perm.jokerIndices[i];
+								// update the placedLetters with valid joker values
+								placedLetters[jokerIndex].letter.push(
+									...jokerValue
+								);
+								// if more than 1 joker we need to do 2 rounds of j replacement (max 2 jokers)
+								for (const jLetter of jokerValue) {
+									if (perm.jokers === 1) {
+										newWord.fullWord.push(
+											placedWord.replace(/j/, jLetter)
+										);
+									} else if (i === 0) {
+										tempWords.push(
+											placedWord.replace(/j/, jLetter)
+										);
+									} else {
+										for (let tempWord of tempWords) {
+											newWord.fullWord.push(
+												tempWord.replace(/j/, jLetter)
+											);
+										}
+									}
 								}
-								newWord.tiles = placedLetters;
 							}
+							newWord.tiles = placedLetters;
+							words.push(newWord);
+						} else if (!verContacts.length && !isIntersecting) {
+							// otherwise perm is invalid and we break early
+							isValidPerm = false;
+							continue;
 						}
-						// if placed letters arent a component of a new word AND they can make a whole word
-						// push them on to words array
-						if (!verContacts.length && !isIntersecting) {
-							if (isMatchFound) {
-								words.push(newWord);
-							} else {
-								// otherwise perm is invalid and we break early
-								isValidPerm = false;
-								break;
-							}
-						}
-					} else if (
-						wordObj[perm.permutation.length].includes(perm.string)
-					) {
+					} else if (trie.search(perm.string)) {
 						if (!verContacts.length && !isIntersecting)
 							words.push({
 								fullWord: perm.string,
@@ -483,7 +506,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							verContacts,
-							wordObj,
+							trie,
 							'vertical',
 							words
 						);
@@ -496,7 +519,7 @@ const getValidWords = (hand, state) => {
 							state,
 							workingState,
 							horContacts,
-							wordObj,
+							trie,
 							'horizontal',
 							words
 						);
@@ -538,7 +561,7 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length, filteredValidWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'P', 'S', 'E', 'T'];
+const hand = ['A', 'B', 'N', 'j', 'S', 'j', 'T'];
 console.log('hand:', hand);
 console.time('Total runtime');
 const validWords = getValidWords(hand, testState);
