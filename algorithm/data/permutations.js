@@ -60,7 +60,7 @@ const getPermutations = (hand, anchors) => {
 				// add all perms to permutations
 				permutations.push({
 					permutation: p,
-					string: p.join('').replace(/j/g, '[A-Z]'),
+					string: p.join(''),
 					jokers: jokers,
 					jokerIndices: jokerIndices,
 				});
