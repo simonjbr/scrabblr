@@ -75,46 +75,33 @@ const findNewWords = (
 		}
 		if (word.hasJoker) {
 			// if word has a joker push all potentialy valid combinations
-			word.fullWord = [word.fullWord];
-			for (const jokerIndex of word.jokerIndices) {
-				for (const letter of word.tiles[jokerIndex].letter) {
-					word.fullWord.push(
-						word.fullWord[0].slice(0, jokerIndex) +
-							letter +
-							word.fullWord[0].slice(jokerIndex + 1)
-					);
+			const foundWord = word.fullWord;
+			word.fullWord = [];
+			const [isMatchFound, jokerValues] = trie.specialSearch(foundWord);
+			if (isMatchFound) {
+				const tempWords = [];
+				for (let i = 0; i < jokerValues.length; i++) {
+					const jokerValue = jokerValues[i];
+					const jokerIndex = word.jokerIndices[i];
+					word.tiles[jokerIndex].letter.push(...jokerValue);
+					for (const jLetter of jokerValue) {
+						if (word.jokerIndices.length === 1) {
+							word.fullWord.push(foundWord.replace(/j/, jLetter));
+						} else if (i === 0) {
+							tempWords.push(foundWord.replace(/j/, jLetter));
+						} else {
+							for (let tempWord of tempWords) {
+								word.fullWord.push(
+									tempWord.replace(/j/, jLetter)
+								);
+							}
+						}
+					}
 				}
-			}
-			// remove first fullWord as it still has a lowercase 'j'
-			word.fullWord.splice(0, 1);
-			let isValidJoker = false;
-			// find any invalid joker letters and store there indices so we can remove them
-			const badJokerLetterIndices = [];
-			for (let j = 0; j < word.fullWord.length; j++) {
-				const w = word.fullWord[j];
-				if (trie.search(w)) {
-					isValidJoker = true;
-				} else {
-					badJokerLetterIndices.push(j);
-				}
-			}
-			// if no valid words found break early
-			if (!isValidJoker) {
+				words.push(word);
+			} else {
 				return false;
 			}
-			// remove bad joker letters and fullWords
-			for (const jokerIndex of word.jokerIndices) {
-				for (let j = 0; j < badJokerLetterIndices.length; j++) {
-					const badIndex = badJokerLetterIndices[j];
-					word.fullWord.splice(badIndex - j, 1);
-					word.tiles[jokerIndex].letter.splice(badIndex - j, 1);
-				}
-			}
-			// if all words removed break early
-			if (!word.fullWord.length) {
-				return false;
-			}
-			words.push(word);
 		} else if (trie.search(word.fullWord)) {
 			words.push(word);
 		} else {
