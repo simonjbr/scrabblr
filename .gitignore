@@ -26,3 +26,9 @@ cache/
 
 # benchmarking
 benchmark/
+
+# test screenshots
+OCR/assets/
+
+# cached OCR results
+OCR/results/
