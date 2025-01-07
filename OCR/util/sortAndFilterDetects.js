@@ -1,21 +1,37 @@
+import fs from 'node:fs';
+
 /**
  *
  * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]} detections OCR detections
+ * @param {{height: number, width: number}} dimensions dimensions of the screenshot
  * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
  */
 
 // filter out all non game grid detections
 // and sort left to right and top to bottom
-const sortAndFilterDetects = (detections) => {
+const sortAndFilterDetects = (detections, dimensions) => {
 	const sortedAndFiltered = detections
-		.filter((d) => /^[A-Z]{1,2}$/.test(d.description)) // may need a more robust pattern in the future
-		.sort(
-			(a, b) =>
-				a.boundingPoly.vertices[0].x - b.boundingPoly.vertices[0].x
+		// may need a more robust pattern in the future
+		.filter(
+			(d) =>
+				d.boundingPoly.vertices[0].y > 300 &&
+				dimensions.height - d.boundingPoly.vertices[0].y > 300 &&
+				/^[A-Z]+$/.test(d.description)
 		)
-		.sort(
-			(a, b) =>
+		// sorting must account for fuzziness
+		.sort((a, b) =>
+			Math.abs(
+				a.boundingPoly.vertices[0].x - b.boundingPoly.vertices[0].x
+			) > 16
+				? a.boundingPoly.vertices[0].x - b.boundingPoly.vertices[0].x
+				: 0
+		)
+		.sort((a, b) =>
+			Math.abs(
 				a.boundingPoly.vertices[0].y - b.boundingPoly.vertices[0].y
+			) > 16
+				? a.boundingPoly.vertices[0].y - b.boundingPoly.vertices[0].y
+				: 0
 		)
 		// Adding a center vertex to account for differently sized text detects
 		.map((d) => {
