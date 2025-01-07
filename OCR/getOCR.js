@@ -13,31 +13,44 @@ const CONFIG = {
 
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
+/**
+ *
+ * @param {string} imagePath path to screenshot
+ * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
+ */
+
 const getOCR = async (imagePath) => {
-	const response = await client.textDetection(imagePath);
-	const result = response[0];
-	console.log('result:', result);
-	const detections = result.textAnnotations;
-	console.log('detections:');
-	detections.forEach((text) => console.log(text));
+	try {
+		const response = await client.textDetection(imagePath);
+		const result = response[0];
+		console.log('result:', result);
+		const detections = result.textAnnotations;
+		console.log('detections:');
+		detections.forEach((text) => console.log(text));
 
-	fs.writeFileSync(
-		'./OCR/results/response.json',
-		JSON.stringify({ response }),
-		'utf8'
-	);
+		fs.writeFileSync(
+			'./OCR/results/response.json',
+			JSON.stringify({ response }),
+			'utf8'
+		);
 
-	fs.writeFileSync(
-		'./OCR/results/result.json',
-		JSON.stringify({ result }),
-		'utf8'
-	);
+		fs.writeFileSync(
+			'./OCR/results/result.json',
+			JSON.stringify({ result }),
+			'utf8'
+		);
 
-	fs.writeFileSync(
-		'./OCR/results/detections.json',
-		JSON.stringify({ detections }),
-		'utf8'
-	);
+		fs.writeFileSync(
+			'./OCR/results/detections.json',
+			JSON.stringify({ detections }),
+			'utf8'
+		);
+
+		return detections;
+	} catch (error) {
+		console.error(error.message);
+		return error;
+	}
 };
 
 export default getOCR;
