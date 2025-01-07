@@ -26,7 +26,11 @@ const parseDetects = (detections, dimensions) => {
 		dim.x = d.boundingPoly.vertices[1].x - d.boundingPoly.vertices[0].x;
 		dim.y = d.boundingPoly.vertices[3].y - d.boundingPoly.vertices[0].y;
 
-		if (/^[A-Z]{1,2}$/.test(d.description)) {
+		if (
+			d.boundingPoly.vertices[0].y > 300 &&
+			dimensions.height - d.boundingPoly.vertices[0].y > 300 &&
+			/^[A-Z]+$/.test(d.description)
+		) {
 			maxX = Math.max(dim.x, maxX);
 			maxY = Math.max(dim.y, maxY);
 			// console.log(dim);
@@ -63,7 +67,7 @@ const parseDetects = (detections, dimensions) => {
 
 	// filter out all non game grid detections
 	// and sort left to right and top to bottom
-	const sortedAndFiltered = sortAndFilterDetects(detections);
+	const sortedAndFiltered = sortAndFilterDetects(detections, dimensions);
 
 	return {
 		boxSize: boxSize,
