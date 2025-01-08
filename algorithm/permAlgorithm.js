@@ -561,18 +561,20 @@ const getValidWords = (hand, state) => {
 	return [filteredValidWords, validWords.length, filteredValidWords.length];
 };
 
-const hand = ['A', 'B', 'N', 'j', 'S', 'j', 'T'];
-console.log('hand:', hand);
-console.time('Total runtime');
-const validWords = getValidWords(hand, testState);
-console.timeEnd('Total runtime');
-console.log(validWords);
+// const hand = ['A', 'B', 'N', 'j', 'S', 'j', 'T'];
+// console.log('hand:', hand);
+// console.time('Total runtime');
+// const validWords = getValidWords(hand, testState);
+// console.timeEnd('Total runtime');
+// console.log(validWords);
 // for (const validWord of validWords) {
 // 	console.log(JSON.stringify(validWord, null, '\t'));
 // }
 
-fs.writeFileSync(
-	`./algorithm/data/cache/cachedResults.json`,
-	JSON.stringify({ validWords }),
-	'utf8'
-);
+// fs.writeFileSync(
+// 	`./algorithm/data/cache/cachedResults.json`,
+// 	JSON.stringify({ validWords }),
+// 	'utf8'
+// );
+
+export default getValidWords;
