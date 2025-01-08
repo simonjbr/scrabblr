@@ -22,7 +22,8 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 		);
 
 	// add convenient data to detection objects
-	for (let i = 0; i < sortedAndFiltered.length; i++) {
+	const initialSortedAndFilteredLength = sortedAndFiltered.length;
+	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
 		const d = sortedAndFiltered[i];
 
 		// add a center vertex to account for varying detection dimensions
@@ -56,10 +57,31 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 			d.dim.relativeToBox.x < d.description.length - 1
 		) {
 			d.weHaveAProblem = true;
-			if (bonusTileValues.has(d.description.slice(0, 2))) {
+			const beforeSlice = d.description.slice(0, 2);
+			const afterSlice = d.description.slice(-2);
+			// deep copy of detection object for modifying and adding to detections array
+			const splitDetect = JSON.parse(JSON.stringify(d));
+			if (bonusTileValues.has(beforeSlice)) {
 				console.log('Before');
-			} else if (bonusTileValues.has(d.description.slice(-2))) {
+			} else if (bonusTileValues.has(afterSlice)) {
 				console.log('After');
+				// remove bonus tile letters from original description;
+				d.description = d.description.slice(0, -2);
+				// change description to the bonus tile
+				splitDetect.description = afterSlice;
+				// adjust minX using a rough proportion of boxSize
+				splitDetect.coords.minX =
+					splitDetect.coords.maxX - 0.6 * boxSize;
+				// update pixel and relative x dimensions
+				splitDetect.dim.pixel.x =
+					splitDetect.coords.maxX - splitDetect.coords.minX;
+				splitDetect.dim.relativeToBox.x =
+					splitDetect.dim.pixel.x / boxSize;
+				// update center x
+				splitDetect.center.x =
+					splitDetect.coords.minX + splitDetect.dim.pixel.x / 2;
+				// push modified detection object to detections array
+				sortedAndFiltered.push(splitDetect);
 			}
 		}
 	}
