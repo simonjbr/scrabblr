@@ -13,30 +13,39 @@ const parseDetects = (detections, dimensions) => {
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
 
-	// maximum dimensions of text detections in game grid
-	let maxX = 0;
-	let maxY = 0;
-
 	// loop to identify above variables
 	for (let i = 1; i < detections.length; i++) {
 		const d = detections[i];
+
+		// vertices aren't always in the same order so i correct by using max mins of each axis
+		// maximum and minimum coordinates of text detections in game grid
+		d.coords = {};
+
+		d.coords.minX = d.boundingPoly.vertices[0].x;
+		d.coords.minY = d.boundingPoly.vertices[0].y;
+		d.coords.maxX = 0;
+		d.coords.maxY = 0;
+
+		for (const vertex of d.boundingPoly.vertices) {
+			d.coords.minX = Math.min(vertex.x, d.coords.minX);
+			d.coords.minY = Math.min(vertex.y, d.coords.minY);
+			d.coords.maxX = Math.max(vertex.x, d.coords.maxX);
+			d.coords.maxY = Math.max(vertex.y, d.coords.maxY);
+		}
 
 		// dimensions of the detection
 		d.dim = { pixel: {} };
 
 		d.dim.pixel.x =
-			d.boundingPoly.vertices[1].x - d.boundingPoly.vertices[3].x;
+			d.coords.maxX - d.coords.minX;
 		d.dim.pixel.y =
-			d.boundingPoly.vertices[3].y - d.boundingPoly.vertices[1].y;
+			d.coords.maxY - d.coords.minY;
 
 		if (
 			d.boundingPoly.vertices[0].y > 300 &&
 			dimensions.height - d.boundingPoly.vertices[0].y > 300 &&
 			/^[A-Z]+$/.test(d.description)
 		) {
-			maxX = Math.max(d.dim.pixel.x, maxX);
-			maxY = Math.max(d.dim.pixel.y, maxY);
-			// console.log(dim);
 			if (!topLeftIndex) {
 				topLeftIndex = i;
 			}
@@ -64,9 +73,6 @@ const parseDetects = (detections, dimensions) => {
 			topLeft.boundingPoly.vertices[0].y) /
 		14;
 	console.log('boxSize:', boxSize);
-
-	console.log('maxX:', maxX, `%${pixelToPercent(maxX, 'x', dimensions)}`);
-	console.log('maxY:', maxY, `%${pixelToPercent(maxY, 'y', dimensions)}`);
 
 	// filter out all non game grid detections
 	// and sort left to right and top to bottom
