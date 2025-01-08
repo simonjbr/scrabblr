@@ -12,6 +12,7 @@ import bonusTileValues from './bonusTileValues.js';
 // filter out all non game grid detections
 // and sort left to right and top to bottom
 const sortAndFilterDetects = (detections, dimensions, boxSize) => {
+	const BONUS_TILE_X_DIMENSION = 0.6;
 	const sortedAndFiltered = detections
 		// may need a more robust pattern in the future
 		.filter(
@@ -21,7 +22,7 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 				/^[A-Z]+$/.test(d.description)
 		);
 
-	// add convenient data to detection objects
+	// add convenient data to detection objects and correct erroneous detections
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
 	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
 		const d = sortedAndFiltered[i];
@@ -71,7 +72,7 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 				splitDetect.description = afterSlice;
 				// adjust minX using a rough proportion of boxSize
 				splitDetect.coords.minX =
-					splitDetect.coords.maxX - 0.6 * boxSize;
+					splitDetect.coords.maxX - BONUS_TILE_X_DIMENSION * boxSize;
 				// update pixel and relative x dimensions
 				splitDetect.dim.pixel.x =
 					splitDetect.coords.maxX - splitDetect.coords.minX;
@@ -80,6 +81,8 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 				// update center x
 				splitDetect.center.x =
 					splitDetect.coords.minX + splitDetect.dim.pixel.x / 2;
+				// set isBonus to true
+				splitDetect.isBonus = true;
 				// push modified detection object to detections array
 				sortedAndFiltered.push(splitDetect);
 			}
