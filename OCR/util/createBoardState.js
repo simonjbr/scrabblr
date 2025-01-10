@@ -27,7 +27,7 @@ const createBoardState = ({
 
 		if (y > lastY) {
 			// account for fuzziness
-			if (y - lastY > 16 && i > 0) {
+			if (y - lastY > 21 && i > 0) {
 				const emptySquaresEnd = Math.floor(rowRemaining / boxSize);
 				boardState[boardState.length - 1].push(
 					...new Array(emptySquaresEnd).fill('')
