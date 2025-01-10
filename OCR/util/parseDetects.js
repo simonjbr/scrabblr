@@ -22,6 +22,12 @@ const parseDetects = (detections, dimensions) => {
 		d.isGameGrid = false;
 		d.isHand = false;
 
+		// cloud vision can confuse a T with a hebrew character
+		if (d.description.includes('יז'))
+			d.description = d.description.replace(/יז/g, 'T');
+		// remove any non [A-Z] characters
+		d.description = d.description.replace(/[^A-Z]/g, '');
+
 		// vertices aren't always in the same order so i correct by using max mins of each axis
 		// maximum and minimum coordinates of text detections in game grid
 		d.coords = {};
