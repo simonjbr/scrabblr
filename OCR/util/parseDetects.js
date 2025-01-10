@@ -13,13 +13,14 @@ const parseDetects = (detections, dimensions) => {
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
 
-	const handDetects = '';
+	let handDetects = '';
 
 	// loop to identify above variables
 	for (let i = 1; i < detections.length; i++) {
 		const d = detections[i];
 
 		d.isGameGrid = false;
+		d.isHand = false;
 
 		// vertices aren't always in the same order so i correct by using max mins of each axis
 		// maximum and minimum coordinates of text detections in game grid
@@ -54,14 +55,20 @@ const parseDetects = (detections, dimensions) => {
 			}
 			bottomRightIndex = i;
 		}
+
+		if (
+			dimensions.height - d.coords.minY <= 430 &&
+			dimensions.height - d.coords.maxY >= 270
+		) {
+			d.isHand = true;
+			handDetects += d.description;
+		}
 	}
 
 	const topLeft = detections[topLeftIndex];
 	const bottomRight = detections[bottomRightIndex];
 
-	const hand = detections[bottomRightIndex + 1].description
-		.split('')
-		.filter((char) => /^[A-Z]$/.test(char));
+	const hand = handDetects.split('').filter((char) => /^[A-Z]$/.test(char));
 	console.log('hand:', hand);
 
 	console.log(
@@ -76,10 +83,7 @@ const parseDetects = (detections, dimensions) => {
 	);
 
 	// size of each grid square
-	const boxSize =
-		(bottomRight.coords.minY -
-			topLeft.coords.minY) /
-		14;
+	const boxSize = (bottomRight.coords.minY - topLeft.coords.minY) / 14;
 	console.log('boxSize:', boxSize);
 
 	// filter out all non game grid detections

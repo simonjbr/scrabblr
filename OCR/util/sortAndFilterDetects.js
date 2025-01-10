@@ -4,7 +4,7 @@ import filterDuplicates from './filterDuplicates.js';
 
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean, isGameGrid: boolean}[]} detections OCR detections
+ * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
  * @param {{height: number, width: number}} dimensions dimensions of the screenshot
  * @param {number} boxSize size of each square in the game grid
  * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
