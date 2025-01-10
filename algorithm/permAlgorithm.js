@@ -430,11 +430,14 @@ const getValidWords = (hand, state) => {
 						// if found search for top letter
 						let yDelta = 1;
 						while (
+							yStart - perm.permutation.length - yDelta > 0 &&
 							workingState[
 								yStart - perm.permutation.length - yDelta
 							][n[1]]
 						) {
 							yDelta++;
+							if (yStart - perm.permutation.length - yDelta < 0)
+								break;
 						}
 						verContacts.push([
 							yStart - perm.permutation.length - yDelta + 1,
