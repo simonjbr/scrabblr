@@ -5,7 +5,7 @@ import sortAndFilterDetects from './sortAndFilterDetects.js';
  *
  * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]} detections OCR detections
  * @param {{height: number, width: number}} dimensions dimensions of the screenshot
- * @returns {{boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
+ * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
  */
 
 const parseDetects = (detections, dimensions) => {
@@ -13,9 +13,13 @@ const parseDetects = (detections, dimensions) => {
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
 
+	const handDetects = '';
+
 	// loop to identify above variables
 	for (let i = 1; i < detections.length; i++) {
 		const d = detections[i];
+
+		d.isGameGrid = false;
 
 		// vertices aren't always in the same order so i correct by using max mins of each axis
 		// maximum and minimum coordinates of text detections in game grid
@@ -36,16 +40,15 @@ const parseDetects = (detections, dimensions) => {
 		// dimensions of the detection
 		d.dim = { pixel: {} };
 
-		d.dim.pixel.x =
-			d.coords.maxX - d.coords.minX;
-		d.dim.pixel.y =
-			d.coords.maxY - d.coords.minY;
+		d.dim.pixel.x = d.coords.maxX - d.coords.minX;
+		d.dim.pixel.y = d.coords.maxY - d.coords.minY;
 
 		if (
-			d.boundingPoly.vertices[0].y > 300 &&
-			dimensions.height - d.boundingPoly.vertices[0].y > 300 &&
+			d.coords.minY > 300 &&
+			dimensions.height - d.coords.maxY > 430 &&
 			/^[A-Z]+$/.test(d.description)
 		) {
+			d.isGameGrid = true;
 			if (!topLeftIndex) {
 				topLeftIndex = i;
 			}
@@ -55,6 +58,11 @@ const parseDetects = (detections, dimensions) => {
 
 	const topLeft = detections[topLeftIndex];
 	const bottomRight = detections[bottomRightIndex];
+
+	const hand = detections[bottomRightIndex + 1].description
+		.split('')
+		.filter((char) => /^[A-Z]$/.test(char));
+	console.log('hand:', hand);
 
 	console.log(
 		'topLeft:',
@@ -69,8 +77,8 @@ const parseDetects = (detections, dimensions) => {
 
 	// size of each grid square
 	const boxSize =
-		(bottomRight.boundingPoly.vertices[0].y -
-			topLeft.boundingPoly.vertices[0].y) /
+		(bottomRight.coords.minY -
+			topLeft.coords.minY) /
 		14;
 	console.log('boxSize:', boxSize);
 
@@ -83,6 +91,7 @@ const parseDetects = (detections, dimensions) => {
 	);
 
 	return {
+		hand: hand,
 		boxSize: boxSize,
 		dimensions: dimensions,
 		gridDetections: sortedAndFiltered,
