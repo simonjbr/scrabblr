@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import bonusTileValues from './bonusTileValues.js';
+import filterDuplicates from './filterDuplicates.js';
 
 /**
  *
@@ -13,10 +14,9 @@ import bonusTileValues from './bonusTileValues.js';
 // and sort left to right and top to bottom
 const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 	const BONUS_TILE_X_DIMENSION = 0.6;
-	const sortedAndFiltered = detections
-		// may need a more robust pattern in the future
-		.filter((d) => d.isGameGrid);
 
+	// filter out non game grid detections
+	let sortedAndFiltered = detections.filter((d) => d.isGameGrid);
 	// add convenient data to detection objects and correct erroneous detections
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
 	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
@@ -87,6 +87,9 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 			}
 		}
 	}
+
+	// filter out duplicate detections
+	sortedAndFiltered = filterDuplicates(sortedAndFiltered);
 
 	// sorting must account for fuzziness
 	sortedAndFiltered
