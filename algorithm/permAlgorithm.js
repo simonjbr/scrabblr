@@ -94,6 +94,8 @@ const getValidWords = (hand, state) => {
 				d[0] < 0 ? y + d[0] : y + d[0] * anchor.length,
 				x + d[1],
 			];
+			// check if neighbour coords are out of bounds
+			if (n[0] < 0 || n[1] < 0) break;
 			// if neighbour is occupied move on to next delta
 			if (state[n[0]][n[1]]) continue;
 			// loop through perms and try placing letters
@@ -169,11 +171,15 @@ const getValidWords = (hand, state) => {
 						// if placed letter contacts an anchor add to contacts
 						// VERTICAL CONTACTS
 						// check for contacts above
-						if (workingState[n[0] - 1][xStart - j]) {
+						if (
+							n[0] - 1 >= 0 &&
+							workingState[n[0] - 1][xStart - j]
+						) {
 							// if there is contact above search for the top letter
 							let yDelta = 1;
 							while (workingState[n[0] - yDelta][xStart - j]) {
 								yDelta++;
+								if (n[0] - yDelta < 0) break;
 							}
 							verContacts.push([n[0] - yDelta + 1, xStart - j]);
 							// check for contacts below
@@ -321,6 +327,8 @@ const getValidWords = (hand, state) => {
 				y + d[0],
 				d[1] < 0 ? x + d[1] : x + d[1] * anchor.length,
 			];
+			// check if neighbour coords are out of bounds
+			if (n[0] < 0 || n[1] < 0) break;
 			// if neighbour is occupied move on to next delta
 			if (state[n[0]][n[1]]) continue;
 			// loop through perms and try placing letters
@@ -395,11 +403,15 @@ const getValidWords = (hand, state) => {
 						});
 						// if placed letter contacts an anchor add to contacts
 						// check for contacts left
-						if (workingState[yStart - j][n[1] - 1]) {
+						if (
+							n[1] - 1 >= 0 &&
+							workingState[yStart - j][n[1] - 1]
+						) {
 							// if there is contact left search for the furthest left letter
 							let xDelta = 1;
 							while (workingState[yStart - j][n[1] - xDelta]) {
 								xDelta++;
+								if (n[0] - xDelta < 0) break;
 							}
 							horContacts.push([yStart - j, n[1] - xDelta + 1]);
 							// check for contacts right
