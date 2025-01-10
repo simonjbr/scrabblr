@@ -3,7 +3,7 @@ import bonusTileValues from './bonusTileValues.js';
 
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean}[]} detections OCR detections
+ * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean, isGameGrid: boolean}[]} detections OCR detections
  * @param {{height: number, width: number}} dimensions dimensions of the screenshot
  * @param {number} boxSize size of each square in the game grid
  * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
@@ -15,12 +15,7 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 	const BONUS_TILE_X_DIMENSION = 0.6;
 	const sortedAndFiltered = detections
 		// may need a more robust pattern in the future
-		.filter(
-			(d) =>
-				d.boundingPoly.vertices[0].y > 300 &&
-				dimensions.height - d.boundingPoly.vertices[0].y > 300 &&
-				/^[A-Z]+$/.test(d.description)
-		);
+		.filter((d) => d.isGameGrid);
 
 	// add convenient data to detection objects and correct erroneous detections
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
@@ -40,7 +35,11 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 
 		// if detection is 2 chars long and still fits in one box we know it's a bonus square
 		d.isBonus = false;
-		if (d.description.length === 2 && d.dim.relativeToBox.x < 1) {
+		if (
+			d.description.length === 2 &&
+			d.dim.relativeToBox.x < 1 &&
+			d.dim.relativeToBox.y < 1
+		) {
 			d.isBonus = true;
 		}
 
@@ -92,17 +91,13 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 	// sorting must account for fuzziness
 	sortedAndFiltered
 		.sort((a, b) =>
-			Math.abs(
-				a.boundingPoly.vertices[0].x - b.boundingPoly.vertices[0].x
-			) > 16
-				? a.boundingPoly.vertices[0].x - b.boundingPoly.vertices[0].x
+			Math.abs(a.coords.minX - b.coords.minX) > 16
+				? a.coords.minX - b.coords.minX
 				: 0
 		)
 		.sort((a, b) =>
-			Math.abs(
-				a.boundingPoly.vertices[0].y - b.boundingPoly.vertices[0].y
-			) > 16
-				? a.boundingPoly.vertices[0].y - b.boundingPoly.vertices[0].y
+			Math.abs(a.coords.minY - b.coords.minY) > 16
+				? a.coords.minY - b.coords.minY
 				: 0
 		);
 

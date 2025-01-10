@@ -11,8 +11,8 @@ const main = async () => {
 	const dimensions = sizeOf('./OCR/assets/04.jpg');
 	// console.log(dimensions);
 
-	// const detections = getDetectsFromCache() || getOCR('./OCR/assets/04.jpg');
-	const detections = await getOCR('./OCR/assets/04.jpg');
+	const detections = getDetectsFromCache() || getOCR('./OCR/assets/04.jpg');
+	// const detections = await getOCR('./OCR/assets/05.jpg');
 
 	const parsedDetects = parseDetects(detections, dimensions);
 
@@ -28,8 +28,8 @@ const main = async () => {
 
 	console.log('count:', count, 'should be:', 15 * 15);
 
-	const hand = ['S', 'L', 'O', 'T', 'A', 'O', 'R'];
-	const validWords = getValidWords(hand, boardState);
+	// const hand = ['S', 'L', 'O', 'T', 'A', 'O', 'R'];
+	const validWords = getValidWords(parsedDetects.hand, boardState);
 
 	console.log(validWords);
 

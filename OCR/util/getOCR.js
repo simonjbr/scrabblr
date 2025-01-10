@@ -24,7 +24,6 @@ const getOCR = async (imagePath) => {
 		const response = await client.textDetection(imagePath);
 		const result = response[0];
 		const detections = result.textAnnotations;
-		detections.forEach((text) => console.log(text));
 
 		fs.writeFileSync(
 			'./OCR/results/response.json',
