@@ -94,12 +94,12 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 	// sorting must account for fuzziness
 	sortedAndFiltered
 		.sort((a, b) =>
-			Math.abs(a.coords.minX - b.coords.minX) > 16
+			Math.abs(a.coords.minX - b.coords.minX) > 21
 				? a.coords.minX - b.coords.minX
 				: 0
 		)
 		.sort((a, b) =>
-			Math.abs(a.coords.minY - b.coords.minY) > 16
+			Math.abs(a.coords.minY - b.coords.minY) > 21
 				? a.coords.minY - b.coords.minY
 				: 0
 		);
