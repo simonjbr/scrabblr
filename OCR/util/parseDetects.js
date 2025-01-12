@@ -1,5 +1,6 @@
 import pixelToPercent from './pixelToPercent.js';
 import sortAndFilterDetects from './sortAndFilterDetects.js';
+import getHand from './getHand.js';
 
 /**
  *
@@ -13,7 +14,7 @@ const parseDetects = (detections, dimensions) => {
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
 
-	let handDetects = '';
+	const handDetects = [];
 
 	// loop to identify above variables
 	for (let i = 1; i < detections.length; i++) {
@@ -29,7 +30,7 @@ const parseDetects = (detections, dimensions) => {
 		d.description = d.description.replace(/[^A-Z]/g, '');
 
 		// vertices aren't always in the same order so i correct by using max mins of each axis
-		// maximum and minimum coordinates of text detections in game grid
+		// maximum and minimum coordinates of text detections
 		d.coords = {};
 
 		d.coords.minX = d.boundingPoly.vertices[0].x;
@@ -73,14 +74,14 @@ const parseDetects = (detections, dimensions) => {
 			dimensions.height - d.coords.maxY >= 270
 		) {
 			d.isHand = true;
-			handDetects += d.description;
+			handDetects.push(d);
 		}
 	}
 
 	const topLeft = detections[topLeftIndex];
 	const bottomRight = detections[bottomRightIndex];
 
-	const hand = handDetects.split('').filter((char) => /^[A-Z]$/.test(char));
+	const hand = getHand(handDetects, dimensions);
 	console.log('hand:', hand);
 
 	console.log(
