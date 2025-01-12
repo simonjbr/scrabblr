@@ -4,7 +4,7 @@ import filterDuplicates from './filterDuplicates.js';
 
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
+ * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
  * @param {{height: number, width: number}} dimensions dimensions of the screenshot
  * @param {number} boxSize size of each square in the game grid
  * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
@@ -21,12 +21,6 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
 	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
 		const d = sortedAndFiltered[i];
-
-		// add a center vertex to account for varying detection dimensions
-		const centerVertex = {};
-		centerVertex.x = d.coords.minX + (d.coords.maxX - d.coords.minX) / 2;
-		centerVertex.y = d.coords.minY + (d.coords.maxY - d.coords.minY) / 2;
-		d.center = centerVertex;
 
 		// calculate dimensions as a proportion of box size
 		d.dim.relativeToBox = {};

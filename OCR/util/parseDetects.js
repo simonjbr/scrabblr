@@ -3,7 +3,7 @@ import sortAndFilterDetects from './sortAndFilterDetects.js';
 
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]} detections OCR detections
+ * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
  * @param {{height: number, width: number}} dimensions dimensions of the screenshot
  * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
  */
@@ -43,6 +43,12 @@ const parseDetects = (detections, dimensions) => {
 			d.coords.maxX = Math.max(vertex.x, d.coords.maxX);
 			d.coords.maxY = Math.max(vertex.y, d.coords.maxY);
 		}
+
+		// add a center vertex to account for varying detection dimensions
+		const centerVertex = {};
+		centerVertex.x = d.coords.minX + (d.coords.maxX - d.coords.minX) / 2;
+		centerVertex.y = d.coords.minY + (d.coords.maxY - d.coords.minY) / 2;
+		d.center = centerVertex;
 
 		// dimensions of the detection
 		d.dim = { pixel: {} };
@@ -89,7 +95,7 @@ const parseDetects = (detections, dimensions) => {
 	);
 
 	// size of each grid square
-	const boxSize = (bottomRight.coords.minY - topLeft.coords.minY) / 14;
+	const boxSize = (bottomRight.center.y - topLeft.center.y) / 14;
 	console.log('boxSize:', boxSize);
 
 	// filter out all non game grid detections
