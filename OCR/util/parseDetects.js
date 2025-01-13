@@ -26,6 +26,11 @@ const parseDetects = (detections, dimensions) => {
 		// cloud vision can confuse a T with a hebrew character
 		if (d.description.includes('יז'))
 			d.description = d.description.replace(/יז/g, 'T');
+		// replace 0's with O's
+		if (d.description.includes('0')) {
+			if (d.description !== '10')
+				d.description = d.description.replace(/0/g, 'O');
+		}
 		// remove any non [A-Z] characters
 		d.description = d.description.replace(/[^A-Z]/g, '');
 
