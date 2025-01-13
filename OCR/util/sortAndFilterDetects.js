@@ -38,9 +38,22 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 		}
 
 		// cloud vision can sometimes combine vertically adjancent tiles into one detection
-		// should be able to correct by simply taking the first character of the detection
+		// split these into single letter detections and adjust minY and maxY for each
 		if (Math.abs(d.dim.relativeToBox.y) > 1) {
-			d.description = d.description[0];
+			for (let i = 0; i < d.description.length; i++) {
+				const letter = d.description.charAt(i);
+
+				const splitDetect = JSON.parse(JSON.stringify(d));
+
+				splitDetect.description = letter;
+				splitDetect.coords.minY = d.coords.minY + i * boxSize;
+				splitDetect.coords.maxY =
+					d.coords.maxY - (d.description.length - 1 - i) * boxSize;
+
+				sortedAndFiltered.push(splitDetect);
+			}
+
+			d.description = '';
 		}
 
 		// cloud vision can sometimes combine placed letters and bonus squares into one detection
