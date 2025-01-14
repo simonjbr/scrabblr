@@ -1,6 +1,6 @@
 /**
  *
- * @param {{boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean}[]}} detections
+ * @param {{boxSize: number, dimensions: {height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean}[]}} detections
  */
 
 const createBoardState = ({
@@ -27,7 +27,7 @@ const createBoardState = ({
 
 		if (y > lastY) {
 			// account for fuzziness
-			if (y - lastY > 21 && i > 0) {
+			if (y - lastY > dimensions.fuzziness && i > 0) {
 				const emptySquaresEnd = Math.floor(rowRemaining / boxSize);
 				boardState[boardState.length - 1].push(
 					...new Array(emptySquaresEnd).fill('')

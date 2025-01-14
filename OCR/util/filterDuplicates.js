@@ -12,9 +12,6 @@ const filterDuplicates = (detections) => {
 			coords: { minX, minY },
 		} = d;
 		if (seen.has(description)) {
-			if (d.description === 'O') {
-				console.log('');
-			}
 			const matches = seen.get(description);
 			const isDuplicate = matches.some(
 				(existing) =>

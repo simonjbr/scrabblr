@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import sizeOf from 'image-size';
 import getOCR from './util/getOCR.js';
+import getDocumentOCR from './util/getDocumentOCR.js';
 import getDetectsFromCache from './util/getDetectsFromCache.js';
 import parseDetects from './util/parseDetects.js';
 import createBoardState from './util/createBoardState.js';
@@ -8,11 +9,27 @@ import getValidWords from '../algorithm/permAlgorithm.js';
 
 const main = async () => {
 	// get height and width of screenshot
-	const dimensions = sizeOf('./OCR/assets/04.jpg');
-	// console.log(dimensions);
+	const dimensions = sizeOf('./OCR/assets/iphone.jpg');
+	// proportion of height dimension for start and end of game grid
+	const GRID_START_MULTIPLIER = 0.14;
+	const GRID_END_MULTIPLIER = 0.81;
 
-	const detections = getDetectsFromCache() || getOCR('./OCR/assets/04.jpg');
-	// const detections = await getOCR('./OCR/assets/05.jpg');
+	// pixel values for start and end of game grid
+	dimensions.gridStart = GRID_START_MULTIPLIER * dimensions.height;
+	dimensions.gridEnd = GRID_END_MULTIPLIER * dimensions.height;
+
+	// proportion of width for hand tiles
+	const HAND_MULTIPLIER = 1 / 7;
+	// pixel value for hand tile dimensions
+	dimensions.handDim = HAND_MULTIPLIER * dimensions.width;
+	// sort fuzziness as proportion of height
+	const FUZZINESS_MULTIPLIER = 0.01;
+	dimensions.fuzziness = FUZZINESS_MULTIPLIER * dimensions.height;
+
+	// const detections =
+	// getDetectsFromCache() || getDocumentOCR('./OCR/assets/08_1080.jpg');
+	// const detections = await getOCR('./OCR/assets/08_1080.jpg');
+	const detections = await getDocumentOCR('./OCR/assets/iphone.jpg');
 
 	const parsedDetects = parseDetects(detections, dimensions);
 
@@ -28,7 +45,6 @@ const main = async () => {
 
 	console.log('count:', count, 'should be:', 15 * 15);
 
-	// const hand = ['S', 'L', 'O', 'T', 'A', 'O', 'R'];
 	const validWords = getValidWords(parsedDetects.hand, boardState);
 
 	console.log(validWords);

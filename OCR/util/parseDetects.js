@@ -5,7 +5,7 @@ import getHand from './getHand.js';
 /**
  *
  * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
- * @param {{height: number, width: number}} dimensions dimensions of the screenshot
+ * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions dimensions of the screenshot
  * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
  */
 
@@ -63,8 +63,8 @@ const parseDetects = (detections, dimensions) => {
 		d.dim.pixel.y = d.coords.maxY - d.coords.minY;
 
 		if (
-			d.coords.minY > 300 &&
-			dimensions.height - d.coords.maxY > 430 &&
+			d.coords.minY > dimensions.gridStart &&
+			d.coords.maxY < dimensions.gridEnd &&
 			/^[A-Z]+$/.test(d.description)
 		) {
 			d.isGameGrid = true;
@@ -75,8 +75,8 @@ const parseDetects = (detections, dimensions) => {
 		}
 
 		if (
-			dimensions.height - d.coords.minY <= 430 &&
-			dimensions.height - d.coords.maxY >= 270
+			d.coords.minY >= dimensions.gridEnd &&
+			d.coords.maxY <= dimensions.gridEnd + dimensions.handDim
 		) {
 			d.isHand = true;
 			handDetects.push(d);
@@ -101,7 +101,8 @@ const parseDetects = (detections, dimensions) => {
 	);
 
 	// size of each grid square
-	const boxSize = (bottomRight.center.y - topLeft.center.y) / 14;
+	// const boxSize = (bottomRight.center.y - topLeft.center.y) / 14;
+	const boxSize = dimensions.width / 15;
 	console.log('boxSize:', boxSize);
 
 	// filter out all non game grid detections
