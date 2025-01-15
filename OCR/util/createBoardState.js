@@ -19,6 +19,9 @@ const createBoardState = ({
 	// loop through detections and create board state
 	for (let i = 0; i < detections.length; i++) {
 		const d = detections[i];
+
+		if (d.ignore) continue;
+
 		const x = d.coords.minX;
 		const y = d.coords.minY;
 

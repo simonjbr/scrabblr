@@ -40,19 +40,24 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 		// cloud vision can sometimes combine vertically adjancent tiles into one detection
 		// split these into single letter detections and adjust minY and maxY for each
 		if (Math.abs(d.dim.relativeToBox.y) > 1) {
-			for (let i = 0; i < d.description.length; i++) {
-				const letter = d.description.charAt(i);
+			// can sometimes see character patterns in the layout of tiles
+			if (d.description.length !== 1) {
+				for (let i = 0; i < d.description.length; i++) {
+					const letter = d.description.charAt(i);
 
-				const splitDetect = JSON.parse(JSON.stringify(d));
+					const splitDetect = JSON.parse(JSON.stringify(d));
 
-				splitDetect.description = letter;
-				splitDetect.coords.minY = d.coords.minY + i * boxSize;
-				splitDetect.coords.maxY =
-					d.coords.maxY - (d.description.length - 1 - i) * boxSize;
+					splitDetect.description = letter;
+					splitDetect.coords.minY = d.coords.minY + i * boxSize;
+					splitDetect.coords.maxY =
+						d.coords.maxY -
+						(d.description.length - 1 - i) * boxSize;
 
-				sortedAndFiltered.push(splitDetect);
+					sortedAndFiltered.push(splitDetect);
+				}
+			} else {
+				d.ignore = true;
 			}
-
 			d.description = '';
 		}
 
