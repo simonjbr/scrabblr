@@ -76,7 +76,7 @@ const parseDetects = (detections, dimensions) => {
 
 		if (
 			d.coords.minY >= dimensions.gridEnd &&
-			d.coords.maxY <= dimensions.gridEnd + dimensions.handDim
+			d.coords.minY <= dimensions.gridEnd + dimensions.handDim
 		) {
 			d.isHand = true;
 			handDetects.push(d);

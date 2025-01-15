@@ -12,7 +12,7 @@ const main = async () => {
 	const dimensions = sizeOf('./OCR/assets/iphone.jpg');
 	// proportion of height dimension for start and end of game grid
 	const GRID_START_MULTIPLIER = 0.14;
-	const GRID_END_MULTIPLIER = 0.81;
+	const GRID_END_MULTIPLIER = 0.8;
 
 	// pixel values for start and end of game grid
 	dimensions.gridStart = GRID_START_MULTIPLIER * dimensions.height;
