@@ -69,33 +69,55 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 			d.dim.relativeToBox.x < d.description.length - 1
 		) {
 			d.weHaveAProblem = true;
-			const beforeSlice = d.description.slice(0, 2);
-			const afterSlice = d.description.slice(-2);
-			// deep copy of detection object for modifying and adding to detections array
-			const splitDetect = JSON.parse(JSON.stringify(d));
-			if (bonusTileValues.has(beforeSlice)) {
-				console.log('Before');
-			} else if (bonusTileValues.has(afterSlice)) {
-				console.log('After');
-				// remove bonus tile letters from original description;
-				d.description = d.description.slice(0, -2);
-				// change description to the bonus tile
-				splitDetect.description = afterSlice;
-				// adjust minX using a rough proportion of boxSize
-				splitDetect.coords.minX =
-					splitDetect.coords.maxX - BONUS_TILE_X_DIMENSION * boxSize;
-				// update pixel and relative x dimensions
-				splitDetect.dim.pixel.x =
-					splitDetect.coords.maxX - splitDetect.coords.minX;
-				splitDetect.dim.relativeToBox.x =
-					splitDetect.dim.pixel.x / boxSize;
-				// update center x
-				splitDetect.center.x =
-					splitDetect.coords.minX + splitDetect.dim.pixel.x / 2;
-				// set isBonus to true
-				splitDetect.isBonus = true;
-				// push modified detection object to detections array
-				sortedAndFiltered.push(splitDetect);
+
+			for (let i = 0; i < d.description.length - 1; i++) {
+				const slices = [];
+				// split description into beforeSlice, slice and afterSlice
+				slices.push(
+					d.description.slice(0, i),
+					d.description.slice(i, i + 2),
+					d.description.slice(i + 2)
+				);
+
+				// if slice is a bonus tile split there
+				if (bonusTileValues.has(slices[1])) {
+					let minXDelta = 0;
+					for (let i = 0; i < slices.length; i++) {
+						const s = slices[i];
+						if (!s) continue;
+						// deep copy current detection for modification
+						const splitDetect = JSON.parse(JSON.stringify(d));
+
+						splitDetect.isBonus = i === 1;
+
+						// update description coords and dimensions
+						splitDetect.description = s;
+
+						splitDetect.coords.minX += minXDelta;
+						splitDetect.coords.maxX =
+							splitDetect.coords.minX +
+							(i === 1 ? 1 : s.length) * boxSize;
+
+						splitDetect.center.x =
+							splitDetect.coords.minX +
+							(splitDetect.coords.maxX -
+								splitDetect.coords.minX) /
+								2;
+
+						splitDetect.dim.pixel.x =
+							splitDetect.coords.maxX - splitDetect.coords.minX;
+						splitDetect.dim.relativeToBox.x =
+							splitDetect.dim.pixel.x / boxSize;
+
+						// update the delta for the next iteration
+						minXDelta += (i === 1 ? 1 : s.length) * boxSize;
+
+						// push modified detection object to detections array
+						sortedAndFiltered.push(splitDetect);
+					}
+					d.ignore = true;
+					break;
+				}
 			}
 		}
 	}
