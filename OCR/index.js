@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import sizeOf from 'image-size';
 import getOCR from './util/getOCR.js';
 import getDocumentOCR from './util/getDocumentOCR.js';
 import getDetectsFromCache from './util/getDetectsFromCache.js';
