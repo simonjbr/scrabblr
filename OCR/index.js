@@ -8,22 +8,27 @@ import getValidWords from '../algorithm/permAlgorithm.js';
 import getDimensions from './util/getDimensions.js';
 
 const main = async () => {
-	// get height and width of screenshot
-	// const dimensions = sizeOf('./OCR/assets/08_1440.jpg');
-
-	// const {detections, dimensions} =
-	// getDetectsFromCache() || getDocumentOCR('./OCR/assets/iphone.jpg');
+	// const {
+	// 	detections,
+	// 	dimensions: { width, height },
+	// 	fullTextAnnotations,
+	// } = getDetectsFromCache() || getDocumentOCR('./OCR/assets/iphone.jpg');
 	// const {detections, dimensions} = await getOCR('./OCR/assets/08_1080.jpg');
 	const {
 		detections,
 		dimensions: { width, height },
-	} = await getDocumentOCR('./OCR/assets/08_1440.jpg');
+		fullTextAnnotations,
+	} = await getDocumentOCR('./OCR/assets/09_1080.jpg');
 
 	const dimensions = getDimensions(width, height);
 
 	console.log(dimensions);
 
-	const parsedDetects = parseDetects(detections, dimensions);
+	const parsedDetects = parseDetects(
+		detections,
+		dimensions,
+		fullTextAnnotations
+	);
 
 	const boardState = createBoardState(parsedDetects);
 

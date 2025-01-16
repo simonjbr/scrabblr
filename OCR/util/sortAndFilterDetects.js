@@ -7,12 +7,18 @@ import filterDuplicates from './filterDuplicates.js';
  * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
  * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions dimensions of the screenshot
  * @param {number} boxSize size of each square in the game grid
+ * @param {{paragraphs: {words: {symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}}[], boundingBox: {vertices: {x: number, y: number}[]}}[], boundingBox: {vertices: {x: number, y: number}[]}}[]} fullTextAnnotations detailed OCR detections
  * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
  */
 
 // filter out all non game grid detections
 // and sort left to right and top to bottom
-const sortAndFilterDetects = (detections, dimensions, boxSize) => {
+const sortAndFilterDetects = (
+	detections,
+	dimensions,
+	boxSize,
+	fullTextAnnotations
+) => {
 	const BONUS_TILE_X_DIMENSION = 0.6;
 
 	// filter out non game grid detections
@@ -119,6 +125,69 @@ const sortAndFilterDetects = (detections, dimensions, boxSize) => {
 					break;
 				}
 			}
+
+			// cloud vision can also confuse a grid line between two letters with an 'I'
+			if (d.description.includes('I')) {
+				const iIndex = d.description.indexOf('I');
+				// bool for breaking early
+				let isFixedErrantI = false;
+				// find the same detection in the fullTextAnnotations
+				// so we can locate the center vertex of the 'I'
+				for (const block of fullTextAnnotations) {
+					// concatenate symbols of the block to make one description string
+					let blockDescription = '';
+					for (const symbol of block.paragraphs[0].words[0].symbols) {
+						blockDescription += symbol.text;
+					}
+
+					const isVerticesEqual =
+						JSON.stringify(d.boundingPoly.vertices) ===
+						JSON.stringify(block.boundingBox.vertices);
+
+					// if descriptions and vertices are equal it's the right block
+					if (blockDescription === d.description && isVerticesEqual) {
+						// calculate center X vertex for the 'I'
+						// we need min and max X first
+						let minX =
+							block.paragraphs[0].words[0]?.symbols[iIndex]
+								.boundingBox.vertices[0].x;
+						let maxX = 0;
+
+						for (const vertex of block.paragraphs[0].words[0]
+							.symbols[iIndex].boundingBox.vertices) {
+							minX = Math.min(vertex.x, minX);
+							maxX = Math.max(vertex.x, maxX);
+						}
+
+						const centerX = minX + (maxX - minX) / 2;
+
+						// check if centerX falls on or close to a grid line (within 5 pixels, say)
+						const isOnGridLine = centerX % boxSize < 5;
+						if (isOnGridLine) {
+							d.description =
+								d.description.slice(0, iIndex) +
+								d.description.slice(iIndex + 1);
+							isFixedErrantI = true;
+							break;
+						}
+					}
+				}
+			}
+			// const pixelsToNextGridLine = (59 / 72) * boxSize;
+			// for (let i = 0; i < d.description.length; i++) {
+			// 	const char = d.description.charAt(i);
+
+			// 	if (char === 'I') {
+			// 		// calculate the center X vertex
+			// 		const centerX =
+			// 			d.coords.minX + i * boxSize + pixelsToNextGridLine;
+			// 		// if center.x % boxSize < (some small range)
+			// 		if (centerX % boxSize < 5) {
+			// 			// it is likely on a grid line so slice it out of d.description
+			// 			d.description.split('').splice(i, 1).join('');
+			// 		}
+			// 	}
+			// }
 		}
 	}
 
