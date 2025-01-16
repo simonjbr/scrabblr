@@ -16,7 +16,7 @@ const client = new vision.ImageAnnotatorClient(CONFIG);
 /**
  *
  * @param {string} imagePath path to screenshot
- * @returns {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}
+ * @returns {{detections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}, dimensions: {width: number, height: number}}
  */
 
 const getDocumentOCR = async (imagePath) => {
@@ -24,6 +24,12 @@ const getDocumentOCR = async (imagePath) => {
 		const response = await client.documentTextDetection(imagePath);
 		const result = response[0];
 		const detections = result.textAnnotations;
+
+		// get dimension data
+		const dimensions = {
+			width: result.fullTextAnnotation.pages[0].width,
+			height: result.fullTextAnnotation.pages[0].height,
+		};
 
 		fs.writeFileSync(
 			'./OCR/results/response.json',
@@ -39,11 +45,11 @@ const getDocumentOCR = async (imagePath) => {
 
 		fs.writeFileSync(
 			'./OCR/results/detections.json',
-			JSON.stringify({ detections }),
+			JSON.stringify({ detections, dimensions }),
 			'utf8'
 		);
 
-		return detections;
+		return { detections, dimensions };
 	} catch (error) {
 		console.error(error.message);
 		return error;
