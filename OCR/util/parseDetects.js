@@ -9,7 +9,7 @@ import getHand from './getHand.js';
  * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
  */
 
-const parseDetects = (detections, dimensions, fullTextAnnotations) => {
+const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords) => {
 	// indices for top left and bottom right squares of game grid
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;

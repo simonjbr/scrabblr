@@ -26,6 +26,16 @@ const getDocumentOCR = async (imagePath) => {
 		const detections = result.textAnnotations;
 		const fullTextAnnotations = result.fullTextAnnotation.pages[0].blocks;
 
+		// simplified fullTextAnotation structure
+		const detailedWords = [];
+
+		for (let i = 0; i < fullTextAnnotations.length; i++) {
+			const block = fullTextAnnotations[i];
+			for (const word of block.paragraphs[0].words) {
+				detailedWords.push(word);
+			}
+		}
+
 		// get dimension data
 		const dimensions = {
 			width: result.fullTextAnnotation.pages[0].width,
@@ -50,7 +60,7 @@ const getDocumentOCR = async (imagePath) => {
 			'utf8'
 		);
 
-		return { detections, dimensions, fullTextAnnotations };
+		return { detections, dimensions, fullTextAnnotations, detailedWords };
 	} catch (error) {
 		console.error(error.message);
 		return error;

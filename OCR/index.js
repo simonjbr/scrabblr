@@ -18,7 +18,8 @@ const main = async () => {
 		detections,
 		dimensions: { width, height },
 		fullTextAnnotations,
-	} = await getDocumentOCR('./OCR/assets/09_1080.jpg');
+		detailedWords,
+	} = await getDocumentOCR('./OCR/assets/08_1440.jpg');
 
 	const dimensions = getDimensions(width, height);
 
@@ -27,7 +28,8 @@ const main = async () => {
 	const parsedDetects = parseDetects(
 		detections,
 		dimensions,
-		fullTextAnnotations
+		fullTextAnnotations,
+		detailedWords
 	);
 
 	const boardState = createBoardState(parsedDetects);
