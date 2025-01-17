@@ -7,11 +7,11 @@ import fs from 'node:fs';
 
 const getDetectsFromCache = () => {
 	try {
-		const { detections, dimensions } = JSON.parse(
+		const { detailedWords, dimensions } = JSON.parse(
 			fs.readFileSync('./OCR/results/detections.json', 'utf8')
 		);
 
-		return { detections, dimensions };
+		return { detailedWords, dimensions };
 	} catch (error) {
 		console.error(error.message);
 		return false;
