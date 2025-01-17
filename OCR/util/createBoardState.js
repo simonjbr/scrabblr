@@ -1,6 +1,6 @@
 /**
  *
- * @param {{boxSize: number, dimensions: {height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean}[]}} detections
+ * @param {{boxSize: number, dimensions: {height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}, gridDetections: {description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]}} detections
  */
 
 const createBoardState = ({

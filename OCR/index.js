@@ -9,28 +9,22 @@ import getDimensions from './util/getDimensions.js';
 
 const main = async () => {
 	// const {
-	// 	detections,
+	// 	detailedWords,
 	// 	dimensions: { width, height },
-	// 	fullTextAnnotations,
-	// } = getDetectsFromCache() || getDocumentOCR('./OCR/assets/iphone.jpg');
-	// const {detections, dimensions} = await getOCR('./OCR/assets/08_1080.jpg');
+	// } = getDetectsFromCache() || getDocumentOCR('./OCR/assets/08_1080.jpg');
+	// const { detailedWords, dimensions } = await getOCR(
+	// 	'./OCR/assets/08_1080.jpg'
+	// );
 	const {
-		detections,
 		dimensions: { width, height },
-		fullTextAnnotations,
 		detailedWords,
-	} = await getDocumentOCR('./OCR/assets/08_1440.jpg');
+	} = await getDocumentOCR('./OCR/assets/08_1080.jpg');
 
 	const dimensions = getDimensions(width, height);
 
 	console.log(dimensions);
 
-	const parsedDetects = parseDetects(
-		detections,
-		dimensions,
-		fullTextAnnotations,
-		detailedWords
-	);
+	const parsedDetects = parseDetects(dimensions, detailedWords);
 
 	const boardState = createBoardState(parsedDetects);
 

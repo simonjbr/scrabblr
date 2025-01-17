@@ -23,7 +23,6 @@ const getDocumentOCR = async (imagePath) => {
 	try {
 		const response = await client.documentTextDetection(imagePath);
 		const result = response[0];
-		const detections = result.textAnnotations;
 		const fullTextAnnotations = result.fullTextAnnotation.pages[0].blocks;
 
 		// simplified fullTextAnotation structure
@@ -56,11 +55,11 @@ const getDocumentOCR = async (imagePath) => {
 
 		fs.writeFileSync(
 			'./OCR/results/detections.json',
-			JSON.stringify({ detections, dimensions }),
+			JSON.stringify({ detailedWords, dimensions }),
 			'utf8'
 		);
 
-		return { detections, dimensions, fullTextAnnotations, detailedWords };
+		return { dimensions, detailedWords };
 	} catch (error) {
 		console.error(error.message);
 		return error;

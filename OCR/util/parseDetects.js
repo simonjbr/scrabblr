@@ -4,12 +4,15 @@ import getHand from './getHand.js';
 
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
  * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions dimensions of the screenshot
- * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: String, boundingPoly: {vertices: {x: number, y: number}[]}}[]}}}
+ * @param {{description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detailedWords simplified fullTextAnnotation structure
+ * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]}}
  */
 
-const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords) => {
+const parseDetects = (
+	dimensions,
+	detailedWords
+) => {
 	// indices for top left and bottom right squares of game grid
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
@@ -17,8 +20,14 @@ const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords
 	const handDetects = [];
 
 	// loop to identify above variables
-	for (let i = 1; i < detections.length; i++) {
-		const d = detections[i];
+	for (let i = 1; i < detailedWords.length; i++) {
+		const d = detailedWords[i];
+		d.description = '';
+
+		// concat all symbols in word to form the description
+		for (const symbol of d.symbols) {
+			d.description += symbol.text;
+		}
 
 		d.isGameGrid = false;
 		d.isHand = false;
@@ -38,12 +47,12 @@ const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords
 		// maximum and minimum coordinates of text detections
 		d.coords = {};
 
-		d.coords.minX = d.boundingPoly.vertices[0].x;
-		d.coords.minY = d.boundingPoly.vertices[0].y;
+		d.coords.minX = d.boundingBox.vertices[0].x;
+		d.coords.minY = d.boundingBox.vertices[0].y;
 		d.coords.maxX = 0;
 		d.coords.maxY = 0;
 
-		for (const vertex of d.boundingPoly.vertices) {
+		for (const vertex of d.boundingBox.vertices) {
 			d.coords.minX = Math.min(vertex.x, d.coords.minX);
 			d.coords.minY = Math.min(vertex.y, d.coords.minY);
 			d.coords.maxX = Math.max(vertex.x, d.coords.maxX);
@@ -83,8 +92,8 @@ const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords
 		}
 	}
 
-	const topLeft = detections[topLeftIndex];
-	const bottomRight = detections[bottomRightIndex];
+	const topLeft = detailedWords[topLeftIndex];
+	const bottomRight = detailedWords[bottomRightIndex];
 
 	const hand = getHand(handDetects, dimensions);
 	console.log('hand:', hand);
@@ -92,12 +101,12 @@ const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords
 	console.log(
 		'topLeft:',
 		topLeftIndex,
-		detections[topLeftIndex].boundingPoly.vertices
+		detailedWords[topLeftIndex].boundingBox.vertices
 	);
 	console.log(
 		'bottomRigth:',
 		bottomRightIndex,
-		detections[bottomRightIndex].boundingPoly.vertices
+		detailedWords[bottomRightIndex].boundingBox.vertices
 	);
 
 	// size of each grid square
@@ -108,10 +117,9 @@ const parseDetects = (detections, dimensions, fullTextAnnotations, detailedWords
 	// filter out all non game grid detections
 	// and sort left to right and top to bottom
 	const sortedAndFiltered = sortAndFilterDetects(
-		detections,
 		dimensions,
 		boxSize,
-		fullTextAnnotations
+		detailedWords
 	);
 
 	return {
