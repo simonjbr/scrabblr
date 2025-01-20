@@ -144,6 +144,15 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 						d.description.slice(iIndex + 1);
 				}
 			}
+
+			// filter out low confidence symbols
+			d.symbols = d.symbols.filter((s) => s.confidence > 0.5);
+
+			// update detection's description in case of any removed symbols
+			d.description = '';
+			for (const symbol of d.symbols) {
+				d.description += symbol.text;
+			}
 		}
 	}
 
