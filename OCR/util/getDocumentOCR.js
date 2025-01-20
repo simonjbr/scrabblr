@@ -30,8 +30,10 @@ const getDocumentOCR = async (imagePath) => {
 
 		for (let i = 0; i < fullTextAnnotations.length; i++) {
 			const block = fullTextAnnotations[i];
-			for (const word of block.paragraphs[0].words) {
-				detailedWords.push(word);
+			for (const paragraph of block.paragraphs) {
+				for (const word of paragraph.words) {
+					detailedWords.push(word);
+				}
 			}
 		}
 
