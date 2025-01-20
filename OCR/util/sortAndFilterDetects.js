@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import bonusTileValues from './bonusTileValues.js';
 import filterDuplicates from './filterDuplicates.js';
+import filterOverlapping from './filterOverlapping.js';
 
 /**
  *
@@ -161,6 +162,9 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 				? a.coords.minY - b.coords.minY
 				: 0
 		);
+
+	// filter out overlapping detections
+	filterOverlapping(sortedAndFiltered, boxSize);
 
 	fs.writeFileSync(
 		'./OCR/results/sortedAndFiltered.json',
