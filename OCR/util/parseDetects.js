@@ -1,6 +1,7 @@
 import pixelToPercent from './pixelToPercent.js';
 import sortAndFilterDetects from './sortAndFilterDetects.js';
 import getHand from './getHand.js';
+import getMinMaxVertices from './getMinMaxVertices.js';
 
 /**
  *
@@ -9,10 +10,7 @@ import getHand from './getHand.js';
  * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]}}
  */
 
-const parseDetects = (
-	dimensions,
-	detailedWords
-) => {
+const parseDetects = (dimensions, detailedWords) => {
 	// indices for top left and bottom right squares of game grid
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
@@ -45,19 +43,7 @@ const parseDetects = (
 
 		// vertices aren't always in the same order so i correct by using max mins of each axis
 		// maximum and minimum coordinates of text detections
-		d.coords = {};
-
-		d.coords.minX = d.boundingBox.vertices[0].x;
-		d.coords.minY = d.boundingBox.vertices[0].y;
-		d.coords.maxX = 0;
-		d.coords.maxY = 0;
-
-		for (const vertex of d.boundingBox.vertices) {
-			d.coords.minX = Math.min(vertex.x, d.coords.minX);
-			d.coords.minY = Math.min(vertex.y, d.coords.minY);
-			d.coords.maxX = Math.max(vertex.x, d.coords.maxX);
-			d.coords.maxY = Math.max(vertex.y, d.coords.maxY);
-		}
+		d.coords = getMinMaxVertices(d.boundingBox.vertices);
 
 		// add a center vertex to account for varying detection dimensions
 		const centerVertex = {};
