@@ -15,6 +15,10 @@ const parseDetects = (dimensions, detailedWords) => {
 	let topLeftIndex = 0;
 	let bottomRightIndex = 0;
 
+	// size of each grid square
+	const boxSize = dimensions.width / 15;
+	console.log('boxSize:', boxSize);
+
 	const handDetects = [];
 
 	// loop to identify above variables
@@ -23,9 +27,17 @@ const parseDetects = (dimensions, detailedWords) => {
 		d.description = '';
 
 		// filter out low confidence symbols
-		d.symbols = d.symbols.filter((s) =>
-			s.text !== 'O' ? s.confidence > 0.5 : true
-		);
+		d.symbols = d.symbols.filter((s) => {
+			// s.text !== 'O' ? s.confidence > 0.5 : true;
+			if (s.text !== 'O') {
+				return s.confidence > 0.5;
+			} else {
+				// check if the 'O' is actually a 0 from the tile score
+				s.coords = getMinMaxVertices(s.boundingBox.vertices);
+				const xDim = (s.coords.maxX - s.coords.minX) / boxSize;
+				return xDim > 0.4;
+			}
+		});
 
 		// concat all symbols in word to form the description
 		for (const symbol of d.symbols) {
@@ -99,11 +111,6 @@ const parseDetects = (dimensions, detailedWords) => {
 		bottomRightIndex,
 		detailedWords[bottomRightIndex].boundingBox.vertices
 	);
-
-	// size of each grid square
-	// const boxSize = (bottomRight.center.y - topLeft.center.y) / 14;
-	const boxSize = dimensions.width / 15;
-	console.log('boxSize:', boxSize);
 
 	// filter out all non game grid detections
 	// and sort left to right and top to bottom
