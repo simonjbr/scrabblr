@@ -183,7 +183,10 @@ const getValidWords = (hand, state) => {
 							}
 							verContacts.push([n[0] - yDelta + 1, xStart - j]);
 							// check for contacts below
-						} else if (workingState[n[0] + 1][xStart - j]) {
+						} else if (
+							n[0] + 1 < BOARD_LENGTH &&
+							workingState[n[0] + 1][xStart - j]
+						) {
 							verContacts.push([n[0], xStart - j]);
 						}
 					}
@@ -415,7 +418,10 @@ const getValidWords = (hand, state) => {
 							}
 							horContacts.push([yStart - j, n[1] - xDelta + 1]);
 							// check for contacts right
-						} else if (workingState[yStart - j][n[1] + 1]) {
+						} else if (
+							n[1] + 1 < BOARD_LENGTH &&
+							workingState[yStart - j][n[1] + 1]
+						) {
 							horContacts.push([yStart - j, n[1]]);
 						}
 					}
