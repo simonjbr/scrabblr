@@ -17,6 +17,7 @@
 		"word-list": "^4.1.0"
 	},
 	"devDependencies": {
+		"jest": "^29.7.0",
 		"tinybench": "^3.0.7"
 	}
 }
