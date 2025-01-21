@@ -22,6 +22,11 @@ const parseDetects = (dimensions, detailedWords) => {
 		const d = detailedWords[i];
 		d.description = '';
 
+		// filter out low confidence symbols
+		d.symbols = d.symbols.filter((s) =>
+			s.text !== 'O' ? s.confidence > 0.5 : true
+		);
+
 		// concat all symbols in word to form the description
 		for (const symbol of d.symbols) {
 			d.description += symbol.text;
