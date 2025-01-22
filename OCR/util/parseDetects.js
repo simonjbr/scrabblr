@@ -33,9 +33,12 @@ const parseDetects = (dimensions, detailedWords) => {
 				return s.confidence > 0.5;
 			} else {
 				// check if the 'O' is actually a 0 from the tile score
+				// if the detection begins < 0.3 * boxSize from the left it is a letter
+				// anymore then it is likely a tile's score
 				s.coords = getMinMaxVertices(s.boundingBox.vertices);
-				const xDim = (s.coords.maxX - s.coords.minX) / boxSize;
-				return xDim > 0.4;
+				const minXPositionWithinBox =
+					(s.coords.minX % boxSize) / boxSize;
+				return minXPositionWithinBox < 0.3;
 			}
 		});
 
