@@ -18,7 +18,7 @@ const main = async () => {
 	const {
 		dimensions: { width, height },
 		detailedWords,
-	} = await getDocumentOCR('./OCR/assets/08_1440.jpg');
+	} = await getDocumentOCR('./OCR/assets/09_1080.jpg');
 
 	const dimensions = getDimensions(width, height);
 
