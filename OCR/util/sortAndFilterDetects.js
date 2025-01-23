@@ -49,10 +49,15 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 
 					splitDetect.description = letter;
 					splitDetect.symbols = [d.symbols[i]];
-					splitDetect.coords = getMinMaxVertices(d.symbols[i].boundingBox.vertices);
+					splitDetect.coords = getMinMaxVertices(
+						d.symbols[i].boundingBox.vertices
+					);
 					splitDetect.center = getCenterVertex(splitDetect.coords);
 					splitDetect.confidence = d.symbols[i].confidence;
-					splitDetect.dim = getDetectionDimensions(splitDetect.coords, boxSize);
+					splitDetect.dim = getDetectionDimensions(
+						splitDetect.coords,
+						boxSize
+					);
 
 					sortedAndFiltered.push(splitDetect);
 				}
@@ -138,7 +143,8 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 				const centerX = minX + (maxX - minX) / 2;
 
 				// check if centerX falls on or close to a grid line (within 5 pixels)
-				const isOnGridLine = centerX % boxSize < 5;
+				const isOnGridLine =
+					centerX % boxSize < 5 || centerX % boxSize > boxSize - 5;
 				if (isOnGridLine) {
 					d.description =
 						d.description.slice(0, iIndex) +
