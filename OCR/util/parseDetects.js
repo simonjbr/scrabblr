@@ -30,6 +30,9 @@ const parseDetects = (dimensions, detailedWords) => {
 
 		// filter out tile scores and low confidence symbols
 		d.symbols = d.symbols.filter((s) => {
+			// cloud vision can confuse E and U with a hebrew characters
+			if (s.text === 'ש') s.text = 'E';
+			if (s.text === 'כ') s.text = 'U';
 			// if the detection begins < 0.3 * boxSize from the left it is a letter
 			// anymore then it is likely part of a tile's score
 			s.coords = getMinMaxVertices(s.boundingBox.vertices);
