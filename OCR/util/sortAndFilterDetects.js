@@ -2,6 +2,9 @@ import fs from 'node:fs';
 import bonusTileValues from './bonusTileValues.js';
 import filterDuplicates from './filterDuplicates.js';
 import filterOverlapping from './filterOverlapping.js';
+import getMinMaxVertices from './getMinMaxVertices.js';
+import getCenterVertex from './getCenterVertex.js';
+import getDetectionDimensions from './getDetectionDimensions.js';
 
 /**
  *
@@ -22,11 +25,6 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
 	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
 		const d = sortedAndFiltered[i];
-
-		// calculate dimensions as a proportion of box size
-		d.dim.relativeToBox = {};
-		d.dim.relativeToBox.x = d.dim.pixel.x / boxSize;
-		d.dim.relativeToBox.y = d.dim.pixel.y / boxSize;
 
 		// if detection is 2 chars long and still fits in one box we know it's a bonus square
 		d.isBonus = false;
@@ -50,10 +48,11 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 					const splitDetect = JSON.parse(JSON.stringify(d));
 
 					splitDetect.description = letter;
-					splitDetect.coords.minY = d.coords.minY + i * boxSize;
-					splitDetect.coords.maxY =
-						d.coords.maxY -
-						(d.description.length - 1 - i) * boxSize;
+					splitDetect.symbols = [d.symbols[i]];
+					splitDetect.coords = getMinMaxVertices(d.symbols[i].boundingBox.vertices);
+					splitDetect.center = getCenterVertex(splitDetect.coords);
+					splitDetect.confidence = d.symbols[i].confidence;
+					splitDetect.dim = getDetectionDimensions(splitDetect.coords, boxSize);
 
 					sortedAndFiltered.push(splitDetect);
 				}
@@ -61,6 +60,7 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 				d.ignore = true;
 			}
 			d.description = '';
+			d.ignore = true;
 		}
 
 		// cloud vision can sometimes combine placed letters and bonus squares into one detection

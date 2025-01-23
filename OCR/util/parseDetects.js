@@ -2,6 +2,8 @@ import pixelToPercent from './pixelToPercent.js';
 import sortAndFilterDetects from './sortAndFilterDetects.js';
 import getHand from './getHand.js';
 import getMinMaxVertices from './getMinMaxVertices.js';
+import getCenterVertex from './getCenterVertex.js';
+import getDetectionDimensions from './getDetectionDimensions.js';
 
 /**
  *
@@ -66,16 +68,10 @@ const parseDetects = (dimensions, detailedWords) => {
 		d.coords = getMinMaxVertices(d.boundingBox.vertices);
 
 		// add a center vertex to account for varying detection dimensions
-		const centerVertex = {};
-		centerVertex.x = d.coords.minX + (d.coords.maxX - d.coords.minX) / 2;
-		centerVertex.y = d.coords.minY + (d.coords.maxY - d.coords.minY) / 2;
-		d.center = centerVertex;
+		d.center = getCenterVertex(d.coords);
 
 		// dimensions of the detection
-		d.dim = { pixel: {} };
-
-		d.dim.pixel.x = d.coords.maxX - d.coords.minX;
-		d.dim.pixel.y = d.coords.maxY - d.coords.minY;
+		d.dim = getDetectionDimensions(d.coords, boxSize);
 
 		if (
 			d.coords.minY > dimensions.gridStart &&

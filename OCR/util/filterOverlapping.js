@@ -14,6 +14,8 @@ const filterOverlapping = (detections, boxSize) => {
 	for (let i = 0; i < detections.length; i++) {
 		const d = detections[i];
 
+		if (d.ignore) continue;
+
 		const {
 			coords: { minX, minY },
 			description,
