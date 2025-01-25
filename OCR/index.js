@@ -16,15 +16,13 @@ const main = async () => {
 	// 	'./OCR/assets/08_1080.jpg'
 	// );
 	const {
-		dimensions: { width, height },
-		detailedWords,
+		dimensions,
+		symbols,
 	} = await getDocumentOCR('./OCR/assets/11_1440.jpg');
-
-	const dimensions = getDimensions(width, height);
 
 	console.log(dimensions);
 
-	const parsedDetects = parseDetects(dimensions, detailedWords);
+	const parsedDetects = parseDetects(dimensions, symbols);
 
 	const boardState = createBoardState(parsedDetects);
 
