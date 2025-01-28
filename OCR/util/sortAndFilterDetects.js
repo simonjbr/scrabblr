@@ -8,42 +8,44 @@ import getDetectionDimensions from './getDetectionDimensions.js';
 
 /**
  *
- * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions dimensions of the screenshot
- * @param {number} boxSize size of each square in the game grid
- * @param {{description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detailedWords simplified fullTextAnnotation structure
+ * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions dimensions of the screenshot
+ * @param {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} symbols simplified fullTextAnnotation structure
  * @returns {{description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]}
  */
 
 // filter out all non game grid detections
 // and sort left to right and top to bottom
-const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
+const sortAndFilterDetects = (dimensions, symbols) => {
 	const BONUS_TILE_X_DIMENSION = 0.6;
 
 	// filter out non game grid detections
-	let sortedAndFiltered = detailedWords.filter((d) => d.isGameGrid);
+	let sortedAndFiltered = symbols.filter((d) => d.isGameGrid);
 	// add convenient data to detection objects and correct erroneous detections
 	const initialSortedAndFilteredLength = sortedAndFiltered.length;
 	for (let i = 0; i < initialSortedAndFilteredLength; i++) {
 		const d = sortedAndFiltered[i];
 
-		// if detection is 2 chars long and still fits in one box we know it's a bonus square
-		d.isBonus = false;
+		if (d.ignore) continue;
+
+		// check if this detect + the next detect form a bonus square
+		// minX of the second letter of a bonus square is > 0.38
+		const nextD = sortedAndFiltered[i + 1];
 		if (
-			d.description.length === 2 &&
-			d.dim.relativeToBox.x < 1 &&
-			d.dim.relativeToBox.y < 1 &&
-			bonusTileValues.has(d.description)
+			bonusTileValues.has(d.text + nextD.text) &&
+			nextD.minXPositionWithinBox > 0.38
 		) {
+			d.text += nextD.text;
 			d.isBonus = true;
+			nextD.ignore = true;
 		}
 
 		// cloud vision can sometimes combine vertically adjancent tiles into one detection
 		// split these into single letter detections and adjust minY and maxY for each
 		if (Math.abs(d.dim.relativeToBox.y) > 1) {
 			// can sometimes see character patterns in the layout of tiles
-			if (d.description.length !== 1) {
-				for (let i = 0; i < d.description.length; i++) {
-					const letter = d.description.charAt(i);
+			if (d.text.length !== 1) {
+				for (let i = 0; i < d.text.length; i++) {
+					const letter = d.text.charAt(i);
 
 					const splitDetect = JSON.parse(JSON.stringify(d));
 
@@ -56,7 +58,7 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 					splitDetect.confidence = d.symbols[i].confidence;
 					splitDetect.dim = getDetectionDimensions(
 						splitDetect.coords,
-						boxSize
+						dimensions.boxSize
 					);
 
 					sortedAndFiltered.push(splitDetect);
@@ -64,26 +66,23 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 			} else {
 				d.ignore = true;
 			}
-			d.description = '';
+			d.text = '';
 			d.ignore = true;
 		}
 
 		// cloud vision can sometimes combine placed letters and bonus squares into one detection
 		// i'll need to determine which portions of the string are tiles/bonuses and
 		// split the detect into multiple detects with updated vertices and dimensions
-		if (
-			d.description.length > 2 &&
-			d.dim.relativeToBox.x < d.description.length - 1
-		) {
+		if (d.text.length > 2 && d.dim.relativeToBox.x < d.text.length - 1) {
 			d.weHaveAProblem = true;
 
-			for (let i = 0; i < d.description.length - 1; i++) {
+			for (let i = 0; i < d.text.length - 1; i++) {
 				const slices = [];
 				// split description into beforeSlice, slice and afterSlice
 				slices.push(
-					d.description.slice(0, i),
-					d.description.slice(i, i + 2),
-					d.description.slice(i + 2)
+					d.text.slice(0, i),
+					d.text.slice(i, i + 2),
+					d.text.slice(i + 2)
 				);
 
 				// if slice is a bonus tile split there
@@ -103,7 +102,7 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 						splitDetect.coords.minX += minXDelta;
 						splitDetect.coords.maxX =
 							splitDetect.coords.minX +
-							(i === 1 ? 1 : s.length) * boxSize;
+							(i === 1 ? 1 : s.length) * dimensions.boxSize;
 
 						splitDetect.center.x =
 							splitDetect.coords.minX +
@@ -114,10 +113,11 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 						splitDetect.dim.pixel.x =
 							splitDetect.coords.maxX - splitDetect.coords.minX;
 						splitDetect.dim.relativeToBox.x =
-							splitDetect.dim.pixel.x / boxSize;
+							splitDetect.dim.pixel.x / dimensions.boxSize;
 
 						// update the delta for the next iteration
-						minXDelta += (i === 1 ? 1 : s.length) * boxSize;
+						minXDelta +=
+							(i === 1 ? 1 : s.length) * dimensions.boxSize;
 
 						// push modified detection object to detections array
 						sortedAndFiltered.push(splitDetect);
@@ -128,8 +128,8 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 			}
 
 			// cloud vision can also confuse a grid line between two letters with an 'I'
-			if (d.description.includes('I')) {
-				const iIndex = d.description.indexOf('I');
+			if (d.text.includes('I')) {
+				const iIndex = d.text.indexOf('I');
 				// calculate center X vertex of the 'I'
 				// first we need min/max X values for the 'I'
 				let minX = d.symbols[iIndex].boundingBox.vertices[0].x;
@@ -144,11 +144,10 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 
 				// check if centerX falls on or close to a grid line (within 5 pixels)
 				const isOnGridLine =
-					centerX % boxSize < 5 || centerX % boxSize > boxSize - 5;
+					centerX % dimensions.boxSize < 5 ||
+					centerX % dimensions.boxSize > dimensions.boxSize - 5;
 				if (isOnGridLine) {
-					d.description =
-						d.description.slice(0, iIndex) +
-						d.description.slice(iIndex + 1);
+					d.text = d.text.slice(0, iIndex) + d.text.slice(iIndex + 1);
 				}
 			}
 		}
@@ -171,7 +170,7 @@ const sortAndFilterDetects = (dimensions, boxSize, detailedWords) => {
 		);
 
 	// filter out overlapping detections
-	filterOverlapping(sortedAndFiltered, boxSize);
+	filterOverlapping(sortedAndFiltered, dimensions.boxSize);
 
 	fs.writeFileSync(
 		'./OCR/results/sortedAndFiltered.json',
