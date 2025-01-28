@@ -9,7 +9,7 @@ import getDetectionDimensions from './getDetectionDimensions.js';
  *
  * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions dimensions of the screenshot
  * @param {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} symbols OCR detections
- * @returns {{hand: string[], boxSize: number, dimensions: {height: number, width: number}, gridDetections: {description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]}}
+ * @returns {{hand: string[], dimensions: {height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}, gridDetections: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]}}
  */
 
 const parseDetects = (dimensions, symbols) => {
@@ -89,11 +89,7 @@ const parseDetects = (dimensions, symbols) => {
 
 	// filter out all non game grid detections
 	// and sort left to right and top to bottom
-	const sortedAndFiltered = sortAndFilterDetects(
-		dimensions,
-		dimensions.boxSize,
-		symbols
-	);
+	const sortedAndFiltered = sortAndFilterDetects(dimensions, symbols);
 
 	return {
 		hand: hand,

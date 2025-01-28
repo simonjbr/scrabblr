@@ -59,7 +59,7 @@ const getDocumentOCR = async (imagePath) => {
 							dimensions.boxSize
 						);
 
-						// flags for sorting an filtering
+						// flags for sorting and filtering
 						// will be set in parseDetects
 						symbol.isGameGrid = false;
 						symbol.isHand = false;
