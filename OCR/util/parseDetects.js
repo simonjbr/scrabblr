@@ -36,7 +36,7 @@ const parseDetects = (dimensions, symbols) => {
 		if (
 			i < symbols.length - 1 &&
 			bonusTileValues.has(s.text + nextS.text) &&
-			nextS.minXPositionWithinBox > 0.38
+			nextS.minXPositionWithinBox > 0.37
 		) {
 			s.text += nextS.text;
 			s.isBonus = true;
