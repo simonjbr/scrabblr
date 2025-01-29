@@ -30,6 +30,15 @@ const parseDetects = (dimensions, symbols) => {
 		if (s.text === 'ז') s.text = 'T';
 		if (s.text === 'י') s.ignore = true;
 
+		if (
+			s.coords.minY >= dimensions.gridEnd &&
+			s.coords.minY <= dimensions.gridEnd + dimensions.handDim
+		) {
+			s.isHand = true;
+			handDetects.push(s);
+			continue;
+		}
+
 		// check if this detect + the next detect form a bonus square
 		// minX of the second letter of a bonus square is > 0.38
 		const nextS = symbols[i + 1];
@@ -48,7 +57,6 @@ const parseDetects = (dimensions, symbols) => {
 		// anymore then it is likely part of a tile's score
 		if (s.minXPositionWithinBox > 0.3) {
 			s.ignore = true;
-			continue;
 		}
 
 		// having ruled out tile scores we can replace 0's with O's
@@ -67,14 +75,6 @@ const parseDetects = (dimensions, symbols) => {
 				topLeftIndex = i;
 			}
 			bottomRightIndex = i;
-		}
-
-		if (
-			s.coords.minY >= dimensions.gridEnd &&
-			s.coords.minY <= dimensions.gridEnd + dimensions.handDim
-		) {
-			s.isHand = true;
-			handDetects.push(s);
 		}
 	}
 
