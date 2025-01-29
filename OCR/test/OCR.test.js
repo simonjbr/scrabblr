@@ -6,9 +6,228 @@ import getDimensions from '../util/getDimensions.js';
 
 import { describe, expect, jest, test } from '@jest/globals';
 
-// jest.useFakeTimers();
-
 describe('OCR and board state creation', () => {
+	test('14_1440.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', 'I', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', 'N', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'C',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', 'M', 'I', 'S', '', 'U', '', '', '', 'E', '', '', ''],
+			[
+				'',
+				'',
+				'B',
+				'O',
+				'T',
+				'H',
+				'I',
+				'E',
+				'',
+				'W',
+				'A',
+				'R',
+				'E',
+				'',
+				'',
+			],
+			['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', 'D', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/14_1440.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
+	test('13_iphone.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', '', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', '', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', 'M', 'I', 'S', '', 'U', '', '', '', 'E', '', '', ''],
+			[
+				'',
+				'',
+				'B',
+				'O',
+				'T',
+				'H',
+				'I',
+				'E',
+				'',
+				'W',
+				'A',
+				'R',
+				'E',
+				'',
+				'',
+			],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/13_iphone.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
+	test('12_iphone.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', '', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', '', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', '', '', '', '', 'U', '', '', '', 'E', '', '', ''],
+			['', '', '', '', '', '', '', 'E', '', 'W', 'A', 'R', 'E', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/12_iphone.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
 	test('11_1440.jpg', async () => {
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
