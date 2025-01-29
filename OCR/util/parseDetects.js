@@ -4,6 +4,7 @@ import getHand from './getHand.js';
 import getMinMaxVertices from './getMinMaxVertices.js';
 import getCenterVertex from './getCenterVertex.js';
 import getDetectionDimensions from './getDetectionDimensions.js';
+import bonusTileValues from './bonusTileValues.js';
 
 /**
  *
@@ -29,21 +30,28 @@ const parseDetects = (dimensions, symbols) => {
 		if (s.text === 'ז') s.text = 'T';
 		if (s.text === 'י') s.ignore = true;
 
+		// check if this detect + the next detect form a bonus square
+		// minX of the second letter of a bonus square is > 0.38
+		const nextS = symbols[i + 1];
+		if (
+			i < symbols.length - 1 &&
+			bonusTileValues.has(s.text + nextS.text) &&
+			nextS.minXPositionWithinBox > 0.38
+		) {
+			s.text += nextS.text;
+			s.isBonus = true;
+			nextS.ignore = true;
+		}
+
 		// filter out tile scores and low confidence symbols
 		// if the detection begins < 0.3 * boxSize from the left it is a letter
 		// anymore then it is likely part of a tile's score
-		if (s.text !== 'O') {
-			if (s.text === '0') {
-				s.text = 'O';
-				s.ignore = s.minXPositionWithinBox > 0.3;
-			}
-			s.ignore = s.confidence < 0.5;
-		} else {
-			// check if the 'O' is actually a 0 from the tile score
-			s.ignore = s.minXPositionWithinBox > 0.3;
+		if (s.minXPositionWithinBox > 0.3) {
+			s.ignore = true;
+			continue;
 		}
 
-		// replace 0's with O's
+		// having ruled out tile scores we can replace 0's with O's
 		if (s.text === '0' && !s.ignore) s.text = 'O';
 
 		// ignore any non [A-Z] symbols
