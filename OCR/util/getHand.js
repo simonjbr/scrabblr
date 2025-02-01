@@ -1,18 +1,37 @@
+import filterDuplicates from './filterDuplicates.js';
+
 /**
  *
- * @param {{description: string, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number}[], boundingBox: {vertices: {x: number, y: number}[]}, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, isBonus: boolean, isGameGrid: boolean, isHand: boolean}[]} detections OCR detections
- * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions dimensions of the screenshot
+ * @param {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} detections OCR detections
+ * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions dimensions of the screenshot
  * @returns {string[]}
  */
+
 
 // parse hand detections
 const getHand = (detections, dimensions) => {
 	const hand = [];
 
+	// sort hand detections
+	detections
+		.sort((a, b) =>
+			Math.abs(a.coords.minX - b.coords.minX) > dimensions.fuzziness
+				? a.coords.minX - b.coords.minX
+				: 0
+		)
+		.sort((a, b) =>
+			Math.abs(a.coords.minY - b.coords.minY) > dimensions.fuzziness
+				? a.coords.minY - b.coords.minY
+				: 0
+		);
+
+	// filter any duplicate detections
+	detections = filterDuplicates(detections);
+
 	for (let i = 0; i < detections.length; i++) {
 		const d = detections[i];
 
-		if (!d.description) continue;
+		if (d.text.match(/[^A-Z]/)) continue;
 
 		// need to check for a gap between detections which may indicate a joker
 		if (i > 0) {
@@ -24,7 +43,7 @@ const getHand = (detections, dimensions) => {
 			}
 		}
 
-		hand.push(...d.description);
+		hand.push(...d.text);
 	}
 
 	return hand;

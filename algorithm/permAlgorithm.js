@@ -137,7 +137,7 @@ const getValidWords = (hand, state) => {
 					// place letters in workingState
 					for (let j = perm.permutation.length - 1; j >= 0; j--) {
 						// we need placed letters and intersected anchors
-						if (xStart - j >= BOARD_LENGTH) {
+						if (xStart - j >= BOARD_LENGTH || xStart - j < 0) {
 							isValidPerm = false;
 							break;
 						}
@@ -151,6 +151,10 @@ const getValidWords = (hand, state) => {
 								placedWord += workingState[n[0]][xStart - j];
 								xStart++;
 							}
+						}
+						if (xStart - j >= BOARD_LENGTH || xStart - j < 0) {
+							isValidPerm = false;
+							break;
 						}
 						// place letter
 						const letter =
@@ -373,7 +377,7 @@ const getValidWords = (hand, state) => {
 					// place letters in workingState
 					for (let j = perm.permutation.length - 1; j >= 0; j--) {
 						// we need placed letters and intersected anchors
-						if (yStart - j >= BOARD_LENGTH) {
+						if (yStart - j >= BOARD_LENGTH || yStart - j < 0) {
 							isValidPerm = false;
 							break;
 						}
@@ -387,6 +391,10 @@ const getValidWords = (hand, state) => {
 								placedWord += workingState[yStart - j][n[1]];
 								yStart++;
 							}
+						}
+						if (yStart - j >= BOARD_LENGTH || yStart - j < 0) {
+							isValidPerm = false;
+							break;
 						}
 						// place letter
 						const letter =

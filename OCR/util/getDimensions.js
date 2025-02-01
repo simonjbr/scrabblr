@@ -2,7 +2,7 @@
  *
  * @param {number} width
  * @param {number} height
- * @returns {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number}} dimensions of the screenshot
+ * @returns {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions of the screenshot
  */
 
 const getDimensions = (width, height) => {
@@ -25,6 +25,8 @@ const getDimensions = (width, height) => {
 	// sort fuzziness as proportion of height
 	const FUZZINESS_MULTIPLIER = 0.01;
 	dimensions.fuzziness = FUZZINESS_MULTIPLIER * dimensions.height;
+
+	dimensions.boxSize = width / 15;
 
 	return dimensions;
 };

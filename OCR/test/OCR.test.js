@@ -6,9 +6,228 @@ import getDimensions from '../util/getDimensions.js';
 
 import { describe, expect, jest, test } from '@jest/globals';
 
-// jest.useFakeTimers();
-
 describe('OCR and board state creation', () => {
+	test('14_1440.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', 'I', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', 'N', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'C',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', 'M', 'I', 'S', '', 'U', '', '', '', 'E', '', '', ''],
+			[
+				'',
+				'',
+				'B',
+				'O',
+				'T',
+				'H',
+				'I',
+				'E',
+				'',
+				'W',
+				'A',
+				'R',
+				'E',
+				'',
+				'',
+			],
+			['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', 'D', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/14_1440.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
+	test('13_iphone.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', '', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', '', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', 'M', 'I', 'S', '', 'U', '', '', '', 'E', '', '', ''],
+			[
+				'',
+				'',
+				'B',
+				'O',
+				'T',
+				'H',
+				'I',
+				'E',
+				'',
+				'W',
+				'A',
+				'R',
+				'E',
+				'',
+				'',
+			],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/13_iphone.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
+	test('12_iphone.jpg', async () => {
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'F'],
+			['', '', '', '', '', '', '', 'R', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', 'Y', 'E', 'T', 'I', '', 'T', '', '', 'V'],
+			['', '', '', '', '', '', '', 'T', '', '', '', 'E', '', '', 'E'],
+			['', '', '', '', '', '', '', 'I', '', '', '', 'L', '', '', 'A'],
+			[
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'I',
+				'N',
+				'H',
+				'A',
+				'U',
+				'L',
+				'E',
+				'R',
+				'S',
+			],
+			['', '', '', '', '', '', '', 'U', '', '', '', 'E', '', '', ''],
+			['', '', '', '', '', '', '', 'E', '', 'W', 'A', 'R', 'E', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/12_iphone.jpg'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
+
 	test('11_1440.jpg', async () => {
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -44,14 +263,11 @@ describe('OCR and board state creation', () => {
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 		];
 
-		const {
-			dimensions: { width, height },
-			detailedWords,
-		} = await getDocumentOCR('./OCR/assets/11_1440.jpg');
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/11_1440.jpg'
+		);
 
-		const dimensions = getDimensions(width, height);
-
-		const parsedDetects = parseDetects(dimensions, detailedWords);
+		const parsedDetects = parseDetects(dimensions, symbols);
 
 		const boardState = createBoardState(parsedDetects);
 
@@ -75,641 +291,636 @@ describe('OCR and board state creation', () => {
 		);
 	}, 40000);
 
-	// test('10_1440.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'O',
-	// 			'W',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'R',
-	// 			'E',
-	// 			'D',
-	// 			'A',
-	// 			'T',
-	// 			'E',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['O', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['Q', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['U', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['E', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'B',
-	// 			'R',
-	// 			'A',
-	// 			'V',
-	// 			'E',
-	// 			'D',
-	// 			'',
-	// 			'A',
-	// 			'',
-	// 			'L',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
-	// 		['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
-	// 	];
+	test('10_1440.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'O',
+				'W',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'R',
+				'E',
+				'D',
+				'A',
+				'T',
+				'E',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			[
+				'O',
+				'',
+				'',
+				'D',
+				'O',
+				'E',
+				'',
+				'A',
+				'Y',
+				'',
+				'',
+				'',
+				'N',
+				'',
+				'O',
+			],
+			['Q', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['U', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['E', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
+			['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
+			[
+				'',
+				'',
+				'',
+				'B',
+				'R',
+				'A',
+				'V',
+				'E',
+				'D',
+				'',
+				'A',
+				'',
+				'L',
+				'',
+				'',
+			],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
+			['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
+			['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
+		];
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/10_1440.jpg');
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/10_1440.jpg'
+		);
 
-	// 	const dimensions = getDimensions(width, height);
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+		const boardState = createBoardState(parsedDetects);
 
-	// 	const boardState = createBoardState(parsedDetects);
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+		expect(count).toBe(15 * 15);
 
-	// 	expect(count).toBe(15 * 15);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+	test('09_1440.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'',
+				'',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'R',
+				'E',
+				'D',
+				'A',
+				'T',
+				'E',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
+			['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
+			['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
+			[
+				'',
+				'',
+				'',
+				'B',
+				'R',
+				'A',
+				'V',
+				'E',
+				'D',
+				'',
+				'A',
+				'',
+				'L',
+				'',
+				'',
+			],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
+			['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
+			['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
+		];
 
-	// test('09_1440.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'R',
-	// 			'E',
-	// 			'D',
-	// 			'A',
-	// 			'T',
-	// 			'E',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'B',
-	// 			'R',
-	// 			'A',
-	// 			'V',
-	// 			'E',
-	// 			'D',
-	// 			'',
-	// 			'A',
-	// 			'',
-	// 			'L',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
-	// 		['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
-	// 	];
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/09_1440.jpg'
+		);
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/09_1440.jpg');
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	const dimensions = getDimensions(width, height);
+		const boardState = createBoardState(parsedDetects);
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	const boardState = createBoardState(parsedDetects);
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+		expect(count).toBe(15 * 15);
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	expect(count).toBe(15 * 15);
+	test('09_1080.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'',
+				'',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'R',
+				'E',
+				'D',
+				'A',
+				'T',
+				'E',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
+			['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
+			['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
+			[
+				'',
+				'',
+				'',
+				'B',
+				'R',
+				'A',
+				'V',
+				'E',
+				'D',
+				'',
+				'A',
+				'',
+				'L',
+				'',
+				'',
+			],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
+			['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
+			['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
+		];
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/09_1080.jpg'
+		);
 
-	// test('09_1080.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'R',
-	// 			'E',
-	// 			'D',
-	// 			'A',
-	// 			'T',
-	// 			'E',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'B',
-	// 			'R',
-	// 			'A',
-	// 			'V',
-	// 			'E',
-	// 			'D',
-	// 			'',
-	// 			'A',
-	// 			'',
-	// 			'L',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
-	// 		['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
-	// 	];
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/09_1080.jpg');
+		const boardState = createBoardState(parsedDetects);
 
-	// 	const dimensions = getDimensions(width, height);
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	const boardState = createBoardState(parsedDetects);
+		expect(count).toBe(15 * 15);
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+	test('09_720.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'',
+				'',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'R',
+				'E',
+				'D',
+				'A',
+				'T',
+				'E',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
+			['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
+			['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
+			[
+				'',
+				'',
+				'',
+				'B',
+				'R',
+				'A',
+				'V',
+				'E',
+				'D',
+				'',
+				'A',
+				'',
+				'L',
+				'',
+				'',
+			],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
+			['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
+			['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
+		];
 
-	// 	expect(count).toBe(15 * 15);
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/09_720.jpg'
+		);
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// test('09_720.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', 'N', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'R',
-	// 			'E',
-	// 			'D',
-	// 			'A',
-	// 			'T',
-	// 			'E',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', 'D', 'O', 'E', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', 'A', '', '', '', 'K', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', 'N', 'U', 'B', '', 'I', 'C', 'E'],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'B',
-	// 			'R',
-	// 			'A',
-	// 			'V',
-	// 			'E',
-	// 			'D',
-	// 			'',
-	// 			'A',
-	// 			'',
-	// 			'L',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', 'N', '', 'L', '', ''],
-	// 		['', '', '', '', '', '', '', 'F', 'I', 'L', 'T', 'H', 'S', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', 'Y', '', '', '', ''],
-	// 	];
+		const boardState = createBoardState(parsedDetects);
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/09_720.jpg');
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	const dimensions = getDimensions(width, height);
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+		expect(count).toBe(15 * 15);
 
-	// 	const boardState = createBoardState(parsedDetects);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+	test('08_1440.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'',
+				'',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', '', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'',
+				'',
+				'',
+				'A',
+				'T',
+				'',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', 'D', 'O', '', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
+			['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/08_1440.jpg'
+		);
 
-	// 	expect(count).toBe(15 * 15);
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		const boardState = createBoardState(parsedDetects);
 
-	// test('08_1440.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', '', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'A',
-	// 			'T',
-	// 			'',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', 'D', 'O', '', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 	];
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/08_1440.jpg');
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	const dimensions = getDimensions(width, height);
+		expect(count).toBe(15 * 15);
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	const boardState = createBoardState(parsedDetects);
+	test('08_1080.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'H',
+				'',
+				'',
+			],
+			['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
+			['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
+			['', '', '', 'F', 'A', '', '', 'P', 'A', '', 'U', '', 'G', '', ''],
+			[
+				'',
+				'',
+				'',
+				'A',
+				'T',
+				'',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', 'D', 'O', '', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
+			['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/08_1080.jpg'
+		);
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	expect(count).toBe(15 * 15);
+		const boardState = createBoardState(parsedDetects);
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// test('08_1080.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'H',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', 'O', '', '', '', '', 'W', 'E', '', 'O', '', ''],
-	// 		['', '', '', '', 'M', '', '', '', 'J', '', 'G', '', 'G', '', ''],
-	// 		['', '', '', 'F', 'A', '', '', 'P', 'A', '', 'U', '', 'G', '', ''],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'A',
-	// 			'T',
-	// 			'',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', 'D', 'O', '', '', 'A', 'Y', '', '', '', 'N', '', 'O'],
-	// 		['', '', '', 'E', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', 'T', 'E', 'S', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 	];
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/08_1080.jpg');
+		expect(count).toBe(15 * 15);
 
-	// 	const dimensions = getDimensions(width, height);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
+	test('07_joker_1080.jpg', async () => {
+		const actualBoardState = [
+			[
+				'',
+				'',
+				'',
+				'U',
+				'T',
+				'I',
+				'L',
+				'I',
+				'D',
+				'O',
+				'R',
+				'',
+				'',
+				'',
+				'',
+			],
+			['', '', '', '', '', '', '', '', '', 'W', 'E', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', 'G', '', '', '', ''],
+			['', '', '', '', '', '', '', 'P', 'A', '', 'U', '', '', '', ''],
+			[
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'E',
+				'X',
+				'T',
+				'R',
+				'A',
+				'I',
+				'T',
+				'S',
+			],
+			['', '', '', '', '', '', '', 'A', '', '', '', '', '', '', 'O'],
+			['', '', '', '', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
+			['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
+			['', '', '', '', 'A', '', '', '', '', '', '', '', '', '', 'R'],
+			['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
+			['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+		];
 
-	// 	const boardState = createBoardState(parsedDetects);
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./OCR/assets/07_joker_1080.jpg'
+		);
 
-	// 	expect(boardState.length).toBe(actualBoardState.length);
+		const parsedDetects = parseDetects(dimensions, symbols);
 
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
+		const boardState = createBoardState(parsedDetects);
 
-	// 	expect(count).toBe(15 * 15);
+		expect(boardState.length).toBe(actualBoardState.length);
 
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
 
-	// test('07_joker_1080.jpg', async () => {
-	// 	const actualBoardState = [
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'U',
-	// 			'T',
-	// 			'I',
-	// 			'L',
-	// 			'I',
-	// 			'D',
-	// 			'O',
-	// 			'R',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 		],
-	// 		['', '', '', '', '', '', '', '', '', 'W', 'E', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', 'G', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', 'P', 'A', '', 'U', '', '', '', ''],
-	// 		[
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'',
-	// 			'E',
-	// 			'X',
-	// 			'T',
-	// 			'R',
-	// 			'A',
-	// 			'I',
-	// 			'T',
-	// 			'S',
-	// 		],
-	// 		['', '', '', '', '', '', '', 'A', '', '', '', '', '', '', 'O'],
-	// 		['', '', '', '', '', '', '', 'Z', '', '', '', '', '', '', 'L'],
-	// 		['', '', '', 'S', 'P', 'I', 'N', 'E', '', '', '', '', '', '', 'A'],
-	// 		['', '', '', '', 'A', '', '', '', '', '', '', '', '', '', 'R'],
-	// 		['', '', '', '', 'V', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', 'E', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', 'B', 'R', 'A', 'V', 'E', '', '', '', '', '', '', ''],
-	// 		['', '', 'N', 'E', 'S', 'T', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 		['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-	// 	];
+		expect(count).toBe(15 * 15);
 
-	// 	const {
-	// 		dimensions: { width, height },
-	// 		detailedWords,
-	// 	} = await getDocumentOCR('./OCR/assets/07_joker_1080.jpg');
-
-	// 	const dimensions = getDimensions(width, height);
-
-	// 	const parsedDetects = parseDetects(dimensions, detailedWords);
-
-	// 	const boardState = createBoardState(parsedDetects);
-
-	// 	expect(boardState.length).toBe(actualBoardState.length);
-
-	// 	let count = 0;
-	// 	for (let i = 0; i < boardState.length; i++) {
-	// 		expect(`Row ${i}: ${boardState[i].length}`).toBe(
-	// 			`Row ${i}: ${actualBoardState[i].length}`
-	// 		);
-	// 		expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
-	// 			`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
-	// 		);
-	// 		count += boardState[i].length;
-	// 	}
-
-	// 	expect(count).toBe(15 * 15);
-
-	// 	expect(JSON.stringify(boardState)).toBe(
-	// 		JSON.stringify(actualBoardState)
-	// 	);
-	// }, 40000);
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+	}, 40000);
 });

@@ -1,6 +1,7 @@
 /**
  *
- * @param {{description: String, boundingPoly: {vertices: {x: number, y: number}[]}, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, isBonus: boolean, isGameGrid: boolean}[]} detections OCR detections
+ * @param {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} detections OCR detections
+ * @returns {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} duplicate filtered detections
  */
 
 // filter out duplicate detections
@@ -8,11 +9,11 @@ const filterDuplicates = (detections) => {
 	const seen = new Map();
 	const filteredDetections = detections.filter((d) => {
 		const {
-			description,
+			text,
 			coords: { minX, minY },
 		} = d;
-		if (seen.has(description)) {
-			const matches = seen.get(description);
+		if (seen.has(text)) {
+			const matches = seen.get(text);
 			const isDuplicate = matches.some(
 				(existing) =>
 					Math.abs(existing.minX - minX) < 20 &&
@@ -26,7 +27,7 @@ const filterDuplicates = (detections) => {
 				return true;
 			}
 		} else {
-			seen.set(description, [{ minX, minY }]);
+			seen.set(text, [{ minX, minY }]);
 			return true;
 		}
 	});
