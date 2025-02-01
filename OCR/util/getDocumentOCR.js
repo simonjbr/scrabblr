@@ -47,6 +47,8 @@ const getDocumentOCR = async (imagePath) => {
 				for (const word of paragraph.words) {
 					detailedWords.push(word);
 					for (const symbol of word.symbols) {
+						// skip over low confidence symbols
+						if (symbol.confidence < 0.4) continue;
 						// vertices aren't always in the same order so i correct by using max mins of each axis
 						symbol.coords = getMinMaxVertices(
 							symbol.boundingBox.vertices
