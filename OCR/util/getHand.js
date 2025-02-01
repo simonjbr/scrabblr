@@ -1,9 +1,12 @@
+import filterDuplicates from './filterDuplicates.js';
+
 /**
  *
  * @param {{boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]} detections OCR detections
  * @param {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions dimensions of the screenshot
  * @returns {string[]}
  */
+
 
 // parse hand detections
 const getHand = (detections, dimensions) => {
@@ -21,6 +24,9 @@ const getHand = (detections, dimensions) => {
 				? a.coords.minY - b.coords.minY
 				: 0
 		);
+
+	// filter any duplicate detections
+	detections = filterDuplicates(detections);
 
 	for (let i = 0; i < detections.length; i++) {
 		const d = detections[i];
