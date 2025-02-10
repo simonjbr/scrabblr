@@ -23,7 +23,7 @@ const getDimensions = (width, height) => {
 	// pixel value for hand tile dimensions
 	dimensions.handDim = HAND_MULTIPLIER * dimensions.width;
 	// sort fuzziness as proportion of height
-	const FUZZINESS_MULTIPLIER = 0.01;
+	const FUZZINESS_MULTIPLIER = 0.015;
 	dimensions.fuzziness = FUZZINESS_MULTIPLIER * dimensions.height;
 
 	dimensions.boxSize = width / 15;
