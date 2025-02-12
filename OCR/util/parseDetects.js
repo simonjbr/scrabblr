@@ -25,6 +25,7 @@ const parseDetects = (dimensions, symbols) => {
 		const s = symbols[i];
 
 		// cloud vision can confuse some letters with a hebrew characters
+		if (s.text === 'Ι') s.text = 'I'; // this is a the Greek letter Iota!?
 		if (s.text === 'ש') s.text = 'E';
 		if (s.text === 'כ') s.text = 'U';
 		if (s.text === 'ז') s.text = 'T';
