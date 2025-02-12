@@ -8,6 +8,7 @@ import { describe, expect, jest, test } from '@jest/globals';
 
 describe('OCR and board state creation', () => {
 	test('15_iphone.jpg', async () => {
+		const actualHand = ['Z', 'N', 'T', 'N', 'S', 'S', 'G'];
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -100,9 +101,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('14_1440.jpg', async () => {
+		const actualHand = ['L', 'D', 'U', 'R', 'N', 'Q', 'T'];
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -179,9 +185,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('13_iphone.jpg', async () => {
+		const actualHand = ['D', 'N', 'O', 'E', 'I', 'N', 'C'];
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -258,9 +269,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('12_iphone.jpg', async () => {
+		const actualHand = ['B', 'O', 'T', 'H', 'I', 'D', 'N'];
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -321,9 +337,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('11_1440.jpg', async () => {
+		const actualHand = ['M', 'N', 'A', 'W', 'E', 'T', 'Q'];
 		const actualBoardState = [
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -384,9 +405,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('10_1440.jpg', async () => {
+		const actualHand = ['I', 'I', 'I'];
 		const actualBoardState = [
 			[
 				'',
@@ -495,9 +521,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('09_1440.jpg', async () => {
+		const actualHand = ['I', 'Q', 'U', 'E', 'I', 'O', 'I'];
 		const actualBoardState = [
 			[
 				'',
@@ -590,9 +621,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('09_1080.jpg', async () => {
+		const actualHand = ['I', 'Q', 'U', 'E', 'I', 'O', 'I'];
 		const actualBoardState = [
 			[
 				'',
@@ -685,9 +721,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('09_720.jpg', async () => {
+		const actualHand = ['I', 'Q', 'U', 'E', 'I', 'O', 'I'];
 		const actualBoardState = [
 			[
 				'',
@@ -780,9 +821,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('08_1440.jpg', async () => {
+		const actualHand = ['A', 'N', 'N', 'D', 'A', 'L', 'Q'];
 		const actualBoardState = [
 			[
 				'',
@@ -859,9 +905,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('08_1080.jpg', async () => {
+		const actualHand = ['A', 'N', 'N', 'D', 'A', 'L', 'Q'];
 		const actualBoardState = [
 			[
 				'',
@@ -938,9 +989,14 @@ describe('OCR and board state creation', () => {
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
 		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
 	}, 40000);
 
 	test('07_joker_1080.jpg', async () => {
+		const actualHand = ['Q', 'j', 'T', 'A', 'S', 'L', 'D'];
 		const actualBoardState = [
 			[
 				'',
@@ -1016,6 +1072,10 @@ describe('OCR and board state creation', () => {
 
 		expect(JSON.stringify(boardState)).toBe(
 			JSON.stringify(actualBoardState)
+		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
 		);
 	}, 40000);
 });
