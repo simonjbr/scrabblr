@@ -15,10 +15,9 @@ const main = async () => {
 	// const { detailedWords, dimensions } = await getOCR(
 	// 	'./OCR/assets/08_1080.jpg'
 	// );
-	const {
-		dimensions,
-		symbols,
-	} = await getDocumentOCR('./OCR/assets/11_1440.jpg');
+	const { dimensions, symbols } = await getDocumentOCR(
+		'./OCR/assets/14_1440.jpg'
+	);
 
 	console.log(dimensions);
 
