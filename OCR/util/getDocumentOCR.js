@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import vision from '@google-cloud/vision';
-import fs from 'node:fs';
+// import fs from 'node:fs';
 import getMinMaxVertices from './getMinMaxVertices.js';
 import getCenterVertex from './getCenterVertex.js';
 import getDetectionDimensions from './getDetectionDimensions.js';
@@ -83,23 +83,23 @@ const getDocumentOCR = async (imagePath) => {
 			}
 		}
 
-		fs.writeFileSync(
-			'./OCR/results/response.json',
-			JSON.stringify({ response }),
-			'utf8'
-		);
+		// fs.writeFileSync(
+		// 	'./OCR/results/response.json',
+		// 	JSON.stringify({ response }),
+		// 	'utf8'
+		// );
 
-		fs.writeFileSync(
-			'./OCR/results/result.json',
-			JSON.stringify({ result }),
-			'utf8'
-		);
+		// fs.writeFileSync(
+		// 	'./OCR/results/result.json',
+		// 	JSON.stringify({ result }),
+		// 	'utf8'
+		// );
 
-		fs.writeFileSync(
-			'./OCR/results/detections.json',
-			JSON.stringify({ symbols, dimensions }),
-			'utf8'
-		);
+		// fs.writeFileSync(
+		// 	'./OCR/results/detections.json',
+		// 	JSON.stringify({ symbols, dimensions }),
+		// 	'utf8'
+		// );
 
 		return { dimensions, symbols };
 	} catch (error) {

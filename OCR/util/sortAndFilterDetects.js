@@ -1,4 +1,4 @@
-import fs from 'node:fs';
+// import fs from 'node:fs';
 import bonusTileValues from './bonusTileValues.js';
 import filterDuplicates from './filterDuplicates.js';
 import filterOverlapping from './filterOverlapping.js';
@@ -59,11 +59,11 @@ const sortAndFilterDetects = (dimensions, symbols) => {
 	// filter out overlapping detections
 	filterOverlapping(sortedAndFiltered, dimensions.boxSize);
 
-	fs.writeFileSync(
-		'./OCR/results/sortedAndFiltered.json',
-		JSON.stringify({ sortedAndFiltered }),
-		'utf8'
-	);
+	// fs.writeFileSync(
+	// 	'./OCR/results/sortedAndFiltered.json',
+	// 	JSON.stringify({ sortedAndFiltered }),
+	// 	'utf8'
+	// );
 	console.log('sortedAndFiltered.length:', sortedAndFiltered.length);
 
 	return sortedAndFiltered;
