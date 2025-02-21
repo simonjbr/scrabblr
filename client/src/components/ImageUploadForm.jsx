@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetOCR } from '../hooks/useGetOCR';
 
 export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
-	const [imageURL, setImageURL] = useState('');
-	const [boardState, setBoardState] = useState([]);
+	const [result, setResult] = useState({
+		boardState: [],
+		hand: [],
+	});
 
-	const { loading, getOCR } = useGetOCR();
+	const { getOCR, loading, error } = useGetOCR();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const newBoardState = getOCR(imageURL);
+		const newResult = await getOCR(image);
 
-		console.log(newBoardState);
-
-		if (newBoardState.length) setBoardState(getOCR(imageURL));
+		setResult(newResult);
 	};
 
 	const handleFileChange = (e) => {
@@ -23,14 +23,19 @@ export const ImageUploadForm = () => {
 
 		if (file) {
 			setImage(e.target.files[0]);
-			setImageURL(URL.createObjectURL(file));
+			console.log('Image set to:', file);
 		}
 	};
+
+	useEffect(() => {
+		if (error) console.error(error);
+		if (!loading) console.log(result);
+	}, [result, loading, error]);
 
 	return (
 		<div>
 			<h1>Upload file here!</h1>
-			<form action={handleSubmit}>
+			<form onSubmit={handleSubmit}>
 				<input
 					type="file"
 					accept="image/*"

@@ -1,34 +1,32 @@
-import getDocumentOCR from '../util/getDocumentOCR.js';
-import parseDetects from '../../../OCR/util/parseDetects.js';
-import createBoardState from '../../../OCR/util/createBoardState.js';
 import { useState } from 'react';
 
 export const useGetOCR = () => {
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
 	const getOCR = async (image) => {
-		setLoading(true);
-
-		let boardState = [];
+		const controller = new AbortController();
+		if (!loading) setLoading(true);
+		setError(null);
 		try {
-			console.log('got here');
-			const { dimensions, symbols } = await getDocumentOCR(image);
-
-			console.log(dimensions);
-
-			const parsedDetects = parseDetects(dimensions, symbols);
-
-			boardState = createBoardState(parsedDetects);
-
-			console.log(boardState);
+			const formData = new FormData();
+			formData.append('image', image);
+			const response = await fetch('/api/cloudVision', {
+				signal: controller.signal,
+				method: 'POST',
+				body: formData,
+			});
+			if (!response.ok) throw new Error('Failed to fetch OCR');
+			const result = await response.json();
+			return result;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
+			if (error.name !== 'AbortError') setError(error);
+			return false;
 		} finally {
 			setLoading(false);
 		}
-
-		return boardState;
 	};
 
-	return { loading, getOCR };
+	return { getOCR, loading, error };
 };
