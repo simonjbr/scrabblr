@@ -1,3 +1,4 @@
+import { Board } from '../../components/board/Board';
 import { ImageUploadForm } from '../../components/ImageUploadForm';
 
 export const Home = () => {
@@ -5,6 +6,7 @@ export const Home = () => {
 		<div>
 			<h1 className="text-3xl font-bold underline">Tailwind in action</h1>
 			<ImageUploadForm />
+			<Board />
 		</div>
 	);
 };
