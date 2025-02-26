@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+/* eslint-disable react/prop-types */
 export const Square = ({ value, defaultValue }) => {
 	const [cell, setCell] = useState(value);
 
