@@ -9,10 +9,10 @@ export const Board = () => {
 		<div className="grid gridRows-15 border-2 border-emerald-400 w-fit">
 			{board.map((row, rowIndex) => (
 				<div key={rowIndex} className="flex ">
-					{row.map((value, colIndex) => (
+					{row.map((_, colIndex) => (
 						<div key={`${rowIndex}-${colIndex}`}>
 							<Square
-								value={value}
+								value={board[rowIndex][colIndex]}
 								defaultValue={
 									WORDFEUD_DEFAULT_BOARD[rowIndex][colIndex]
 								}

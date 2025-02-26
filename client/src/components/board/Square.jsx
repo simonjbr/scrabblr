@@ -10,6 +10,7 @@ export const Square = ({ value, defaultValue }) => {
 	return (
 		<div className="w-[50px] h-[50px] border-2 border-emerald-400">
 			<input
+				className="input w-full h-full"
 				type="text"
 				onFocus={(e) => (e.target.value = '')}
 				onBlur={(e) => {
