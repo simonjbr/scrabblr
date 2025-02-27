@@ -10,14 +10,13 @@ export const Board = () => {
 			{board.map((row, rowIndex) => (
 				<div key={rowIndex} className="flex ">
 					{row.map((_, colIndex) => (
-						<div key={`${rowIndex}-${colIndex}`}>
-							<Square
-								value={board[rowIndex][colIndex]}
-								defaultValue={
-									WORDFEUD_DEFAULT_BOARD[rowIndex][colIndex]
-								}
-							/>
-						</div>
+						<Square
+							key={`${rowIndex}-${colIndex}`}
+							value={board[rowIndex][colIndex]}
+							defaultValue={
+								WORDFEUD_DEFAULT_BOARD[rowIndex][colIndex]
+							}
+						/>
 					))}
 				</div>
 			))}
