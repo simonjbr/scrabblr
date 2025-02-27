@@ -1,19 +1,18 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
 const BoardContext = createContext();
 
 export const useBoardContext = () => useContext(BoardContext);
 
-const createEmptyBoard = () => {
-	return Array.from({ length: 15 }, () => Array(15).fill(null));
-};
+const createEmptyBoard = () =>
+	Array.from({ length: 15 }, () => Array(15).fill(null));
 
 export const BoardProvider = ({ children }) => {
-	const [board, setBoard] = useState(createEmptyBoard());
+	const [board, setBoard] = useState(() => createEmptyBoard());
+
+	const value = useMemo(() => ({ board, setBoard }), [board]);
 
 	return (
-		<BoardContext.Provider value={{ board, setBoard }}>
-			{children}
-		</BoardContext.Provider>
+		<BoardContext.Provider value={value}>{children}</BoardContext.Provider>
 	);
 };
