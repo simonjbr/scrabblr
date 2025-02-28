@@ -10,6 +10,8 @@ const createEmptyBoard = () =>
 export const BoardProvider = ({ children }) => {
 	const [board, setBoard] = useState(() => createEmptyBoard());
 
+	console.log('Board state updated:', board);
+
 	const value = useMemo(() => ({ board, setBoard }), [board]);
 
 	return (

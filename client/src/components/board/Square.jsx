@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const Square = ({ value, defaultValue }) => {
+export const Square = ({ value, defaultValue, onChange }) => {
 	const [cell, setCell] = useState(value);
 
 	useEffect(() => {
@@ -9,6 +9,7 @@ export const Square = ({ value, defaultValue }) => {
 
 	const handleInputChange = (InputValue) => {
 		setCell(InputValue);
+		if (onChange) onChange(InputValue);
 	};
 	return (
 		<div className="w-[50px] h-[50px] border-2 border-emerald-400">
