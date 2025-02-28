@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Square = ({ value, defaultValue }) => {
 	const [cell, setCell] = useState(value);
+
+	useEffect(() => {
+		setCell(value);
+	}, [value]);
 
 	const handleInputChange = (InputValue) => {
 		setCell(InputValue);
@@ -16,7 +20,7 @@ export const Square = ({ value, defaultValue }) => {
 					if (!e.target.value.length) e.target.value = defaultValue;
 				}}
 				onChange={(e) => handleInputChange(e.target.value)}
-				value={cell ? cell : defaultValue}
+				value={cell ?? defaultValue}
 			/>
 		</div>
 	);
