@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 export const Board = () => {
 	const { board, setBoard } = useBoardContext();
 
-	console.log('Rendering board:', board);
+	// console.log('Rendering board:', board);
 
 	const renderedBoard = useMemo(() => {
 		return board.map((row, rowIndex) => (
@@ -27,7 +27,7 @@ export const Board = () => {
 				))}
 			</div>
 		));
-	}, [board]);
+	}, [board, setBoard]);
 
 	return (
 		<div className="border-2 border-emerald-400 w-fit">{renderedBoard}</div>

@@ -5,7 +5,7 @@ import { useBoardContext } from '../context/BoardContext';
 export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
 
-	const { getOCR, loading, error } = useGetOCR();
+	const { getOCR, error } = useGetOCR();
 	const { board, setBoard } = useBoardContext();
 
 	const handleSubmit = async (e) => {
@@ -18,15 +18,15 @@ export const ImageUploadForm = () => {
 
 		try {
 			const newResult = await getOCR(image);
-			console.log('OCR result:', newResult);
+			// console.log('OCR result:', newResult);
 
 			if (!newResult || !newResult.boardState) {
 				console.error('Failed to get OCR!');
 				return;
 			}
-			console.log('New board state:', newResult.boardState);
-			setBoard((prevBoard) => [...newResult.boardState]);
-			console.log(newResult.boardState);
+			// console.log('New board state:', newResult.boardState);
+			setBoard(() => [...newResult.boardState]);
+			// console.log(newResult.boardState);
 		} catch (error) {
 			console.error(error);
 		}
@@ -41,9 +41,9 @@ export const ImageUploadForm = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (board.length > 0) console.log('Board updated:', board);
-	}, [board]);
+	// useEffect(() => {
+	// 	if (board.length > 0) console.log('Board updated:', board);
+	// }, [board]);
 
 	useEffect(() => {
 		if (error) console.error('OCR error:', error);
