@@ -12,16 +12,20 @@ export const Square = ({ value, defaultValue, onChange }) => {
 		if (onChange) onChange(InputValue);
 	};
 	return (
-		<div className="w-[50px] h-[50px] border-2 border-emerald-400">
+		<div
+			className={`w-[50px] h-[50px] border-2 border-emerald-400 ${
+				cell?.length && 'bg-amber-200 text-black font-bold rounded-lg'
+			}`}
+		>
 			<input
-				className="input w-full h-full"
+				className="input w-full h-full text-center"
 				type="text"
 				onFocus={(e) => (e.target.value = '')}
 				onBlur={(e) => {
 					if (!e.target.value.length) e.target.value = defaultValue;
 				}}
 				onChange={(e) => handleInputChange(e.target.value)}
-				value={cell ?? defaultValue}
+				value={cell?.length ? cell : defaultValue}
 			/>
 		</div>
 	);
