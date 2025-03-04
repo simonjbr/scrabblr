@@ -6,7 +6,7 @@ export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
 
 	const { getOCR, error } = useGetOCR();
-	const { board, setBoard } = useBoardContext();
+	const { setBoard, setHand } = useBoardContext();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -26,6 +26,7 @@ export const ImageUploadForm = () => {
 			}
 			// console.log('New board state:', newResult.boardState);
 			setBoard(() => [...newResult.boardState]);
+			setHand(() => [...newResult.hand]);
 			// console.log(newResult.boardState);
 		} catch (error) {
 			console.error(error);

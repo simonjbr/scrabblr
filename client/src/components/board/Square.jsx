@@ -24,7 +24,9 @@ export const Square = ({ value, defaultValue, onChange }) => {
 				onBlur={(e) => {
 					if (!e.target.value.length) e.target.value = defaultValue;
 				}}
-				onChange={(e) => handleInputChange(e.target.value)}
+				onChange={(e) =>
+					handleInputChange(e.target.value.toUpperCase())
+				}
 				value={cell?.length ? cell : defaultValue}
 			/>
 		</div>

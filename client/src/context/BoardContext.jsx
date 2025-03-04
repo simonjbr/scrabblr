@@ -9,10 +9,11 @@ const createEmptyBoard = () =>
 
 export const BoardProvider = ({ children }) => {
 	const [board, setBoard] = useState(() => createEmptyBoard());
+	const [hand, setHand] = useState([]);
 
 	// console.log('Board state updated:', board);
 
-	const value = useMemo(() => ({ board, setBoard }), [board]);
+	const value = useMemo(() => ({ board, setBoard, hand, setHand }), [board, hand]);
 
 	return (
 		<BoardContext.Provider value={value}>{children}</BoardContext.Provider>
