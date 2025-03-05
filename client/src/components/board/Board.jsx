@@ -35,7 +35,6 @@ export const Board = () => {
 			<div className="border-2 border-emerald-400 w-fit">
 				{renderedBoard}
 			</div>
-			<Hand />
 		</>
 	);
 };

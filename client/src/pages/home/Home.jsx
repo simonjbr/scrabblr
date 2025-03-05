@@ -1,4 +1,5 @@
 import { Board } from '../../components/board/Board';
+import { Hand } from '../../components/board/Hand';
 import { ImageUploadForm } from '../../components/ImageUploadForm';
 
 export const Home = () => {
@@ -6,6 +7,7 @@ export const Home = () => {
 		<div>
 			<ImageUploadForm />
 			<Board />
+			<Hand />
 		</div>
 	);
 };

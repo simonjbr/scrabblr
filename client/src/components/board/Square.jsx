@@ -14,7 +14,7 @@ export const Square = ({ value, defaultValue, onChange }) => {
 
 	return (
 		<div
-			className={`w-[50px] h-[50px] border-2 border-emerald-400 ${
+			className={`w-[40px] h-[40px] border-2 border-emerald-400 ${
 				cell?.length && 'bg-amber-200 text-black font-bold rounded-lg'
 			}`}
 		>
