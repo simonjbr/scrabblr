@@ -11,6 +11,9 @@ export default defineConfig({
 			'/api/cloudVision': {
 				target: 'http://localhost:3001',
 			},
+			'/api/bestMoves': {
+				target: 'http://localhost:3001',
+			},
 		},
 	},
 });
