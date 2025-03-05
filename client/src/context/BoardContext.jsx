@@ -13,7 +13,10 @@ export const BoardProvider = ({ children }) => {
 
 	// console.log('Board state updated:', board);
 
-	const value = useMemo(() => ({ board, setBoard, hand, setHand }), [board, hand]);
+	const value = useMemo(
+		() => ({ board, setBoard, hand, setHand }),
+		[board, hand]
+	);
 
 	return (
 		<BoardContext.Provider value={value}>{children}</BoardContext.Provider>

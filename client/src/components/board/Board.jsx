@@ -2,6 +2,7 @@ import { Square } from './Square';
 import { WORDFEUD_DEFAULT_BOARD } from '../../lib/constants';
 import { useBoardContext } from '../../context/BoardContext';
 import { useMemo } from 'react';
+import { Hand } from './Hand';
 
 export const Board = () => {
 	const { board, setBoard } = useBoardContext();
@@ -30,6 +31,11 @@ export const Board = () => {
 	}, [board, setBoard]);
 
 	return (
-		<div className="border-2 border-emerald-400 w-fit">{renderedBoard}</div>
+		<>
+			<div className="border-2 border-emerald-400 w-fit">
+				{renderedBoard}
+			</div>
+			<Hand />
+		</>
 	);
 };
