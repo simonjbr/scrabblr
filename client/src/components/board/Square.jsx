@@ -7,10 +7,11 @@ export const Square = ({ value, defaultValue, onChange }) => {
 		setCell(value);
 	}, [value]);
 
-	const handleInputChange = (InputValue) => {
-		setCell(InputValue);
-		if (onChange) onChange(InputValue);
+	const handleInputChange = (inputValue) => {
+		setCell(inputValue.charAt(inputValue.length - 1));
+		if (onChange) onChange(inputValue.charAt(inputValue.length - 1));
 	};
+
 	return (
 		<div
 			className={`w-[50px] h-[50px] border-2 border-emerald-400 ${
