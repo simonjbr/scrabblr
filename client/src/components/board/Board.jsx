@@ -2,7 +2,6 @@ import { Square } from './Square';
 import { WORDFEUD_DEFAULT_BOARD } from '../../lib/constants';
 import { useBoardContext } from '../../context/BoardContext';
 import { useMemo } from 'react';
-import { Hand } from './Hand';
 
 export const Board = () => {
 	const { board, setBoard } = useBoardContext();
