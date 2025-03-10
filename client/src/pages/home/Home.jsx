@@ -2,7 +2,7 @@ import { Board } from '../../components/board/Board';
 import { Hand } from '../../components/board/Hand';
 import { GetBestMovesButton } from '../../components/GetBestMovesButton';
 import { ImageUploadForm } from '../../components/ImageUploadForm';
-import { Results } from '../../components/results/Results';
+import { ResultsTable } from '../../components/results/ResultsTable';
 
 export const Home = () => {
 	return (
@@ -14,7 +14,7 @@ export const Home = () => {
 				<GetBestMovesButton />
 			</div>
 			<div className="w-[300px]">
-				<Results />
+				<ResultsTable />
 			</div>
 		</div>
 	);
