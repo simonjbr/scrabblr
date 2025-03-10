@@ -8,8 +8,11 @@ export const ResultBox = ({ result }) => {
 	};
 	return (
 		<div
-			className="hover:cursor-pointer hover:bg-amber-600"
+			className="font-bold hover:cursor-pointer hover:bg-amber-600"
 			onClick={handleClick}
-		>{`${result.words[0].fullWord}: ${result.score}`}</div>
+		>
+			{`${result.words[0].fullWord}: `}
+			<span className="text-blue-300">{result.score}</span>
+		</div>
 	);
 };

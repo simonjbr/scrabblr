@@ -6,7 +6,7 @@ export const ResultsTable = () => {
 
 	return (
 		<div className="divide-y divide-emerald-400 overflow-auto border-2 border-emerald-400">
-			<h2>RESULTS</h2>
+			<h2 className="text-4xl font-bold">RESULTS</h2>
 			{results.map((result, index) => (
 				<ResultBox key={index} result={result} />
 			))}
