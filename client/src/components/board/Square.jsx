@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const Square = ({ value, defaultValue, onChange }) => {
+export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	const [cell, setCell] = useState(value);
 
 	useEffect(() => {
@@ -11,6 +11,16 @@ export const Square = ({ value, defaultValue, onChange }) => {
 		setCell(inputValue.charAt(inputValue.length - 1));
 		if (onChange) onChange(inputValue.charAt(inputValue.length - 1));
 	};
+
+	if (placedTile.length)
+		return (
+			<div
+				className={`w-[40px] h-[40px] border-2 border-emerald-400 bg-amber-400 text-black font-bold rounded-lg text-center flex items-center justify-center
+			`}
+			>
+				{placedTile}
+			</div>
+		);
 
 	return (
 		<div

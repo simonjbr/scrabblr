@@ -1,12 +1,26 @@
 import { Square } from './Square';
 import { WORDFEUD_DEFAULT_BOARD } from '../../lib/constants';
 import { useBoardContext } from '../../context/BoardContext';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { usePlacedTilesContext } from '../../context/PlacedTilesContext';
 
 export const Board = () => {
 	const { board, setBoard } = useBoardContext();
+	const { placedTiles } = usePlacedTilesContext();
 
 	// console.log('Rendering board:', board);
+
+	const handlePlacedTile = useCallback(
+		(rowIndex, colIndex) => {
+			for (const tile of placedTiles) {
+				if (tile.x === colIndex && tile.y === rowIndex) {
+					return tile.letter;
+				}
+			}
+			return '';
+		},
+		[placedTiles]
+	);
 
 	const renderedBoard = useMemo(() => {
 		return board.map((row, rowIndex) => (
@@ -23,11 +37,12 @@ export const Board = () => {
 							newBoard[rowIndex][colIndex] = newValue;
 							setBoard(() => [...newBoard]);
 						}}
+						placedTile={handlePlacedTile(rowIndex, colIndex)}
 					/>
 				))}
 			</div>
 		));
-	}, [board, setBoard]);
+	}, [board, handlePlacedTile, setBoard]);
 
 	return (
 		<>
