@@ -1,6 +1,10 @@
+import { usePlacedTilesContext } from '../../context/PlacedTilesContext';
+
 export const ResultBox = ({ result }) => {
+	const { setPlacedTiles } = usePlacedTilesContext();
+
 	const handleClick = () => {
-		console.log('clicked!');
+		setPlacedTiles(result.placedLetters);
 	};
 	return (
 		<div
