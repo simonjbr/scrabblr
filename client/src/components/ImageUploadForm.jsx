@@ -5,6 +5,7 @@ import { usePlacedTilesContext } from '../context/PlacedTilesContext';
 
 export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
+	const [preview, setPreview] = useState(null);
 
 	const { getOCR, error } = useGetOCR();
 	const { setBoard, setHand } = useBoardContext();
@@ -40,6 +41,7 @@ export const ImageUploadForm = () => {
 
 		if (file) {
 			setImage(e.target.files[0]);
+			setPreview(URL.createObjectURL(file));
 			console.log('Image set to:', file);
 			setSelectedResult(null);
 			setPlacedTiles([]);
@@ -65,6 +67,13 @@ export const ImageUploadForm = () => {
 				/>
 				<button type="submit">Submit!</button>
 			</form>
+
+			{preview && (
+				<div className="image-preview">
+					<p>Preview:</p>
+					<img src={preview} alt="Uploaded Preview" className="preview-img" />
+				</div>
+			)}
 		</div>
 	);
 };

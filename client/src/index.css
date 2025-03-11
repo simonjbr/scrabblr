@@ -68,3 +68,16 @@ button:focus-visible {
 		background-color: #f9f9f9;
 	}
 }
+
+
+.image-preview {
+	margin-top: 10px;
+}
+  
+.preview-img {
+width: 100%;
+max-width: 300px;
+max-height: 300px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
