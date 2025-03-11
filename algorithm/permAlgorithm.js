@@ -51,6 +51,12 @@ const getValidWords = (hand, state) => {
 
 	console.timeEnd('Finding anchors');
 
+	// if there are no anchors we still need something to iterate over to
+	// get into the for loop
+	if (!anchors.length) {
+		anchors.push(['', 7, 7, false]);
+	}
+
 	// valid letter placement deltas (relative to anchors)
 	// vertical deltas
 	const verDeltas = [
@@ -86,7 +92,9 @@ const getValidWords = (hand, state) => {
 	for (let i = 0; i < anchors.length; i++) {
 		let [anchor, y, x, isVertical] = anchors[i];
 
-		const deltas = isVertical ? verDeltas : horDeltas;
+		let deltas = isVertical ? verDeltas : horDeltas;
+
+		if (anchors.length === 1 && anchor === '') deltas = [[0, 0]];
 
 		for (const d of deltas) {
 			// coords of anchor's neighbour
