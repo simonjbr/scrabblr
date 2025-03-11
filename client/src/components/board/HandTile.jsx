@@ -13,7 +13,7 @@ export const HandTile = ({ letter, onChange }) => {
 	};
 
 	return (
-		<div className="w-[60px] h-[60px] text-5xl border-4 border-emerald-400 text-center align-middle">
+		<div className="w-[60px] h-[60px] text-4xl border-4 border-emerald-400 text-center align-middle">
 			<input
 				className="input w-full h-full text-center"
 				type="text"
