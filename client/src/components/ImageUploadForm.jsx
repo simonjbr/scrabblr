@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useGetOCR } from '../hooks/useGetOCR';
 import { useBoardContext } from '../context/BoardContext';
+import { usePlacedTilesContext } from '../context/PlacedTilesContext';
 
 export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
 
 	const { getOCR, error } = useGetOCR();
 	const { setBoard, setHand } = useBoardContext();
+	const { setPlacedTiles, setSelectedResult } = usePlacedTilesContext();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -39,6 +41,8 @@ export const ImageUploadForm = () => {
 		if (file) {
 			setImage(e.target.files[0]);
 			console.log('Image set to:', file);
+			setSelectedResult(null);
+			setPlacedTiles([]);
 		}
 	};
 
