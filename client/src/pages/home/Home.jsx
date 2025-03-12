@@ -1,6 +1,7 @@
 import { Board } from '../../components/board/Board';
 import { Hand } from '../../components/board/Hand';
 import { GetBestMovesButton } from '../../components/GetBestMovesButton';
+import { ImagePreivew } from '../../components/ImagePreivew';
 import { ImageUploadForm } from '../../components/ImageUploadForm';
 import { ResultsTable } from '../../components/results/ResultsTable';
 
@@ -14,6 +15,7 @@ export const Home = () => {
 				<GetBestMovesButton />
 			</div>
 			<div className="w-[300px]">
+				<ImagePreivew />
 				<ResultsTable />
 			</div>
 		</div>

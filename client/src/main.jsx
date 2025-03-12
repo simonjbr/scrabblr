@@ -5,13 +5,16 @@ import App from './App.jsx';
 import { BoardProvider } from './context/BoardContext.jsx';
 import { ResultsProvider } from './context/ResultsContext.jsx';
 import { PlacedTilesProvider } from './context/PlacedTilesContext.jsx';
+import { ImagePreviewProvider } from './context/ImagePreviewContext.jsx';
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
 		<BoardProvider>
 			<ResultsProvider>
 				<PlacedTilesProvider>
-					<App />
+					<ImagePreviewProvider>
+						<App />
+					</ImagePreviewProvider>
 				</PlacedTilesProvider>
 			</ResultsProvider>
 		</BoardProvider>
