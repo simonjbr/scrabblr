@@ -6,7 +6,7 @@ import getCenterVertex from './getCenterVertex.js';
 import getDetectionDimensions from './getDetectionDimensions.js';
 import getDimensions from './getDimensions.js';
 
-const CREDENTIALS = JSON.parse(process.env.CLOUD_VISION_CRED || {});
+const CREDENTIALS = JSON.parse(process.env.CLOUD_VISION_CRED || '{}');
 
 const CONFIG = {
 	credentials: {
