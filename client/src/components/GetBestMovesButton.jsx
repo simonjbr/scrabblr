@@ -10,7 +10,10 @@ export const GetBestMovesButton = () => {
 	const handleClick = async () => {
 		console.log(hand);
 		console.log(board);
-		const bestMoves = await getBestMoves(hand, board);
+		const bestMoves = await getBestMoves(
+			hand.map((handTile) => handTile.letter),
+			board
+		);
 
 		console.log(bestMoves);
 

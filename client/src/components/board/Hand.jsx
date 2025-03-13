@@ -10,10 +10,17 @@ export const Hand = () => {
 			{handRack.map((_, index) => (
 				<HandTile
 					key={index}
-					letter={index < hand.length ? hand[index] : ''}
+					letter={
+						index < hand.length && hand[index].isVisible
+							? hand[index].letter
+							: ''
+					}
 					onChange={(newValue) => {
 						const newHand = [...hand];
-						newHand[index] = newValue;
+						newHand[index] = {
+							letter: newValue,
+							isVisible: true,
+						};
 						setHand(() => [...newHand]);
 					}}
 				/>
