@@ -30,7 +30,14 @@ export const ImageUploadForm = () => {
 			}
 			// console.log('New board state:', newResult.boardState);
 			setBoard(() => [...newResult.boardState]);
-			setHand(() => [...newResult.hand]);
+			const newHand = [];
+			for (const handTile of newResult.hand) {
+				newHand.push({
+					letter: handTile,
+					isVisible: true,
+				});
+			}
+			setHand(() => newHand);
 			// console.log(newResult.boardState);
 		} catch (error) {
 			console.error(error);
