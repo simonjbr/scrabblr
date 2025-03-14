@@ -6,6 +6,10 @@ export const ResultBox = ({ result, index }) => {
 		usePlacedTilesContext();
 	const { hand, setHand } = useBoardContext();
 
+	const getHighestScoringWord = (words) => {
+		return words.sort((a, b) => b.score - a.score)[0];
+	};
+
 	const handleClick = () => {
 		setPlacedTiles(result.placedLetters);
 		setSelectedResult(index);
@@ -21,10 +25,7 @@ export const ResultBox = ({ result, index }) => {
 
 		for (const handTile of newHand) {
 			handTile.isVisible = true;
-			if (
-				workingPlacedLetters
-					.includes(handTile.letter)
-			) {
+			if (workingPlacedLetters.includes(handTile.letter)) {
 				handTile.isVisible = false;
 				workingPlacedLetters.splice(
 					workingPlacedLetters.indexOf(handTile.letter),
@@ -46,7 +47,7 @@ export const ResultBox = ({ result, index }) => {
 			}`}
 			onClick={handleClick}
 		>
-			{`${result.words[0].fullWord}: `}
+			{`${getHighestScoringWord(result.words).fullWord}: `}
 			<span className="text-blue-300">{result.score}</span>
 		</div>
 	);

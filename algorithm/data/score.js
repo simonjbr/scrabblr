@@ -42,6 +42,7 @@ const getWordScore = (words, tilesUsed) => {
 
 			if (!t.isJoker) score += letterScores[t.letter] * letterMultiplier;
 		}
+		word.score = score * wordMultiplier;
 		total += score * wordMultiplier;
 	}
 
