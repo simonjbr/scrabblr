@@ -12,7 +12,9 @@ export const ResultBox = ({ result, index }) => {
 
 		// remove placed tiles from hand rack
 		const newHand = [...hand];
-		const workingPlacedLetters = [...result.placedLetters];
+		const workingPlacedLetters = [...result.placedLetters].map(
+			(l) => l.letter
+		);
 
 		console.log(workingPlacedLetters);
 		console.log('newHand before:', newHand);
@@ -21,7 +23,6 @@ export const ResultBox = ({ result, index }) => {
 			handTile.isVisible = true;
 			if (
 				workingPlacedLetters
-					.map((l) => l.letter)
 					.includes(handTile.letter)
 			) {
 				handTile.isVisible = false;
