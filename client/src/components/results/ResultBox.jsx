@@ -11,11 +11,25 @@ export const ResultBox = ({ result, index }) => {
 	};
 
 	const handleClick = () => {
+		const newHand = [...hand];
+
+		// deselect result if already selected
+		if (selectedResult === index) {
+			setPlacedTiles([]);
+			setSelectedResult(null);
+
+			for (const handTile of newHand) {
+				handTile.isVisible = true;
+			}
+
+			setHand(newHand);
+			return;
+		}
+
 		setPlacedTiles(result.placedLetters);
 		setSelectedResult(index);
 
-		// remove placed tiles from hand rack
-		const newHand = [...hand];
+		// hide placed tiles on hand rack
 		const workingPlacedLetters = [...result.placedLetters].map(
 			(l) => l.letter
 		);
