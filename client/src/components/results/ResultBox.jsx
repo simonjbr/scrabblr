@@ -20,9 +20,6 @@ export const ResultBox = ({ result, index }) => {
 			(l) => l.letter
 		);
 
-		console.log(workingPlacedLetters);
-		console.log('newHand before:', newHand);
-
 		for (const handTile of newHand) {
 			handTile.isVisible = true;
 			if (workingPlacedLetters.includes(handTile.letter)) {
@@ -32,10 +29,7 @@ export const ResultBox = ({ result, index }) => {
 					1
 				);
 			}
-			console.log(handTile);
 		}
-
-		console.log('newHand after:', newHand);
 
 		setHand(newHand);
 	};

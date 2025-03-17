@@ -66,7 +66,6 @@ export const ImageUploadForm = () => {
 
 	return (
 		<div>
-			<h1>Upload file here!</h1>
 			<form onSubmit={handleSubmit}>
 				<input
 					type="file"
