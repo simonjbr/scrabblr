@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	const [cell, setCell] = useState(value);
+	const [tempCell, setTempCell] = useState('');
 
 	useEffect(() => {
 		setCell(value);
@@ -24,21 +25,35 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 
 	return (
 		<div
-			className={`w-[40px] h-[40px] border-2 border-emerald-400 ${
+			className={`w-[40px] h-[40px] border-2 border-emerald-400 relative ${
 				cell?.length && 'bg-amber-200 text-black font-bold rounded-lg'
 			}`}
 		>
+			<div
+				className={`absolute inset-0 flex items-center justify-center text-gray-400 ${
+					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
+				} ${cell && 'hidden'}`}
+			>
+				{defaultValue}
+			</div>
 			<input
 				className="input w-full h-full text-center"
 				type="text"
-				onFocus={(e) => (e.target.value = '')}
-				onBlur={(e) => {
-					if (!e.target.value.length) e.target.value = defaultValue;
+				onFocus={() => {
+					setTempCell(cell);
+					setCell('');
+				}}
+				onBlur={() => {
+					if (!cell) {
+						setCell(tempCell || '');
+						if (onChange) onChange(tempCell || '');
+					}
 				}}
 				onChange={(e) =>
 					handleInputChange(e.target.value.toUpperCase())
 				}
-				value={cell?.length ? cell : defaultValue}
+				value={cell || ''}
+				aria-label="Square input"
 			/>
 		</div>
 	);
