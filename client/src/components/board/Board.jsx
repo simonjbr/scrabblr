@@ -46,7 +46,7 @@ export const Board = () => {
 
 	return (
 		<>
-			<div className="border-2 border-emerald-400 w-fit">
+			<div className="border-2 border-black w-fit">
 				{renderedBoard}
 			</div>
 		</>

@@ -48,12 +48,12 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 
 	return (
 		<div
-			className={`w-[40px] h-[40px] border-2 border-emerald-400 relative ${
+			className={`w-[40px] h-[40px] border-2 border-black relative ${
 				cell?.length && 'bg-amber-200 text-black font-bold rounded-lg'
 			}`}
 		>
 			<div
-				className={`absolute inset-0 flex items-center justify-center text-gray-400 ${
+				className={`absolute inset-0 flex items-center justify-center text-white font-bold ${
 					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
 				} ${cell && 'hidden'} bg-${getDefaultBackgroungColor()}`}
 			>
