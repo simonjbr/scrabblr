@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+@theme {
+	--color-wordfeud-blank: #2b2f38;
+	--color-wordfeud-triple-word: #8a3137;
+	--color-wordfeud-triple-letter: #34639b;
+	--color-wordfeud-double-word: #c97c23;
+	--color-wordfeud-double-letter: #70975e;
+}
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
