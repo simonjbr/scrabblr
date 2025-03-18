@@ -13,6 +13,29 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 		if (onChange) onChange(inputValue.charAt(inputValue.length - 1));
 	};
 
+	const getDefaultBackgroungColor = () => {
+		let color = '';
+		switch (defaultValue) {
+			case '':
+				color = 'wordfeud-blank';
+				break;
+			case 'TW':
+				color = 'wordfeud-triple-word';
+				break;
+			case 'TL':
+				color = 'wordfeud-triple-letter';
+				break;
+			case 'DW':
+				color = 'wordfeud-double-word';
+				break;
+			case 'DL':
+				color = 'wordfeud-double-letter';
+				break;
+		}
+
+		return color;
+	};
+
 	if (placedTile.length)
 		return (
 			<div
@@ -32,7 +55,7 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 			<div
 				className={`absolute inset-0 flex items-center justify-center text-gray-400 ${
 					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
-				} ${cell && 'hidden'}`}
+				} ${cell && 'hidden'} bg-${getDefaultBackgroungColor()}`}
 			>
 				{defaultValue}
 			</div>
