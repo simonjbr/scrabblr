@@ -33,7 +33,7 @@ export const Board = () => {
 							WORDFEUD_DEFAULT_BOARD[rowIndex][colIndex]
 						}
 						onChange={(newValue) => {
-							const newBoard = board;
+							const newBoard = board.map((row) => [...row]);
 							newBoard[rowIndex][colIndex] = newValue;
 							setBoard(() => [...newBoard]);
 						}}
