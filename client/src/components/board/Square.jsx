@@ -40,7 +40,7 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	if (placedTile.length)
 		return (
 			<div
-				className={`w-[40px] h-[40px] border-1 border-black bg-amber-300 text-black font-bold rounded-sm text-center flex items-center justify-center
+				className={`w-[40px] h-[40px] border-1 border-black bg-wordfeud-placed-tile text-xl text-black font-bold rounded-sm text-center flex items-center justify-center
 			`}
 			>
 				{placedTile}
@@ -50,7 +50,7 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	return (
 		<div
 			className={`w-[40px] h-[40px] border-1 border-black relative ${
-				cell?.length && 'bg-amber-200 text-black font-bold rounded-sm'
+				cell?.length && 'bg-wordfeud-tile text-black font-bold rounded-sm text-xl'
 			}`}
 		>
 			<div

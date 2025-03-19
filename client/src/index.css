@@ -6,6 +6,8 @@
 	--color-wordfeud-triple-letter: #34639b;
 	--color-wordfeud-double-word: #c97c23;
 	--color-wordfeud-double-letter: #70975e;
+	--color-wordfeud-tile: #f2efea;
+	--color-wordfeud-placed-tile: #efe395;
 }
 
 :root {

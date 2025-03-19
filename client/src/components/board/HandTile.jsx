@@ -21,8 +21,10 @@ export const HandTile = ({ letter, onChange }) => {
 
 	return (
 		<div
-			className={`w-[60px] h-[60px] text-4xl border-2 border-black text-center align-middle ${
-				cell?.length && 'bg-amber-200 text-black font-bold rounded-lg'
+			className={`w-[60px] h-[60px] text-4xl border-2 border-black rounded-lg text-center align-middle ${
+				cell?.length
+					? 'bg-wordfeud-tile text-black font-bold'
+					: 'bg-wordfeud-blank'
 			}`}
 		>
 			<input

@@ -6,7 +6,7 @@ export const Hand = () => {
 	const { hand, setHand } = useBoardContext();
 
 	return (
-		<div className="flex flex-row justify-center mt-3">
+		<div className="flex flex-row justify-center bg-black w-fit mx-auto mt-3">
 			{handRack.map((_, index) => (
 				<HandTile
 					key={index}
