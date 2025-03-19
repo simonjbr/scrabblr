@@ -67,12 +67,28 @@ export const ImageUploadForm = () => {
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
+				<label htmlFor="image-upload">Upload Image: </label>
 				<input
+					id="image-upload"
 					type="file"
 					accept="image/*"
 					onChange={handleFileChange}
+					className="
+					px-4
+                    py-2
+                    border-2
+                    rounded-lg
+                    bg-wordfeud-blank
+                    text-white
+                    cursor-pointer
+                    hover:border-blue-700
+                    focus:outline-none
+                    focus:border-blue-700
+                    transition-colors
+                    duration-200
+                "
 				/>
-				<button type="submit">Submit!</button>
+				<button type="submit">Scan Image</button>
 			</form>
 		</div>
 	);

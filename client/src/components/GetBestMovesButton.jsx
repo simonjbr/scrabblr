@@ -22,7 +22,7 @@ export const GetBestMovesButton = () => {
 
 	return (
 		<>
-			<button onClick={handleClick}>Accept</button>
+			<button onClick={handleClick}>Get Results</button>
 		</>
 	);
 };
