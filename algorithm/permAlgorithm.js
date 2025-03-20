@@ -207,7 +207,11 @@ const getValidWords = (hand, state) => {
 					// HORIZONTAL CONTACTS
 					const horContacts = [];
 					// check for contacts left
-					if (workingState[n[0]][xStart - perm.permutation.length]) {
+					if (
+						workingState[n[0]][
+							xStart - perm.permutation.length - intersectionCount
+						]
+					) {
 						let xDelta = 1;
 						while (
 							workingState[
@@ -239,9 +243,8 @@ const getValidWords = (hand, state) => {
 							hasJoker: true,
 						};
 						// search trie for valid joker values
-						const [isMatchFound, jokerValues] = trie.specialSearch(
-							perm.string
-						);
+						const [isMatchFound, jokerValues] =
+							trie.specialSearch(placedWord);
 						// if found push all valid words to fullWord array
 						if (isMatchFound) {
 							const tempWords = [];
@@ -277,14 +280,14 @@ const getValidWords = (hand, state) => {
 							isValidPerm = false;
 							continue;
 						}
-					} else if (trie.search(perm.string)) {
-						if (!horContacts.length && !isIntersecting)
+					} else if (trie.search(placedWord)) {
+						if (!horContacts.length)
 							words.push({
-								fullWord: perm.string,
+								fullWord: placedWord,
 								tiles: placedLetters,
 								hasJoker: perm.jokers > 0, // should always be false
 							});
-					} else if (!horContacts.length && !isIntersecting) {
+					} else if (!horContacts.length) {
 						isValidPerm = false;
 						break;
 					}
@@ -430,7 +433,7 @@ const getValidWords = (hand, state) => {
 							let xDelta = 1;
 							while (workingState[yStart - j][n[1] - xDelta]) {
 								xDelta++;
-								if (n[0] - xDelta < 0) break;
+								if (n[1] - xDelta < 0) break;
 							}
 							horContacts.push([yStart - j, n[1] - xDelta + 1]);
 							// check for contacts right
@@ -447,7 +450,9 @@ const getValidWords = (hand, state) => {
 					const verContacts = [];
 					// check for contacts above
 					if (
-						workingState[yStart - perm.permutation.length][[n[1]]]
+						workingState[
+							yStart - perm.permutation.length - intersectionCount
+						][[n[1]]]
 					) {
 						// if found search for top letter
 						let yDelta = 1;
@@ -485,9 +490,8 @@ const getValidWords = (hand, state) => {
 							hasJoker: true,
 						};
 						// search trie for valid joker values
-						const [isMatchFound, jokerValues] = trie.specialSearch(
-							perm.string
-						);
+						const [isMatchFound, jokerValues] =
+							trie.specialSearch(placedWord);
 						// if found push all valid words to fullWord array
 						if (isMatchFound) {
 							const tempWords = [];
@@ -524,14 +528,14 @@ const getValidWords = (hand, state) => {
 							isValidPerm = false;
 							continue;
 						}
-					} else if (trie.search(perm.string)) {
-						if (!verContacts.length && !isIntersecting)
+					} else if (trie.search(placedWord)) {
+						if (!verContacts.length)
 							words.push({
-								fullWord: perm.string,
+								fullWord: placedWord,
 								tiles: placedLetters,
 								hasJoker: perm.jokers > 0, // should always be false
 							});
-					} else if (!verContacts.length && !isIntersecting) {
+					} else if (!verContacts.length) {
 						isValidPerm = false;
 						break;
 					}
