@@ -14,27 +14,18 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	};
 
 	const getDefaultBackgroungColor = () => {
-		let color = '';
 		switch (defaultValue) {
-			case '':
-			case '*':
-				color = 'wordfeud-blank';
-				break;
 			case 'TW':
-				color = 'wordfeud-triple-word';
-				break;
+				return 'bg-wordfeud-triple-word';
 			case 'TL':
-				color = 'wordfeud-triple-letter';
-				break;
+				return 'bg-wordfeud-triple-letter';
 			case 'DW':
-				color = 'wordfeud-double-word';
-				break;
+				return 'bg-wordfeud-double-word';
 			case 'DL':
-				color = 'wordfeud-double-letter';
-				break;
+				return 'bg-wordfeud-double-letter';
+			default:
+				return 'bg-wordfeud-blank';
 		}
-
-		return color;
 	};
 
 	if (placedTile.length)
@@ -50,13 +41,14 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	return (
 		<div
 			className={`w-[40px] h-[40px] border-1 border-black relative ${
-				cell?.length && 'bg-wordfeud-tile text-black font-bold rounded-sm text-xl'
+				cell?.length &&
+				'bg-wordfeud-tile text-black font-bold rounded-sm text-xl'
 			}`}
 		>
 			<div
 				className={`absolute inset-0 flex items-center justify-center text-white font-bold rounded-sm ${
 					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
-				} ${cell && 'hidden'} bg-${getDefaultBackgroungColor()}`}
+				} ${cell && 'hidden'} ${getDefaultBackgroungColor()}`}
 			>
 				{defaultValue}
 			</div>
