@@ -96,7 +96,8 @@ const getValidWords = (hand, state) => {
 
 		if (anchors.length === 1 && anchor === '') deltas = [[0, 0]];
 
-		for (const d of deltas) {
+		for (let k = 0; k < deltas.length; k++) {
+			const d = [...deltas[k]];
 			// coords of anchor's neighbour
 			const n = [
 				d[0] < 0 ? y + d[0] : y + d[0] * anchor.length,
@@ -115,6 +116,12 @@ const getValidWords = (hand, state) => {
 					xStartDelta++
 				) {
 					let xStart = n[1] + xStartDelta;
+					// if modified starting position is in use skip this position
+					if (
+						xStart - (perm.permutation.length - 1) > 0 &&
+						state[n[0]][xStart - (perm.permutation.length - 1)]
+					)
+						continue;
 					if (xStart >= BOARD_LENGTH) break;
 					// if we lose contact with anchor
 					if (xStart - perm.permutation.length >= n[1]) break;
@@ -214,15 +221,27 @@ const getValidWords = (hand, state) => {
 					) {
 						let xDelta = 1;
 						while (
-							workingState[
-								n[0][xStart - perm.permutation.length - xDelta]
+							xStart -
+								perm.permutation.length -
+								intersectionCount -
+								xDelta >
+								0 &&
+							workingState[n[0]][
+								xStart -
+									perm.permutation.length -
+									intersectionCount -
+									xDelta
 							]
 						) {
 							xDelta++;
 						}
 						horContacts.push([
 							n[0],
-							xStart - perm.permutation.length - xDelta + 1,
+							xStart -
+								perm.permutation.length -
+								intersectionCount -
+								xDelta +
+								1,
 						]);
 						// check for contact right
 					} else if (
@@ -231,7 +250,10 @@ const getValidWords = (hand, state) => {
 					) {
 						horContacts.push([
 							n[0],
-							xStart - perm.permutation.length + 1,
+							xStart -
+								perm.permutation.length -
+								intersectionCount +
+								1,
 						]);
 					}
 
@@ -339,7 +361,8 @@ const getValidWords = (hand, state) => {
 
 		const deltas = isVertical ? verDeltas : horDeltas;
 
-		for (const d of deltas) {
+		for (let k = 0; k < deltas.length; k++) {
+			const d = [...deltas[k]];
 			// coords of anchor's neighbour
 			const n = [
 				y + d[0],
@@ -358,6 +381,12 @@ const getValidWords = (hand, state) => {
 					yStartDelta++
 				) {
 					let yStart = n[0] + yStartDelta; // const yStart = n[0] + yStartDelta
+					// if modified starting position is in use skip this position
+					if (
+						yStart - (perm.permutation.length - 1) > 0 &&
+						state[yStart - (perm.permutation.length - 1)][n[1]]
+					)
+						continue;
 					if (yStart >= BOARD_LENGTH) break;
 					// if we lose contact with anchor
 					if (yStart - perm.permutation.length >= n[0]) break;
@@ -457,9 +486,16 @@ const getValidWords = (hand, state) => {
 						// if found search for top letter
 						let yDelta = 1;
 						while (
-							yStart - perm.permutation.length - yDelta > 0 &&
+							yStart -
+								perm.permutation.length -
+								intersectionCount -
+								yDelta >
+								0 &&
 							workingState[
-								yStart - perm.permutation.length - yDelta
+								yStart -
+									perm.permutation.length -
+									intersectionCount -
+									yDelta
 							][n[1]]
 						) {
 							yDelta++;
@@ -467,7 +503,11 @@ const getValidWords = (hand, state) => {
 								break;
 						}
 						verContacts.push([
-							yStart - perm.permutation.length - yDelta + 1,
+							yStart -
+								perm.permutation.length -
+								intersectionCount -
+								yDelta +
+								1,
 							n[1],
 						]);
 						// check for contact below
@@ -476,7 +516,10 @@ const getValidWords = (hand, state) => {
 						workingState[yStart + 1][n[1]]
 					) {
 						verContacts.push([
-							yStart - perm.permutation.length + 1,
+							yStart -
+								perm.permutation.length -
+								intersectionCount +
+								1,
 							n[1],
 						]);
 					}
