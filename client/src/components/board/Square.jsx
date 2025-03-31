@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	const [cell, setCell] = useState(value);
-	const [tempCell, setTempCell] = useState('');
 
 	useEffect(() => {
 		setCell(value);
@@ -31,10 +30,10 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	if (placedTile.length)
 		return (
 			<div
-				className={`w-[40px] h-[40px] border-1 border-black bg-wordfeud-placed-tile text-xl text-black font-bold rounded-sm text-center flex items-center justify-center
+				className={`w-[40px] h-[40px] border-1 border-black bg-wordfeud-placed-tile text-xl text-black font-bold rounded-sm text-center flex items-center justify-center overflow-hidden
 			`}
 			>
-				{placedTile}
+				{Array.isArray(placedTile) ? placedTile[0] : placedTile}
 			</div>
 		);
 
@@ -55,15 +54,8 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 			<input
 				className="input w-full h-full text-center"
 				type="text"
-				onFocus={() => {
-					setTempCell(cell);
-					setCell('');
-				}}
-				onBlur={() => {
-					if (!cell) {
-						setCell(tempCell || '');
-						if (onChange) onChange(tempCell || '');
-					}
+				onFocus={(e) => {
+					e.target.select();
 				}}
 				onChange={(e) =>
 					handleInputChange(e.target.value.toUpperCase())
