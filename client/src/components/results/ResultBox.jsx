@@ -30,9 +30,13 @@ export const ResultBox = ({ result, index }) => {
 		setSelectedResult(index);
 
 		// hide placed tiles on hand rack
-		const workingPlacedLetters = [...result.placedLetters].map(
-			(l) => l.letter
-		);
+		const workingPlacedLetters = [...result.placedLetters].map((l) => {
+			if (Array.isArray(l.letter)) {
+				return 'j';
+			} else {
+				return l.letter;
+			}
+		});
 
 		for (const handTile of newHand) {
 			handTile.isVisible = true;
