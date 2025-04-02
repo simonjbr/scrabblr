@@ -5,6 +5,11 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"start": "node server/server.js",
+		"start:dev": "nodemon server/server.js",
+		"client:dev": "npm run dev --prefix client",
+		"install": "cd server && npm i && cd ../client && npm i",
+		"build": "npm install && cd client && npm run build",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 	},
 	"keywords": [],
