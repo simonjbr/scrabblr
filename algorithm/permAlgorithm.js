@@ -1,4 +1,4 @@
-import { wordArray, wordObj, wordObjStrings, trie } from './data/words.js';
+import { trie } from './data/words.js';
 import { createEmptyState, testState } from './data/emptyState.js';
 import getWordScore from './data/score.js';
 import getPermutations from './data/permutations.js';

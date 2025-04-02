@@ -15,41 +15,41 @@ for (const word of wordArray) {
 	trie.insert(word);
 }
 
-let wordsString = '';
-for (const word of wordArray) {
-	if (word.length > 15) break;
-	wordsString += `${word}\n`;
-}
+// let wordsString = '';
+// for (const word of wordArray) {
+// 	if (word.length > 15) break;
+// 	wordsString += `${word}\n`;
+// }
 
-const wordObj = {};
-for (const word of wordArray) {
-	if (word.length >= 16) break;
-	if (!wordObj[word.length]) {
-		wordObj[word.length] = [];
-	}
-	wordObj[word.length].push(word);
-}
+// const wordObj = {};
+// for (const word of wordArray) {
+// 	if (word.length >= 16) break;
+// 	if (!wordObj[word.length]) {
+// 		wordObj[word.length] = [];
+// 	}
+// 	wordObj[word.length].push(word);
+// }
 
-const wordObjStrings = {};
-for (const word of wordArray) {
-	if (word.length >= 16) break;
-	if (!wordObjStrings[word.length]) {
-		wordObjStrings[word.length] = '';
-	}
-	wordObjStrings[word.length] += ` ${word}`;
-}
+// const wordObjStrings = {};
+// for (const word of wordArray) {
+// 	if (word.length >= 16) break;
+// 	if (!wordObjStrings[word.length]) {
+// 		wordObjStrings[word.length] = '';
+// 	}
+// 	wordObjStrings[word.length] += ` ${word}`;
+// }
 
-const wordArraySplit = [[]];
-for (const word of wordArray) {
-	if (!wordArraySplit[word.length]) {
-		wordArraySplit.push([]);
-		if (word.length === 27) {
-			wordArraySplit.push([]);
-		}
-	}
+// const wordArraySplit = [[]];
+// for (const word of wordArray) {
+// 	if (!wordArraySplit[word.length]) {
+// 		wordArraySplit.push([]);
+// 		if (word.length === 27) {
+// 			wordArraySplit.push([]);
+// 		}
+// 	}
 
-	wordArraySplit[word.length].push(word);
-}
+// 	wordArraySplit[word.length].push(word);
+// }
 
 // fs.writeFileSync(
 // 	`./algorithm/data/words.json`,
@@ -58,10 +58,10 @@ for (const word of wordArray) {
 // );
 
 export {
-	wordArray,
-	wordObj,
-	wordArraySplit,
-	wordObjStrings,
-	wordsString,
+	// wordArray,
+	// wordObj,
+	// wordArraySplit,
+	// wordObjStrings,
+	// wordsString,
 	trie,
 };
