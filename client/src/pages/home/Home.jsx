@@ -7,17 +7,21 @@ import { ResultsTable } from '../../components/results/ResultsTable';
 
 export const Home = () => {
 	return (
-		<div className="flex gap-[20px]">
-			<div className="left-section flex flex-[1] flex-col gap-[20px]">
-				<h1 className="text-center">Scrabblr.</h1>
-				<ImageUploadForm />
-				<Board />
-				<Hand />
-				<GetBestMovesButton />
-			</div>
-			<div className="w-[300px]">
-				<ImagePreview />
-				<ResultsTable />
+		<div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#1E1E1E] to-[#121212] text-white">
+			<h1 className="text-center text-5xl mb-2">Scrabblr.</h1>
+			<div className="flex flex-col md:flex-row gap-[20px]">
+				<div className="left-section flex flex-[1] flex-col md:mx-[20px] gap-[20px]">
+					<ImageUploadForm />
+					<Board />
+					<Hand />
+					<GetBestMovesButton />
+				</div>
+				<div className="w-[250px] mx-[20px]">
+					<div className="max-md:hidden">
+						<ImagePreview />
+					</div>
+					<ResultsTable />
+				</div>
 			</div>
 		</div>
 	);
