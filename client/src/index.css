@@ -11,3 +11,9 @@
 	--color-wordfeud-tile: #f2efea;
 	--color-wordfeud-placed-tile: #efe395;
 } */
+
+@layer base {
+	input[type='text'] {
+		@apply bg-transparent border-none focus:ring-0 focus:outline-none p-0 m-0;
+	}
+}

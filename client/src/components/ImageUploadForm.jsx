@@ -88,7 +88,7 @@ export const ImageUploadForm = () => {
                     duration-200
                 "
 				/>
-				<button type="submit">Scan Image</button>
+				<button className='btn' type="submit">Scan Image</button>
 			</form>
 		</div>
 	);
