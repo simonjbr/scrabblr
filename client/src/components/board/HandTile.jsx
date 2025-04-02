@@ -21,14 +21,14 @@ export const HandTile = ({ letter, onChange }) => {
 
 	return (
 		<div
-			className={`w-[60px] h-[60px] text-4xl border-2 border-black rounded-lg text-center align-middle ${
-				cell?.length
+			className={`aspect-square w-full max-w-[60px] border-2 border-black rounded-md text-center align-middle ${
+				cell
 					? 'bg-wordfeud-tile text-black font-bold'
 					: 'bg-wordfeud-blank'
 			}`}
 		>
 			<input
-				className="input w-full h-full text-center"
+				className="input w-full h-full text-4xl text-center"
 				type="text"
 				onChange={(e) =>
 					handleInputChange(e.target.value.toUpperCase())

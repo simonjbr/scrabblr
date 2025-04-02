@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	const [cell, setCell] = useState(value);
@@ -7,10 +7,14 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 		setCell(value);
 	}, [value]);
 
-	const handleInputChange = (inputValue) => {
-		setCell(inputValue.charAt(inputValue.length - 1));
-		if (onChange) onChange(inputValue.charAt(inputValue.length - 1));
-	};
+	const handleInputChange = useCallback(
+		(inputValue) => {
+			const lastChar = inputValue.slice(-1);
+			setCell(lastChar);
+			if (onChange) onChange(lastChar);
+		},
+		[onChange]
+	);
 
 	const getDefaultBackgroungColor = () => {
 		switch (defaultValue) {
@@ -27,10 +31,10 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 		}
 	};
 
-	if (placedTile.length)
+	if (placedTile)
 		return (
 			<div
-				className={`w-[40px] h-[40px] border-1 border-black bg-wordfeud-placed-tile text-xl text-black font-bold rounded-sm text-center flex items-center justify-center overflow-hidden
+				className={`aspect-square w-full max-w-[40px] border-[1px] border-black bg-wordfeud-placed-tile text-xl text-black font-bold rounded-sm text-center flex items-center justify-center overflow-hidden
 			`}
 			>
 				{Array.isArray(placedTile) ? placedTile[0] : placedTile}
@@ -39,20 +43,21 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 
 	return (
 		<div
-			className={`w-[40px] h-[40px] border-1 border-black relative ${
-				cell?.length &&
-				'bg-wordfeud-tile text-black font-bold rounded-sm text-xl'
+			className={`aspect-square w-full max-w-[40px] border-[1px] border-black relative ${
+				cell
+					? 'bg-wordfeud-tile text-black font-bold rounded-sm text-xl'
+					: ''
 			}`}
 		>
 			<div
-				className={`absolute inset-0 flex items-center justify-center text-white font-bold rounded-sm ${
+				className={`absolute inset-0 flex items-center justify-center text-white font-bold rounded-sm overflow-hidden ${
 					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
 				} ${cell && 'hidden'} ${getDefaultBackgroungColor()}`}
 			>
 				{defaultValue}
 			</div>
 			<input
-				className="input w-full h-full text-center"
+				className="bg-transparent w-full h-full text-center rounded-xl"
 				type="text"
 				onFocus={(e) => {
 					e.target.select();
