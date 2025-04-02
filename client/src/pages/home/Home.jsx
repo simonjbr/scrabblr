@@ -16,7 +16,7 @@ export const Home = () => {
 					<Hand />
 					<GetBestMovesButton />
 				</div>
-				<div className="w-[250px] mx-[20px]">
+				<div className="flex flex-col w-full md:w-[250px] md:mx-[20px] md:gap-[20px] mb-[20px] items-center">
 					<div className="max-md:hidden">
 						<ImagePreview />
 					</div>

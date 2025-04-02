@@ -54,7 +54,7 @@ export const ResultBox = ({ result, index }) => {
 
 	return (
 		<div
-			className={`font-bold hover:cursor-pointer hover:bg-amber-600 ${
+			className={`mx-2 font-bold hover:cursor-pointer hover:bg-amber-600 ${
 				index === selectedResult && 'bg-amber-500'
 			}`}
 			onClick={handleClick}
