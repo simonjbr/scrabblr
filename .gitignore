@@ -28,7 +28,7 @@ cache/
 benchmark/
 
 # test screenshots
-OCR/assets/
+server/OCR/assets/
 
 # cached OCR results
 OCR/results/

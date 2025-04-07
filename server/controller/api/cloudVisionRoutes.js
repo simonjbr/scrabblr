@@ -1,8 +1,8 @@
 import express from 'express';
 import upload from '../../config/multer.js';
-import getDocumentOCR from '../../../OCR/util/getDocumentOCR.js';
-import parseDetects from '../../../OCR/util/parseDetects.js';
-import createBoardState from '../../../OCR/util/createBoardState.js';
+import getDocumentOCR from '../../OCR/util/getDocumentOCR.js';
+import parseDetects from '../../OCR/util/parseDetects.js';
+import createBoardState from '../../OCR/util/createBoardState.js';
 import path from 'path';
 import fs from 'node:fs';
 
