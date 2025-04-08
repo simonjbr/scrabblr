@@ -31,4 +31,9 @@ benchmark/
 server/OCR/assets/
 
 # cached OCR results
-OCR/results/
+server/OCR/results/
+
+# firebase config
+.firebaserc
+firebase.json
+firebase-debug.log
