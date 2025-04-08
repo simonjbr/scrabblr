@@ -1,5 +1,5 @@
 import express from 'express';
-import getValidWords from '../../../algorithm/permAlgorithm.js';
+import getValidWords from '../../algorithm/permAlgorithm.js';
 
 const router = express.Router();
 
