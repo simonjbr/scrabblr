@@ -38,3 +38,5 @@ server/OCR/results/
 .firebaserc
 firebase.json
 firebase-debug.log
+
+workflowCommands.txt
