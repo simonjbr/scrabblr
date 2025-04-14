@@ -1,14 +1,13 @@
 import { Square } from './Square';
-import { WORDFEUD_DEFAULT_BOARD } from '../../lib/constants';
 import { useBoardContext } from '../../context/BoardContext';
 import { useCallback, useMemo } from 'react';
 import { usePlacedTilesContext } from '../../context/PlacedTilesContext';
+import { useGameContext } from '../../context/GameContext';
 
 export const Board = () => {
 	const { board, setBoard } = useBoardContext();
 	const { placedTiles } = usePlacedTilesContext();
-
-	// console.log('Rendering board:', board);
+	const { game } = useGameContext();
 
 	const handlePlacedTile = useCallback(
 		(rowIndex, colIndex) => {
@@ -29,9 +28,7 @@ export const Board = () => {
 					<Square
 						key={`${rowIndex}-${colIndex}`}
 						value={board[rowIndex][colIndex]}
-						defaultValue={
-							WORDFEUD_DEFAULT_BOARD[rowIndex][colIndex]
-						}
+						defaultValue={game[rowIndex][colIndex]}
 						onChange={(newValue) => {
 							const newBoard = board.map((row) => [...row]);
 							newBoard[rowIndex][colIndex] = newValue;
@@ -42,13 +39,11 @@ export const Board = () => {
 				))}
 			</div>
 		));
-	}, [board, handlePlacedTile, setBoard]);
+	}, [board, handlePlacedTile, setBoard, game]);
 
 	return (
 		<>
-			<div className="bg-black rounded-sm w-fit">
-				{renderedBoard}
-			</div>
+			<div className="bg-black rounded-sm w-fit">{renderedBoard}</div>
 		</>
 	);
 };

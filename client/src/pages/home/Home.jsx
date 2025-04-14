@@ -1,5 +1,6 @@
 import { Board } from '../../components/board/Board';
 import { Hand } from '../../components/board/Hand';
+import { GameSelector } from '../../components/GameSelector';
 import { GetBestMovesButton } from '../../components/GetBestMovesButton';
 import { ImagePreview } from '../../components/ImagePreview';
 import { ImageUploadForm } from '../../components/ImageUploadForm';
@@ -11,6 +12,7 @@ export const Home = () => {
 			<h1 className="text-center text-5xl mb-2">Scrabblr.</h1>
 			<div className="flex flex-col md:flex-row gap-[20px]">
 				<div className="left-section flex flex-[1] flex-col md:mx-[20px] gap-[20px]">
+					<GameSelector />
 					<ImageUploadForm />
 					<Board />
 					<Hand />
