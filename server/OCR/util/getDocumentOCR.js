@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import vision from '@google-cloud/vision';
-// import fs from 'node:fs';
+import fs from 'node:fs';
 import getMinMaxVertices from './getMinMaxVertices.js';
 import getCenterVertex from './getCenterVertex.js';
 import getDetectionDimensions from './getDetectionDimensions.js';
@@ -20,10 +20,11 @@ const client = new vision.ImageAnnotatorClient(CONFIG);
 /**
  *
  * @param {string} imagePath path to screenshot
+ * @param {string} gameType string indicating the variety of scrabble game
  * @returns {{dimensions: {height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}, symbols: {boundingBox: {vertices: {x: number, y: number}[]}, text: string, confidence: number, coords: {minX: number, minY: number, maxX: number, maxY: number}, dim: {pixel: {x: number, y: number}, relativeToBox: {x: number, y: number}}, center: { x: number, y: number}, minXPositionWithinBox: number, isBonus: boolean, isGameGrid: boolean, isHand: boolean, ignore: boolean}[]}}
  */
 
-const getDocumentOCR = async (imagePath) => {
+const getDocumentOCR = async (imagePath, gameType) => {
 	try {
 		const response = await client.documentTextDetection(imagePath);
 		const result = response[0];
@@ -39,7 +40,7 @@ const getDocumentOCR = async (imagePath) => {
 		const width = result.fullTextAnnotation.pages[0].width;
 		const height = result.fullTextAnnotation.pages[0].height;
 
-		const dimensions = getDimensions(width, height);
+		const dimensions = getDimensions(width, height, gameType);
 
 		for (let i = 0; i < fullTextAnnotations.length; i++) {
 			const block = fullTextAnnotations[i];
@@ -72,7 +73,8 @@ const getDocumentOCR = async (imagePath) => {
 						// and the start of the detection area
 						// useful for differentiating letters, tile scores and bonus tiles
 						symbol.minXPositionWithinBox =
-							(symbol.coords.minX % dimensions.boxSize) /
+							((symbol.coords.minX - dimensions.gridBuffer) %
+								dimensions.boxSize) /
 							dimensions.boxSize;
 
 						// figuring out column and row would be useful here!
@@ -83,23 +85,23 @@ const getDocumentOCR = async (imagePath) => {
 			}
 		}
 
-		// fs.writeFileSync(
-		// 	'./OCR/results/response.json',
-		// 	JSON.stringify({ response }),
-		// 	'utf8'
-		// );
+		fs.writeFileSync(
+			'./server/OCR/results/response.json',
+			JSON.stringify({ response }),
+			'utf8'
+		);
 
-		// fs.writeFileSync(
-		// 	'./OCR/results/result.json',
-		// 	JSON.stringify({ result }),
-		// 	'utf8'
-		// );
+		fs.writeFileSync(
+			'./server/OCR/results/result.json',
+			JSON.stringify({ result }),
+			'utf8'
+		);
 
-		// fs.writeFileSync(
-		// 	'./OCR/results/detections.json',
-		// 	JSON.stringify({ symbols, dimensions }),
-		// 	'utf8'
-		// );
+		fs.writeFileSync(
+			'./server/OCR/results/detections.json',
+			JSON.stringify({ symbols, dimensions }),
+			'utf8'
+		);
 
 		return { dimensions, symbols };
 	} catch (error) {

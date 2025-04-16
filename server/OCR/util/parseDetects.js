@@ -56,7 +56,7 @@ const parseDetects = (dimensions, symbols) => {
 		// filter out tile scores and low confidence symbols
 		// if the detection begins < 0.3 * boxSize from the left it is a letter
 		// anymore then it is likely part of a tile's score
-		if (s.minXPositionWithinBox > 0.3) {
+		if (s.minXPositionWithinBox > dimensions.minXPositionMultiplier) {
 			s.ignore = true;
 		}
 

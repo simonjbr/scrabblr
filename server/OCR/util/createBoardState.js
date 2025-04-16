@@ -23,7 +23,7 @@ const createBoardState = ({ dimensions, gridDetections }) => {
 		const y = d.coords.minY;
 
 		// length between lastX and the end of row
-		const rowRemaining = dimensions.width - lastX;
+		const rowRemaining = dimensions.width - dimensions.gridBuffer - lastX;
 
 		if (y > lastY) {
 			// account for fuzziness
