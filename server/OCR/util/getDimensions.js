@@ -2,17 +2,33 @@
  *
  * @param {number} width
  * @param {number} height
+ * @param {string} gameType string indicating the variety of scrabble game
  * @returns {{height: number, width: number, gridStart: number, gridEnd: number, handDim: number, fuzziness: number, boxSize: number}} dimensions of the screenshot
  */
 
-const getDimensions = (width, height) => {
+const getDimensions = (width, height, gameType) => {
 	const dimensions = {
 		width,
 		height,
 	};
+
+	const multipliers = {
+		wordfeud: {
+			gridStart: 0.14,
+			gridEnd: 0.8,
+			gridMargin: 0,
+			minXPositionMultiplier: 0.3,
+		},
+		wwf: {
+			gridStart: 0.28,
+			gridEnd: 0.74,
+			gridMargin: (25 / 1080) * width,
+			minXPositionMultiplier: 0.4,
+		},
+	};
 	// proportion of height dimension for start and end of game grid
-	const GRID_START_MULTIPLIER = 0.14;
-	const GRID_END_MULTIPLIER = 0.8;
+	const GRID_START_MULTIPLIER = multipliers[gameType].gridStart;
+	const GRID_END_MULTIPLIER = multipliers[gameType].gridEnd;
 
 	// pixel values for start and end of game grid
 	dimensions.gridStart = GRID_START_MULTIPLIER * dimensions.height;
@@ -26,7 +42,9 @@ const getDimensions = (width, height) => {
 	const FUZZINESS_MULTIPLIER = 0.015;
 	dimensions.fuzziness = FUZZINESS_MULTIPLIER * dimensions.height;
 
-	dimensions.boxSize = width / 15;
+	dimensions.boxSize = (width - multipliers[gameType].gridMargin * 2) / 15;
+
+	dimensions.gridBuffer = multipliers[gameType].gridMargin;
 
 	return dimensions;
 };
