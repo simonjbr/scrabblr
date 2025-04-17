@@ -22,7 +22,7 @@ const getDimensions = (width, height, gameType) => {
 		wwf: {
 			gridStart: 0.28,
 			gridEnd: 0.74,
-			gridMargin: (25 / 1080) * width,
+			gridMargin: (35 / 1080) * width,
 			minXPositionMultiplier: 0.4,
 		},
 	};
@@ -45,6 +45,9 @@ const getDimensions = (width, height, gameType) => {
 	dimensions.boxSize = (width - multipliers[gameType].gridMargin * 2) / 15;
 
 	dimensions.gridBuffer = multipliers[gameType].gridMargin;
+
+	dimensions.minXPositionMultiplier =
+		multipliers[gameType].minXPositionMultiplier;
 
 	return dimensions;
 };
