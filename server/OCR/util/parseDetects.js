@@ -32,8 +32,11 @@ const parseDetects = (dimensions, symbols) => {
 		if (s.text === 'י') s.ignore = true;
 
 		if (
-			s.coords.minY >= dimensions.gridEnd &&
-			s.coords.minY <= dimensions.gridEnd + dimensions.handDim
+			s.coords.minY >= dimensions.gridEnd + dimensions.gridEndYBuffer &&
+			s.coords.minY <=
+				dimensions.gridEnd +
+					dimensions.gridEndYBuffer +
+					dimensions.handDim
 		) {
 			s.isHand = true;
 			handDetects.push(s);

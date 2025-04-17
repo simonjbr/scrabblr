@@ -41,7 +41,8 @@ const sortAndFilterDetects = (dimensions, symbols) => {
 	}
 
 	// filter out duplicate detections
-	sortedAndFiltered = filterDuplicates(sortedAndFiltered);
+	const isHand = false;
+	sortedAndFiltered = filterDuplicates(sortedAndFiltered, dimensions, isHand);
 
 	// sorting must account for fuzziness
 	sortedAndFiltered

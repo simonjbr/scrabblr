@@ -18,12 +18,14 @@ const getDimensions = (width, height, gameType) => {
 			gridEnd: 0.8,
 			gridMargin: 0,
 			minXPositionMultiplier: 0.3,
+			gridEndYBuffer: 0,
 		},
 		wwf: {
 			gridStart: 0.28,
 			gridEnd: 0.74,
 			gridMargin: (35 / 1080) * width,
 			minXPositionMultiplier: 0.4,
+			gridEndYBuffer: (130 / 2280) * height,
 		},
 	};
 	// proportion of height dimension for start and end of game grid
@@ -48,6 +50,10 @@ const getDimensions = (width, height, gameType) => {
 
 	dimensions.minXPositionMultiplier =
 		multipliers[gameType].minXPositionMultiplier;
+
+	dimensions.gridEndYBuffer = multipliers[gameType].gridEndYBuffer;
+
+	dimensions.duplicateFuzziness = (20 / 1080) * width;
 
 	return dimensions;
 };

@@ -26,7 +26,8 @@ const getHand = (detections, dimensions) => {
 		);
 
 	// filter any duplicate detections
-	detections = filterDuplicates(detections);
+	const isHand = true;
+	detections = filterDuplicates(detections, dimensions, isHand);
 
 	for (let i = 0; i < detections.length; i++) {
 		const d = detections[i];
