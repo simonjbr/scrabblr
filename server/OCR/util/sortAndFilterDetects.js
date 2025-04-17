@@ -34,8 +34,7 @@ const sortAndFilterDetects = (dimensions, symbols) => {
 		if (d.text === 'I') {
 			// if the center X falls on or close to a grid line we ignore it
 			const isOnGridLine =
-				d.center.x % dimensions.boxSize < 5 ||
-				d.center.x % dimensions.box;
+				(d.center.x - dimensions.gridBuffer) % dimensions.boxSize < 5;
 			d.ignore = isOnGridLine;
 		}
 	}
