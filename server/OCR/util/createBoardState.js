@@ -13,6 +13,17 @@ const createBoardState = ({ dimensions, gridDetections }) => {
 	let lastX = gridDetections[0].coords.minX;
 	let lastY = gridDetections[0].coords.minY;
 
+	// logic to insert empty square before first detection
+	if (lastX > dimensions.boxSize) {
+		const emptySquaresFront = Math.floor(
+			(lastX - dimensions.gridBuffer) / dimensions.boxSize
+		);
+		boardState[boardState.length - 1].push(
+			...new Array(emptySquaresFront).fill('')
+		);
+		// lastX = lastX % dimensions.boxSize;
+	}
+
 	// loop through gridDetections and create board state
 	for (let i = 0; i < gridDetections.length; i++) {
 		const d = gridDetections[i];
@@ -27,7 +38,7 @@ const createBoardState = ({ dimensions, gridDetections }) => {
 
 		if (y > lastY) {
 			// account for fuzziness
-			if (y - lastY > dimensions.fuzziness && i > 0) {
+			if (y - lastY > dimensions.fuzziness /* && i > 0 */) {
 				const emptySquaresEnd = Math.floor(
 					rowRemaining / dimensions.boxSize
 				);
@@ -64,6 +75,17 @@ const createBoardState = ({ dimensions, gridDetections }) => {
 			boardState[boardState.length - 1].push(...d.text.split(''));
 			lastX = d.coords.maxX - LETTER_X_DIMENSION * dimensions.boxSize;
 		}
+	}
+
+	// logic to insert empty square after last detection
+	if (lastX < dimensions.width) {
+		const emptySquaresEnd = Math.floor(
+			(dimensions.width - dimensions.gridBuffer - lastX) /
+				dimensions.boxSize
+		);
+		boardState[boardState.length - 1].push(
+			...new Array(emptySquaresEnd).fill('')
+		);
 	}
 
 	return boardState;
