@@ -76,7 +76,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/15_iphone.jpg'
+			'./server/OCR/assets/15_iphone.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -160,7 +161,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/14_1440.jpg'
+			'./server/OCR/assets/14_1440.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -244,7 +246,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/13_iphone.jpg'
+			'./server/OCR/assets/13_iphone.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -312,7 +315,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/12_iphone.jpg'
+			'./server/OCR/assets/12_iphone.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -380,7 +384,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/11_1440.jpg'
+			'./server/OCR/assets/11_1440.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -496,7 +501,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/10_1440.jpg'
+			'./server/OCR/assets/10_1440.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -596,7 +602,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/09_1440.jpg'
+			'./server/OCR/assets/09_1440.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -696,7 +703,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/09_1080.jpg'
+			'./server/OCR/assets/09_1080.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -796,7 +804,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/09_720.jpg'
+			'./server/OCR/assets/09_720.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -880,7 +889,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/08_1440.jpg'
+			'./server/OCR/assets/08_1440.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -964,7 +974,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/08_1080.jpg'
+			'./server/OCR/assets/08_1080.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
@@ -1048,7 +1059,8 @@ describe('OCR and board state creation', () => {
 		];
 
 		const { dimensions, symbols } = await getDocumentOCR(
-			'./OCR/assets/07_joker_1080.jpg'
+			'./server/OCR/assets/07_joker_1080.jpg',
+			'wordfeud'
 		);
 
 		const parsedDetects = parseDetects(dimensions, symbols);
