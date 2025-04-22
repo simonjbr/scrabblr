@@ -1,12 +1,10 @@
 import getDocumentOCR from '../util/getDocumentOCR.js';
 import parseDetects from '../util/parseDetects.js';
 import createBoardState from '../util/createBoardState.js';
-import getValidWords from '../../algorithm/permAlgorithm.js';
-import getDimensions from '../util/getDimensions.js';
 
-import { describe, expect, jest, test } from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 
-describe('OCR and board state creation', () => {
+describe('Wordfeud OCR and board state creation', () => {
 	test('15_iphone.jpg', async () => {
 		const actualHand = ['Z', 'N', 'T', 'N', 'S', 'S', 'G'];
 		const actualBoardState = [
