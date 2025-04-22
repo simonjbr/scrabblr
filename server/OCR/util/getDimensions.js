@@ -25,7 +25,7 @@ const getDimensions = (width, height, gameType) => {
 			gridEnd: 0.74,
 			gridMargin: (35 / 1080) * width,
 			minXPositionMultiplier: 0.4,
-			gridEndYBuffer: (130 / 2280) * height,
+			gridEndYBuffer: (120 / 2280) * height,
 		},
 	};
 	// proportion of height dimension for start and end of game grid
