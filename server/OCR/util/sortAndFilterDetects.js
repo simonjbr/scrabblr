@@ -1,10 +1,6 @@
-import fs from 'node:fs';
-import bonusTileValues from './bonusTileValues.js';
+// import fs from 'node:fs';
 import filterDuplicates from './filterDuplicates.js';
 import filterOverlapping from './filterOverlapping.js';
-import getMinMaxVertices from './getMinMaxVertices.js';
-import getCenterVertex from './getCenterVertex.js';
-import getDetectionDimensions from './getDetectionDimensions.js';
 
 /**
  *
@@ -59,11 +55,11 @@ const sortAndFilterDetects = (dimensions, symbols) => {
 	// filter out overlapping detections
 	filterOverlapping(sortedAndFiltered, dimensions.boxSize);
 
-	fs.writeFileSync(
-		'./server/OCR/results/sortedAndFiltered.json',
-		JSON.stringify({ sortedAndFiltered }),
-		'utf8'
-	);
+	// fs.writeFileSync(
+	// 	'./server/OCR/results/sortedAndFiltered.json',
+	// 	JSON.stringify({ sortedAndFiltered }),
+	// 	'utf8'
+	// );
 	console.log('sortedAndFiltered.length:', sortedAndFiltered.length);
 
 	return sortedAndFiltered;

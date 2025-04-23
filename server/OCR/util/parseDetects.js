@@ -1,9 +1,5 @@
-import pixelToPercent from './pixelToPercent.js';
 import sortAndFilterDetects from './sortAndFilterDetects.js';
 import getHand from './getHand.js';
-import getMinMaxVertices from './getMinMaxVertices.js';
-import getCenterVertex from './getCenterVertex.js';
-import getDetectionDimensions from './getDetectionDimensions.js';
 import bonusTileValues from './bonusTileValues.js';
 
 /**
