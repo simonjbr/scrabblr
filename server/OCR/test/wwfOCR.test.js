@@ -564,4 +564,116 @@ describe('Words With Friends OCR and board state creation', () => {
 			JSON.stringify(actualHand)
 		);
 	}, 40000);
+
+	test('11.jpg', async () => {
+		const actualHand = ['R', 'L', 'G', 'Q', 'H', 'E', 'M'];
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', 'R', '', '', '', '', '', '', '', 'B', '', '', ''],
+			['', '', '', 'O', 'G', 'I', 'V', 'E', '', '', '', 'O', '', '', 'D'],
+			['', '', '', 'O', '', '', '', 'D', 'E', 'W', 'A', 'X', '', '', 'U'],
+			['', 'H', 'A', 'T', 'E', 'S', '', '', 'Y', 'I', '', '', '', '', 'N'],
+			['', '', '', '', '', '', '', 'H', 'E', 'N', 'T', '', '', 'M', 'E'],
+			['', 'C', '', '', 'F', 'I', 'R', 'E', 'S', '', '', '', '', 'O', ''], // 'I' is a non detection
+			['J', '', '', '', 'O', '', '', 'A', '', '', 'R', '', '', '', ''], // 'O' AND 'U' are non detections
+			['', '', '', '', 'R', '', 'A', 'P', 'P', 'L', 'E', 'T', '', 'N', ''], // 'I' and 'O' are non detections
+			['B', 'L', 'I', 'N', 'K', 'S', '', '', '', 'O', '', 'I', '', 'T', ''],
+			['S', '', '', '', 'Y', 'A', '', '', '', 'C', '', 'N', 'E', 'E', 'D'],
+			['', '', '', '', '', 'V', 'U', 'G', '', 'A', 'H', '', '', 'R', ''],
+			['', '', '', '', '', 'E', 'T', 'A', '', 'L', 'A', '', '', '', ''], 
+			['', '', '', 'W', 'A', 'D', 'E', 'S', '', '', 'E', 'D', 'I', 'T', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./server/OCR/assets/WWF/11.jpg',
+			'wwf'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		// console.log(boardState);
+		// console.log(boardState.length);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
+	}, 40000);
+
+	test('12.jpg', async () => {
+		const actualHand = ['R', 'L', 'G', 'Q', 'H'];
+		const actualBoardState = [
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+			['', '', '', 'R', '', '', '', '', '', '', '', 'B', '', '', ''],
+			['', '', '', 'O', 'G', 'I', 'V', 'E', '', '', '', 'O', '', '', 'D'],
+			['', '', '', 'O', '', '', '', 'D', 'E', 'W', 'A', 'X', '', '', 'U'],
+			['', 'H', 'A', 'T', 'E', 'S', '', '', 'Y', 'I', '', 'E', '', '', 'N'],
+			['', '', '', '', '', '', '', 'H', 'E', 'N', 'T', 'S', '', 'M', 'E'],
+			['', 'C', '', '', 'F', 'I', 'R', 'E', 'S', '', '', '', '', 'O', ''], // 'I' is a non detection
+			['J', '', '', '', 'O', '', '', 'A', '', '', 'R', '', '', 'U', 'M'], // 'O' is a non detection
+			['', '', '', '', 'R', '', 'A', 'P', 'P', 'L', 'E', 'T', '', 'N', 'E'], // 'I' and 'O' are non detections
+			['B', 'L', 'I', 'N', 'K', 'S', '', '', '', 'O', '', 'I', '', 'T', ''],
+			['S', '', '', '', 'Y', 'A', '', '', '', 'C', '', 'N', 'E', 'E', 'D'],
+			['', '', '', '', '', 'V', 'U', 'G', '', 'A', 'H', '', '', 'R', ''],
+			['', '', '', '', '', 'E', 'T', 'A', '', 'L', 'A', '', '', '', ''], 
+			['', '', '', 'W', 'A', 'D', 'E', 'S', '', '', 'E', 'D', 'I', 'T', ''],
+		];
+
+		const { dimensions, symbols } = await getDocumentOCR(
+			'./server/OCR/assets/WWF/12.jpg',
+			'wwf'
+		);
+
+		const parsedDetects = parseDetects(dimensions, symbols);
+
+		const boardState = createBoardState(parsedDetects);
+
+		// console.log(boardState);
+		// console.log(boardState.length);
+
+		expect(boardState.length).toBe(actualBoardState.length);
+
+		let count = 0;
+		for (let i = 0; i < boardState.length; i++) {
+			expect(`Row ${i}: ${boardState[i].length}`).toBe(
+				`Row ${i}: ${actualBoardState[i].length}`
+			);
+			expect(`Row ${i}: ${JSON.stringify(boardState[i])}`).toBe(
+				`Row ${i}: ${JSON.stringify(actualBoardState[i])}`
+			);
+			count += boardState[i].length;
+		}
+
+		expect(count).toBe(15 * 15);
+
+		expect(JSON.stringify(boardState)).toBe(
+			JSON.stringify(actualBoardState)
+		);
+
+		expect(JSON.stringify(parsedDetects.hand)).toBe(
+			JSON.stringify(actualHand)
+		);
+	}, 40000);
 });
