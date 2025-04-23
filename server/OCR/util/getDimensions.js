@@ -19,13 +19,15 @@ const getDimensions = (width, height, gameType) => {
 			gridMargin: 0,
 			minXPositionMultiplier: 0.3,
 			gridEndYBuffer: 0,
+			bonusSecondLetterMinX: 0.37,
 		},
 		wwf: {
 			gridStart: 0.28,
 			gridEnd: 0.74,
-			gridMargin: (35 / 1080) * width,
+			gridMargin: (30 / 1080) * width,
 			minXPositionMultiplier: 0.4,
 			gridEndYBuffer: (120 / 2280) * height,
+			bonusSecondLetterMinX: 0.32,
 		},
 	};
 	// proportion of height dimension for start and end of game grid
@@ -54,6 +56,9 @@ const getDimensions = (width, height, gameType) => {
 	dimensions.gridEndYBuffer = multipliers[gameType].gridEndYBuffer;
 
 	dimensions.duplicateFuzziness = (20 / 1080) * width;
+
+	dimensions.bonusSecondLetterMinX =
+		multipliers[gameType].bonusSecondLetterMinX;
 
 	return dimensions;
 };
