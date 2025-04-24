@@ -7,9 +7,10 @@ export const useGameContext = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
 	const [game, setGame] = useState(WORDFEUD_DEFAULT_BOARD);
+	const [gameType, setGameType] = useState('wordfeud');
 
 	return (
-		<GameContext.Provider value={{ game, setGame }}>
+		<GameContext.Provider value={{ game, setGame, gameType, setGameType }}>
 			{children}
 		</GameContext.Provider>
 	);

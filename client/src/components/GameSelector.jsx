@@ -5,9 +5,10 @@ import {
 } from '../lib/constants';
 
 export const GameSelector = () => {
-	const { setGame } = useGameContext();
-	const handleSelect = (gameType) => {
-		setGame(gameType);
+	const { setGame, setGameType } = useGameContext();
+	const handleSelect = (selectedGame, selectedGameType) => {
+		setGame(selectedGame);
+		setGameType(selectedGameType);
 	};
 	return (
 		<div className="dropdown">
@@ -19,14 +20,21 @@ export const GameSelector = () => {
 				className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
 			>
 				<li>
-					<a onClick={() => handleSelect(WORDFEUD_DEFAULT_BOARD)}>
+					<a
+						onClick={() =>
+							handleSelect(WORDFEUD_DEFAULT_BOARD, 'wordfeud')
+						}
+					>
 						Wordfeud
 					</a>
 				</li>
 				<li>
 					<a
 						onClick={() =>
-							handleSelect(WORDS_WITH_FRIENDS_DEFAULT_BOARD)
+							handleSelect(
+								WORDS_WITH_FRIENDS_DEFAULT_BOARD,
+								'wwf'
+							)
 						}
 					>
 						Words With Friends

@@ -3,6 +3,7 @@ import { useGetOCR } from '../hooks/useGetOCR';
 import { useBoardContext } from '../context/BoardContext';
 import { usePlacedTilesContext } from '../context/PlacedTilesContext';
 import { useImagePreviewContext } from '../context/ImagePreviewContext';
+import { useGameContext } from '../context/GameContext';
 
 export const ImageUploadForm = () => {
 	const [image, setImage] = useState(null);
@@ -11,6 +12,7 @@ export const ImageUploadForm = () => {
 	const { setBoard, setHand } = useBoardContext();
 	const { setPlacedTiles, setSelectedResult } = usePlacedTilesContext();
 	const { setPreview } = useImagePreviewContext();
+	const { gameType } = useGameContext();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -21,7 +23,7 @@ export const ImageUploadForm = () => {
 		}
 
 		try {
-			const newResult = await getOCR(image);
+			const newResult = await getOCR(image, gameType);
 			// console.log('OCR result:', newResult);
 
 			if (!newResult || !newResult.boardState) {
@@ -88,7 +90,9 @@ export const ImageUploadForm = () => {
                     duration-200
                 "
 				/>
-				<button className='btn' type="submit">Scan Image</button>
+				<button className="btn" type="submit">
+					Scan Image
+				</button>
 			</form>
 		</div>
 	);

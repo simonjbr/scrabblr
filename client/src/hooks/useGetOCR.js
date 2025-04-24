@@ -5,7 +5,7 @@ export const useGetOCR = () => {
 	const [error, setError] = useState(null);
 	const [controller, setController] = useState(null);
 
-	const getOCR = async (image) => {
+	const getOCR = async (image, game) => {
 		if (controller) controller.abort();
 
 		const newController = new AbortController();
@@ -16,6 +16,7 @@ export const useGetOCR = () => {
 		try {
 			const formData = new FormData();
 			formData.append('image', image);
+			formData.append('gameType', game);
 
 			const response = await fetch('/api/cloudVision', {
 				signal: newController.signal,
