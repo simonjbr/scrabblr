@@ -11,8 +11,10 @@ import findNewWords from './data/findNewWords.js';
  * @param {String[]} hand
  */
 
-const getValidWords = (hand, state) => {
+const getValidWords = (hand, state, gameType) => {
 	const BOARD_LENGTH = 15;
+
+	console.log('gameType:', gameType);
 
 	console.time('Finding anchors');
 	// check for vertical anchors
@@ -343,7 +345,11 @@ const getValidWords = (hand, state) => {
 						const move = {
 							placedLetters: placedLetters,
 							words: words,
-							score: getWordScore(words, placedLetters.length),
+							score: getWordScore(
+								words,
+								placedLetters.length,
+								gameType
+							),
 						};
 						validWords.push(move);
 					}
@@ -612,7 +618,11 @@ const getValidWords = (hand, state) => {
 						const move = {
 							placedLetters: placedLetters,
 							words: words,
-							score: getWordScore(words, placedLetters.length),
+							score: getWordScore(
+								words,
+								placedLetters.length,
+								gameType
+							),
 						};
 						validWords.push(move);
 					}

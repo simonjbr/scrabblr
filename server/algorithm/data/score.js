@@ -10,7 +10,7 @@ import createBoard from './board.js';
 
 const board = createBoard();
 
-const getWordScore = (words, tilesUsed) => {
+const getWordScore = (words, tilesUsed, gameType) => {
 	let total = 0;
 	for (const word of words) {
 		let score = 0;
@@ -20,7 +20,7 @@ const getWordScore = (words, tilesUsed) => {
 			let letterMultiplier = 1;
 
 			if (t.hasBonus) {
-				let bonus = board[t.y][t.x];
+				let bonus = board[gameType][t.y][t.x];
 
 				switch (bonus) {
 					case 'DL':
@@ -40,7 +40,8 @@ const getWordScore = (words, tilesUsed) => {
 				}
 			}
 
-			if (!t.isJoker) score += letterScores[t.letter] * letterMultiplier;
+			if (!t.isJoker)
+				score += letterScores[gameType][t.letter] * letterMultiplier;
 		}
 		word.score = score * wordMultiplier;
 		total += score * wordMultiplier;
