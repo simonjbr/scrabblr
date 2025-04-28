@@ -22,24 +22,45 @@ export const Board = () => {
 	);
 
 	const renderedBoard = useMemo(() => {
+		// Validate board structure
+		if (!Array.isArray(board) || board.length === 0) {
+			console.error('Invalid board structure');
+			return null;
+		}
+
 		return board.map((row, rowIndex) => (
 			<div key={rowIndex} className="flex ">
-				{row.map((_, colIndex) => (
-					<Square
-						key={`${rowIndex}-${colIndex}`}
-						value={board[rowIndex][colIndex]}
-						defaultValue={game[rowIndex][colIndex]}
-						onChange={(newValue) => {
-							const newBoard = board.map((row) => [...row]);
-							newBoard[rowIndex][colIndex] = newValue;
-							setBoard(() => [...newBoard]);
-						}}
-						placedTile={handlePlacedTile(rowIndex, colIndex)}
-					/>
-				))}
+				{row.map((_, colIndex) => {
+					// Safely get defaultValue
+					const defaultValue =
+						game &&
+						Array.isArray(game) &&
+						game[rowIndex] &&
+						game[rowIndex][colIndex] !== undefined
+							? game[rowIndex][colIndex]
+							: '';
+
+					return (
+						<Square
+							key={`${rowIndex}-${colIndex}`}
+							value={board[rowIndex][colIndex]}
+							defaultValue={defaultValue}
+							onChange={(newValue) => {
+								const newBoard = board.map((row) => [...row]);
+								newBoard[rowIndex][colIndex] = newValue;
+								setBoard(() => [...newBoard]);
+							}}
+							placedTile={handlePlacedTile(rowIndex, colIndex)}
+						/>
+					);
+				})}
 			</div>
 		));
 	}, [board, handlePlacedTile, setBoard, game]);
+
+	if (!renderedBoard) {
+		return <div className="text-red-500">Invalid board structure</div>;
+	}
 
 	return (
 		<>
