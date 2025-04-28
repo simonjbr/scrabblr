@@ -5,7 +5,7 @@ export const useGetBestMoves = () => {
 	const [error, setError] = useState(null);
 	const [controller, setController] = useState(null);
 
-	const getBestMoves = async (hand, board) => {
+	const getBestMoves = async (hand, board, gameType) => {
 		if (controller) controller.abort();
 
 		const newController = new AbortController();
@@ -23,6 +23,7 @@ export const useGetBestMoves = () => {
 				body: JSON.stringify({
 					hand,
 					board,
+					gameType,
 				}),
 			});
 
