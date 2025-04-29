@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 	const [cell, setCell] = useState(value);
+	const [isSelected, setIsSelected] = useState(false);
 
 	useEffect(() => {
 		setCell(value);
@@ -16,7 +17,7 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 		[onChange]
 	);
 
-	const getDefaultBackgroungColor = () => {
+	const getDefaultBackgroundColor = () => {
 		switch (defaultValue) {
 			case 'TW':
 				return 'bg-wordfeud-triple-word';
@@ -52,21 +53,29 @@ export const Square = ({ value, defaultValue, onChange, placedTile }) => {
 			<div
 				className={`absolute inset-0 flex items-center justify-center text-white font-bold rounded-sm overflow-hidden ${
 					!cell && 'pointer-events-none' // Disable pointer events if no value is entered
-				} ${cell && 'hidden'} ${getDefaultBackgroungColor()}`}
+				} ${
+					(cell || isSelected) && 'hidden'
+				} ${getDefaultBackgroundColor()}`}
 			>
 				{defaultValue}
 			</div>
 			<input
-				className="bg-transparent w-full h-full text-center rounded-xl"
+				className={`bg-transparent w-full h-full text-center rounded-sm focus:bg-wordfeud-tile caret-black`}
 				type="text"
 				onFocus={(e) => {
 					e.target.select();
+					setIsSelected(true);
+				}}
+				onBlur={() => {
+					setIsSelected(false);
 				}}
 				onChange={(e) =>
 					handleInputChange(e.target.value.toUpperCase())
 				}
 				value={cell || ''}
-				aria-label="Square input"
+				aria-label={`Square input ${
+					defaultValue ? `(${defaultValue} bonus)` : ''
+				}`}
 			/>
 		</div>
 	);
